@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import '../helper/googleMap.dart';
+import 'package:research_mobile_app/exports.dart';
 
 class LandingPage extends StatefulWidget {
   final String title;
@@ -10,24 +12,46 @@ class LandingPage extends StatefulWidget {
 }
 
 class _LandingPageState extends State<LandingPage> {
-  late GoogleMapController mapController;
-
-  final LatLng _center = const LatLng(45.521563, -122.677433);
-
-  void _onMapCreated(GoogleMapController controller) {
-    mapController = controller;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text(
+          widget.title,
+          style: TextStyle(color: Colors.blue),
+        ),
+        centerTitle: true,
+        backgroundColor: Colors.transparent,
+        foregroundColor: Colors.transparent,
+        shadowColor: Colors.transparent,
       ),
-      body: GoogleMap(
-        onMapCreated: _onMapCreated,
-        initialCameraPosition: CameraPosition(target: _center, zoom: 11.0),
+      body: Map().initMap(),
+      floatingActionButton: SpeedDial(
+        animatedIcon: AnimatedIcons.search_ellipsis,
+        overlayColor: Colors.transparent,
+        spacing: 10.0,
+        spaceBetweenChildren: 10.0,
+        children: [
+          SpeedDialChild(
+            child: SizedBox(
+              height: 25,
+              width: 25,
+              child: SvgIcons.capsules_solid,
+            ),
+            label: "Medicine",
+          ),
+          SpeedDialChild(
+            child: SizedBox(
+              height: 25,
+              width: 25,
+              child: SvgIcons.pharmacy,
+            ),
+            label: "Pharmacy",
+          ),
+        ],
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      extendBodyBehindAppBar: true,
     );
   }
 }

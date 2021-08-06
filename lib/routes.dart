@@ -13,13 +13,13 @@ Route<dynamic> appRoutes(RouteSettings route) {
   switch (route.name) {
     case landingPage:
       return Transition().page(LandingPage(
-        title: "Home",
+        title: "Map",
       ));
     case searchPage:
       return Transition().page(Search(
         title: "Search",
       ));
     default:
-      return Transition().page(LandingPage(title: "Home"));
+      return Transition().page(LandingPage(title: "Map"));
   }
 }
