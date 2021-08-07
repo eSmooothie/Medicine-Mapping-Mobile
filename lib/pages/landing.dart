@@ -12,6 +12,11 @@ class LandingPage extends StatefulWidget {
 }
 
 class _LandingPageState extends State<LandingPage> {
+  Future<String> _test = Future<String>.delayed(
+    const Duration(minutes: 1),
+    () => "test 1",
+  );
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,7 +30,40 @@ class _LandingPageState extends State<LandingPage> {
         foregroundColor: Colors.transparent,
         shadowColor: Colors.transparent,
       ),
-      body: Map().initMap(),
+      body: FutureBuilder(
+        future: _test,
+        builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+          List<Widget> children;
+          if (snapshot.hasData) {
+            // done waiting
+
+            return Map().initMap();
+          } else if (snapshot.hasError) {
+            // error
+            children = <Widget>[
+              const Icon(
+                Icons.error_outline,
+                color: Colors.red,
+                size: 60,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 16),
+                child: Text('Error: ${snapshot.error}'),
+              )
+            ];
+          } else {
+            // waiting
+            children = Utility.loading;
+          }
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: children,
+            ),
+          );
+        },
+      ),
       floatingActionButton: SpeedDial(
         animatedIcon: AnimatedIcons.search_ellipsis,
         overlayColor: Colors.transparent,
@@ -39,6 +77,13 @@ class _LandingPageState extends State<LandingPage> {
               child: SvgIcons.capsules_solid,
             ),
             label: "Medicine",
+            onTap: () {
+              Utility().errorDialog(
+                context: context,
+                errtitle: "Test Title",
+                errContent: "Text cotent.",
+              );
+            },
           ),
           SpeedDialChild(
             child: SizedBox(
