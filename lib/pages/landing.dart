@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../helper/googleMap.dart';
 import 'package:research_mobile_app/exports.dart';
 
@@ -13,7 +14,7 @@ class LandingPage extends StatefulWidget {
 
 class _LandingPageState extends State<LandingPage> {
   Future<String> _test = Future<String>.delayed(
-    const Duration(minutes: 1),
+    const Duration(seconds: 30),
     () => "test 1",
   );
 
@@ -37,7 +38,7 @@ class _LandingPageState extends State<LandingPage> {
           if (snapshot.hasData) {
             // done waiting
 
-            return Map().initMap();
+            return Gmap().initMap(context: context);
           } else if (snapshot.hasError) {
             // error
             children = <Widget>[
@@ -66,7 +67,8 @@ class _LandingPageState extends State<LandingPage> {
       ),
       floatingActionButton: SpeedDial(
         animatedIcon: AnimatedIcons.search_ellipsis,
-        overlayColor: Colors.transparent,
+        overlayColor: Colors.blue.shade100,
+        animationSpeed: 50,
         spacing: 10.0,
         spaceBetweenChildren: 10.0,
         children: [
