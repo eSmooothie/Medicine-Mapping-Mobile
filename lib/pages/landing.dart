@@ -18,6 +18,8 @@ class _LandingPageState extends State<LandingPage> {
     () => "test 1",
   );
 
+  Gmap map = Gmap();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,13 +34,13 @@ class _LandingPageState extends State<LandingPage> {
         shadowColor: Colors.transparent,
       ),
       body: FutureBuilder(
-        future: _test,
-        builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+        future: map.initMap(context: context),
+        builder: (BuildContext context, AsyncSnapshot<Widget> snapshot) {
           List<Widget> children;
           if (snapshot.hasData) {
             // done waiting
 
-            return Gmap().initMap(context: context);
+            return snapshot.data!;
           } else if (snapshot.hasError) {
             // error
             children = <Widget>[
@@ -76,7 +78,7 @@ class _LandingPageState extends State<LandingPage> {
             child: SizedBox(
               height: 25,
               width: 25,
-              child: SvgIcons.capsules_solid,
+              child: SvgIcons.capsulesSolid,
             ),
             label: "Medicine",
             onTap: () {
@@ -100,5 +102,14 @@ class _LandingPageState extends State<LandingPage> {
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       extendBodyBehindAppBar: true,
     );
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+
+    map.dispose();
+
+    super.dispose();
   }
 }
