@@ -32,6 +32,7 @@ class Transition {
       childCurrent: currentPage,
       type: _pageTransitionType(transitionType),
       duration: Duration(milliseconds: duration),
+      settings: RouteSettings(arguments: "test"),
     );
   }
 }

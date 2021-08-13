@@ -18,6 +18,7 @@ Route<dynamic> appRoutes(RouteSettings route) {
     case searchPage:
       return Transition().page(Search(
         title: "Search",
+        arguments: route.arguments,
       ));
     default:
       return Transition().page(LandingPage(title: "Map"));

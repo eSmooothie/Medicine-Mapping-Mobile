@@ -12,11 +12,11 @@ class Gmap {
   late GoogleMapController mapController;
   late String _mapStyle;
   late bool _serviceEnabled;
-  late BuildContext _context;
   late PermissionStatus _permissionGranted;
   final LatLng _center = const LatLng(8.2280, 124.2452);
   late LocationData _userPos;
 
+  BuildContext context;
   Map<MarkerId, Marker> _markers = <MarkerId, Marker>{};
   Map<CircleId, Circle> _circles = <CircleId, Circle>{};
   StreamSubscription? _locationSubscription;
@@ -24,7 +24,7 @@ class Gmap {
 
   bool darkMode = false;
 
-  Gmap() {
+  Gmap({required this.context}) {
     String loadMapStyle =
         darkMode ? 'assets/dark_mapStyle.txt' : 'assets/default_mapStyle.txt';
     rootBundle.loadString(loadMapStyle).then((string) {
@@ -42,7 +42,7 @@ class Gmap {
       position: position,
       onTap: () {
         showModalBottomSheet(
-          context: _context,
+          context: context,
           builder: (BuildContext context) {
             return Container(
               height: 200,
@@ -88,7 +88,7 @@ class Gmap {
   }
 
   // customMarker
-  Future<Uint8List> userMarkerIcon(BuildContext context) async {
+  Future<Uint8List> userMarkerIcon() async {
     ByteData byteData = await DefaultAssetBundle.of(context)
         .load("assets/images/userLocationMarker.png");
     return byteData.buffer.asUint8List();
@@ -127,28 +127,25 @@ class Gmap {
   }
 
   Future<void> _userLocation() async {
-    Uint8List imageData = await userMarkerIcon(_context);
+    Uint8List imageData = await userMarkerIcon();
     _userPos = await _userLocationTracker.getLocation();
-    print("User: $_userPos");
     _updateUserMarkerAndCircle(newLocationData: _userPos, imageData: imageData);
   }
 
-  void _followUser({required BuildContext context}) async {
-    Uint8List imageData = await userMarkerIcon(context);
+  void _followUser() async {
+    Uint8List imageData = await userMarkerIcon();
 
     _locationSubscription =
         _userLocationTracker.onLocationChanged.listen((newLocalData) {
-      if (mapController != null) {
-        mapController
-            .animateCamera(CameraUpdate.newCameraPosition(new CameraPosition(
-          bearing: 192.8334901395799,
-          target: LatLng(newLocalData.latitude!, newLocalData.longitude!),
-          tilt: 0,
-          zoom: 18.00,
-        )));
-        _updateUserMarkerAndCircle(
-            newLocationData: newLocalData, imageData: imageData);
-      }
+      mapController
+          .animateCamera(CameraUpdate.newCameraPosition(new CameraPosition(
+        bearing: 192.8334901395799,
+        target: LatLng(newLocalData.latitude!, newLocalData.longitude!),
+        tilt: 0,
+        zoom: 18.00,
+      )));
+      _updateUserMarkerAndCircle(
+          newLocationData: newLocalData, imageData: imageData);
     });
   }
 
@@ -167,12 +164,10 @@ class Gmap {
 
   // The larger the value of zoom the more it is closer to the map.
   Future<Widget> initMap({
-    required BuildContext context,
     double zoom = 12.0,
     bool showPharmacy = true,
     bool followUser = false,
   }) async {
-    _context = context;
     // wait for the user to allow the app to use the location
     bool isPermitted = await _checkLocationService();
     if (isPermitted) {
@@ -188,7 +183,7 @@ class Gmap {
     }
 
     if (followUser) {
-      _followUser(context: context);
+      _followUser();
     }
 
     return GoogleMap(
@@ -242,6 +237,10 @@ class Gmap {
     if (_locationSubscription != null) {
       _locationSubscription!.cancel();
     }
-    mapController.dispose();
+    try {
+      mapController.dispose();
+    } catch (e) {
+      print(e.toString());
+    }
   }
 }

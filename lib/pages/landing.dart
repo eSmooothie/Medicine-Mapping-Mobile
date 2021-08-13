@@ -13,15 +13,11 @@ class LandingPage extends StatefulWidget {
 }
 
 class _LandingPageState extends State<LandingPage> {
-  Future<String> _test = Future<String>.delayed(
-    const Duration(seconds: 30),
-    () => "test 1",
-  );
-
-  Gmap map = Gmap();
+  late Gmap map;
 
   @override
   Widget build(BuildContext context) {
+    map = Gmap(context: context);
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -34,12 +30,11 @@ class _LandingPageState extends State<LandingPage> {
         shadowColor: Colors.transparent,
       ),
       body: FutureBuilder(
-        future: map.initMap(context: context),
+        future: map.initMap(),
         builder: (BuildContext context, AsyncSnapshot<Widget> snapshot) {
           List<Widget> children;
           if (snapshot.hasData) {
             // done waiting
-
             return snapshot.data!;
           } else if (snapshot.hasError) {
             // error
@@ -82,11 +77,10 @@ class _LandingPageState extends State<LandingPage> {
             ),
             label: "Medicine",
             onTap: () {
-              Utility().errorDialog(
-                context: context,
-                errtitle: "Test Title",
-                errContent: "Text cotent.",
-              );
+              List<Object> args = [
+                "medicine",
+              ];
+              Navigator.popAndPushNamed(context, searchPage, arguments: args);
             },
           ),
           SpeedDialChild(
@@ -96,12 +90,26 @@ class _LandingPageState extends State<LandingPage> {
               child: SvgIcons.pharmacy,
             ),
             label: "Pharmacy",
+            onTap: () {
+              List<Object> args = [
+                "pharmacy",
+              ];
+
+              Navigator.popAndPushNamed(context, searchPage, arguments: args);
+            },
           ),
         ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       extendBodyBehindAppBar: true,
     );
+  }
+
+  @override
+  void deactivate() {
+    // TODO: implement deactivate
+    print("Deactivate landing page");
+    super.deactivate();
   }
 
   @override
