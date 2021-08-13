@@ -51,7 +51,7 @@ class _LandingPageState extends State<LandingPage> {
             ];
           } else {
             // waiting
-            children = Utility.loading;
+            children = Utility.loadingCircular;
           }
           return Center(
             child: Column(

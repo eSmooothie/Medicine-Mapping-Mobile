@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class Utility {
-  static List<Widget> loading = [
+  static List<Widget> loadingCircular = [
     SizedBox(
       child: CircularProgressIndicator(),
       width: 50,
@@ -12,6 +12,44 @@ class Utility {
       child: Text("Loading..."),
     ),
   ];
+
+  Widget medicineContainer({
+    required String brandName,
+    required String genericName,
+    required String dosage,
+    required String dosageForm,
+    required Function()? onTap,
+  }) {
+    return SizedBox(
+      height: 70,
+      child: Ink(
+        decoration: BoxDecoration(
+          color: Colors.blue.shade100,
+          borderRadius: BorderRadius.circular(50.0),
+        ),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(50.0),
+          splashColor: Colors.blue,
+          focusColor: Colors.blue.shade100,
+          highlightColor: null,
+          child: Row(
+            children: [
+              Container(
+                margin: const EdgeInsets.all(10.0),
+                child: Text("Logo"),
+              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [],
+              )
+            ],
+          ),
+          onTap: onTap,
+        ),
+      ),
+    );
+  }
 
   Future errorDialog({
     required BuildContext context,
