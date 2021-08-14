@@ -26,6 +26,6 @@ class Pharmacy {
   @override
   String toString() {
     // TODO: implement toString
-    return "{id:$id, LatLng:($lat, $lng), name:$name, address:$address";
+    return "{id:$id, LatLng:($lat, $lng), name:$name, address:$address}";
   }
 }
