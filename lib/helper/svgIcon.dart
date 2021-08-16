@@ -23,4 +23,9 @@ class SvgIcons {
     semanticsLabel: 'Pharmacy',
     color: Colors.blue,
   );
+
+  static final Widget getDirection = SvgPicture.asset(
+    'assets/icons/get_direction.svg',
+    semanticsLabel: "Get Direction",
+  );
 }

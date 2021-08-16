@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
-import 'helper/page_transition.dart';
-import 'pages/landing.dart';
-import 'pages/search.dart';
-import 'pages/medicineInfo.dart';
+import 'package:research_mobile_app/helper/page_transition.dart';
+import 'package:research_mobile_app/pages/landing.dart';
+import 'package:research_mobile_app/pages/search.dart';
+import 'package:research_mobile_app/pages/medicineInfo.dart';
+import 'package:research_mobile_app/pages/pharmacyInfo.dart';
 
 // Routes of the app
 const String landingPage = "/";
@@ -26,9 +27,20 @@ Route<dynamic> appRoutes(RouteSettings route) {
 
     case medicineInfoPage:
       return Transition().page(
-        MedicineInfo(title: "Medicine Information", arguments: route.arguments),
+        MedicineInfo(
+          title: "Medicine Information",
+          arguments: route.arguments,
+        ),
       );
+
+    case pharmacyInfoPage:
+      return Transition().page(PharmacyInformation(
+        title: "Pharmacy Information",
+        arguments: route.arguments,
+      ));
     default:
-      return Transition().page(LandingPage(title: "Map"));
+      return Transition().page(
+        LandingPage(title: "Map"),
+      );
   }
 }

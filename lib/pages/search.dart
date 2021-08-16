@@ -96,7 +96,7 @@ class _SearchState extends State<Search> {
   };
 
   Future futureMedicine = Future.delayed(
-    Duration(seconds: 10),
+    Duration(seconds: 4),
     () {
       return [
         new Medicine("1", "brandX", "genericX", "2", "vial", true,
@@ -111,7 +111,7 @@ class _SearchState extends State<Search> {
   );
 
   Future futurePharma = Future.delayed(
-    Duration(seconds: 5),
+    Duration(seconds: 4),
     () {
       return [
         new Pharmacy(1, 9.0000, 214.2123, "PharmaX", "AddressX"),

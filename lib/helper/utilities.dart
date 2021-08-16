@@ -9,7 +9,7 @@ class Utility {
     ),
     Padding(
       padding: EdgeInsets.only(top: 16),
-      child: Text("Loading..."),
+      child: Text("Loading google map..."),
     ),
   ];
 
