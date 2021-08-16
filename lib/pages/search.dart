@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:research_mobile_app/exports.dart';
 
 class Search extends StatefulWidget {
@@ -14,6 +15,7 @@ class _SearchState extends State<Search> {
   late String searchBy;
   TextEditingController _searchController = TextEditingController();
 
+  // future builder
   Widget Function(BuildContext context, AsyncSnapshot snapshot) futureBuilder =
       (BuildContext context, AsyncSnapshot snapshot) {
     var rand = new Random();
@@ -99,6 +101,7 @@ class _SearchState extends State<Search> {
     );
   };
 
+  // future medicine
   Future futureMedicine = Future.delayed(
     Duration(seconds: 4),
     () {
@@ -114,6 +117,7 @@ class _SearchState extends State<Search> {
     },
   );
 
+  // future pharmacy
   Future futurePharma = Future.delayed(
     Duration(seconds: 4),
     () {
@@ -221,6 +225,45 @@ class _SearchState extends State<Search> {
           ),
         ),
       ),
+      floatingActionButton: SpeedDial(
+        animatedIcon: AnimatedIcons.search_ellipsis,
+        overlayColor: Colors.blue.shade100,
+        animationSpeed: 50,
+        spacing: 10.0,
+        spaceBetweenChildren: 10.0,
+        children: [
+          SpeedDialChild(
+            child: SizedBox(
+              height: 25,
+              width: 25,
+              child: SvgIcons.capsulesSolid,
+            ),
+            label: "Medicine",
+            onTap: () {
+              List<Object> args = [
+                "medicine",
+              ];
+              Navigator.popAndPushNamed(context, searchPage, arguments: args);
+            },
+          ),
+          SpeedDialChild(
+            child: SizedBox(
+              height: 25,
+              width: 25,
+              child: SvgIcons.pharmacy,
+            ),
+            label: "Pharmacy",
+            onTap: () {
+              List<Object> args = [
+                "pharmacy",
+              ];
+
+              Navigator.popAndPushNamed(context, searchPage, arguments: args);
+            },
+          ),
+        ],
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 }

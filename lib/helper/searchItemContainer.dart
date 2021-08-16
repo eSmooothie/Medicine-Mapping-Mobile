@@ -11,10 +11,11 @@ Widget ItemContainer({
   return OutlinedButton(
     style: OutlinedButton.styleFrom(
       fixedSize: Size(200, 100),
-      backgroundColor: Colors.blue,
+      backgroundColor: Colors.blue.shade100,
       textStyle: TextStyle(color: Colors.white),
       padding: EdgeInsets.all(18.0),
       shape: RoundedRectangleBorder(
+          side: BorderSide(color: Colors.blue.shade100),
           borderRadius: BorderRadius.all(Radius.circular(10.0))),
     ),
     onPressed: onPressed,
@@ -34,7 +35,7 @@ Widget ItemContainer({
                 child: Text(
                   "$title",
                   style: TextStyle(
-                    color: Colors.white,
+                    color: Colors.blue.shade800,
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),
@@ -46,7 +47,7 @@ Widget ItemContainer({
                 child: Text(
                   "$description",
                   style: TextStyle(
-                    color: Colors.white,
+                    color: Colors.blue.shade800,
                   ),
                 ),
               ),
