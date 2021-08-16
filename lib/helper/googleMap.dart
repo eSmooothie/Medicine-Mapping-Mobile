@@ -7,6 +7,8 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter/services.dart'
     show ByteData, PlatformException, rootBundle;
 import 'package:location/location.dart';
+import 'package:research_mobile_app/exports.dart';
+import 'package:research_mobile_app/objects/pharmacy.dart';
 
 class Gmap {
   late GoogleMapController mapController;
@@ -34,9 +36,11 @@ class Gmap {
 
   void _addMarker({
     required var id,
+    required String name,
     required LatLng position,
+    required void Function()? onPressed,
   }) {
-    MarkerId markerId = MarkerId(id);
+    MarkerId markerId = MarkerId(id.toString());
     final Marker newMarker = Marker(
       markerId: markerId,
       position: position,
@@ -53,16 +57,14 @@ class Gmap {
                 mainAxisSize: MainAxisSize.max,
                 children: [
                   Text(
-                    "$id",
+                    "$name",
                     style: TextStyle(color: Colors.white, fontSize: 34),
                   ),
                   SizedBox(
                     width: 200,
                     height: 50,
                     child: TextButton(
-                      onPressed: () {
-                        print("marker tap. {$id}");
-                      },
+                      onPressed: onPressed,
                       child: Text(
                         "View",
                         style: TextStyle(color: Colors.white, fontSize: 18),
@@ -150,15 +152,30 @@ class Gmap {
   }
 
   void _initPharmacy() {
-    Map<String, LatLng> pharmaInfo = <String, LatLng>{};
-
-    // query
-    pharmaInfo["1"] = const LatLng(8.228210, 124.241222);
-    pharmaInfo["2"] = const LatLng(8.232329, 124.237471);
+    print("initializing pharmacy marker in the google map.");
+    List<Pharmacy> pharmacies = [
+      new Pharmacy(1, 8.228210, 124.241222, "PharmaX", "AddressX"),
+      new Pharmacy(2, 8.232329, 124.237471, "PharmaY", "AddressY"),
+    ];
 
     // loop
-    pharmaInfo.forEach((key, value) {
-      _addMarker(id: key, position: value);
+    pharmacies.forEach((Pharmacy pharmacy) {
+      LatLng pos = LatLng(pharmacy.lat, pharmacy.lng);
+      Map<String, Object> args = {
+        'from': landingPage,
+        'pharmacy': pharmacy,
+      };
+      _addMarker(
+          id: pharmacy.id,
+          name: pharmacy.name,
+          position: pos,
+          onPressed: () {
+            Navigator.popAndPushNamed(
+              context,
+              pharmacyInfoPage,
+              arguments: args,
+            );
+          });
     });
   }
 

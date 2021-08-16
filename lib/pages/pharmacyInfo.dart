@@ -15,7 +15,10 @@ class PharmacyInformation extends StatefulWidget {
 }
 
 class _PharmacyInformationState extends State<PharmacyInformation> {
-  late var pharmaInfo;
+  late var _pharmaInfo;
+  late var _arguments;
+  late var _from;
+  late var _medicineInfo;
   TextEditingController _searchDrugController = TextEditingController();
 
   Widget Function(BuildContext context, AsyncSnapshot snapshot) _futureBuilder =
@@ -39,7 +42,7 @@ class _PharmacyInformationState extends State<PharmacyInformation> {
             description: _medicineItemDataHolder[index].description,
             onPressed: () {
               // reroute to pharmacy information page
-              Navigator.popAndPushNamed(
+              Navigator.pushNamed(
                 context,
                 medicineInfoPage,
                 arguments: _medicineItemDataHolder[index].object,
@@ -103,22 +106,17 @@ class _PharmacyInformationState extends State<PharmacyInformation> {
   @override
   Widget build(BuildContext context) {
     setState(() {
-      pharmaInfo = widget.arguments;
-      // print(pharmaInfo.toString());
+      _arguments = widget.arguments;
+      _from = _arguments['from'];
+      _medicineInfo = _arguments!['medicine'];
+      _pharmaInfo = _arguments['pharmacy'];
     });
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         leading: CustomWidget.outlinedButton(
           onPressed: () {
-            List<Object> args = [
-              "pharmacy",
-            ];
-            Navigator.popAndPushNamed(
-              context,
-              searchPage,
-              arguments: args,
-            );
+            Navigator.pop(context);
           },
           child: Icon(
             Icons.arrow_back,
@@ -155,7 +153,7 @@ class _PharmacyInformationState extends State<PharmacyInformation> {
                           Container(
                             margin: EdgeInsets.only(top: 20.0),
                             child: Text(
-                              "${pharmaInfo.name}",
+                              "${_pharmaInfo.name}",
                               style: TextStyle(
                                 fontSize: 24.0,
                                 fontWeight: FontWeight.bold,
@@ -164,7 +162,7 @@ class _PharmacyInformationState extends State<PharmacyInformation> {
                           ),
                           Expanded(
                             flex: 5,
-                            child: Text("${pharmaInfo.address}"),
+                            child: Text("${_pharmaInfo.address}"),
                           ),
                         ],
                       ),

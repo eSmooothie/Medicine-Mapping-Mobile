@@ -20,7 +20,9 @@ class _MedicineInfoState extends State<MedicineInfo> {
     var rand = new Random();
     List<ObjectItemDataHolder> _pharmacyItemDataHolder = [];
     if (snapshot.hasData) {
-      snapshot.data.forEach((Pharmacy pharmacy) {
+      Medicine medicineObj = snapshot.data['medicineData'];
+      List<Pharmacy> pharmacies = snapshot.data['pharmacies'];
+      pharmacies.forEach((Pharmacy pharmacy) {
         ObjectItemDataHolder pharmaData = ObjectItemDataHolder(
             name: pharmacy.name,
             description: pharmacy.address,
@@ -36,16 +38,21 @@ class _MedicineInfoState extends State<MedicineInfo> {
             description: _pharmacyItemDataHolder[index].description,
             onPressed: () {
               // reroute to pharmacy information page
-              Navigator.popAndPushNamed(
+              Map<String, Object> args = {
+                'from': medicineInfoPage,
+                'pharmacy': _pharmacyItemDataHolder[index].object,
+                'medicine': medicineObj,
+              };
+              Navigator.pushNamed(
                 context,
                 pharmacyInfoPage,
-                arguments: _pharmacyItemDataHolder[index].object,
+                arguments: args,
               );
             },
           );
         },
         separatorBuilder: (BuildContext context, int index) => const Divider(),
-        itemCount: snapshot.data.length,
+        itemCount: pharmacies.length,
       );
     } else if (snapshot.hasError) {}
 
@@ -65,11 +72,18 @@ class _MedicineInfoState extends State<MedicineInfo> {
     );
   };
 
-  Future _future = Future.delayed(Duration(seconds: 5), () {
-    return [
+  Future<Map<String, Object>> _future(var medicineObj) async {
+    Map<String, Object> data = {
+      'medicineData': medicineObj,
+    };
+
+    List<Pharmacy> pharmacies = [
       new Pharmacy(1, 9.0000, 214.2123, "PharmaX", "AddressX"),
     ];
-  });
+
+    data['pharmacies'] = pharmacies;
+    return data;
+  }
 
   @override
   void dispose() {
@@ -97,11 +111,7 @@ class _MedicineInfoState extends State<MedicineInfo> {
             List<Object> args = [
               "medicine",
             ];
-            Navigator.popAndPushNamed(
-              context,
-              searchPage,
-              arguments: args,
-            );
+            Navigator.pop(context);
           },
           child: Icon(
             Icons.arrow_back,
@@ -182,7 +192,7 @@ class _MedicineInfoState extends State<MedicineInfo> {
               child: Container(
                 padding: EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 5.0),
                 child: FutureBuilder(
-                  future: _future,
+                  future: _future(drugInfo),
                   builder: _futureBuilder,
                 ),
               ),

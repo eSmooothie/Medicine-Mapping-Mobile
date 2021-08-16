@@ -55,17 +55,21 @@ class _SearchState extends State<Search> {
               // evaluate the obj of searchItemDataHolder
               if (_searchItemDataHolder[index].object is Medicine) {
                 // reroute to medicine information page
-                Navigator.popAndPushNamed(
+                Navigator.pushNamed(
                   context,
                   medicineInfoPage,
                   arguments: _searchItemDataHolder[index].object,
                 );
               } else if (_searchItemDataHolder[index].object is Pharmacy) {
                 // reroute to pharmacy information page
-                Navigator.popAndPushNamed(
+                Map<String, Object> args = {
+                  'from': searchPage,
+                  'pharmacy': _searchItemDataHolder[index].object,
+                };
+                Navigator.pushNamed(
                   context,
                   pharmacyInfoPage,
-                  arguments: _searchItemDataHolder[index].object,
+                  arguments: args,
                 );
               }
             },
