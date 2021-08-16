@@ -3,9 +3,10 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:research_mobile_app/exports.dart';
 
-Widget SearchItemContainer({
+Widget ItemContainer({
   required String title,
   required String description,
+  required void Function()? onPressed,
 }) {
   return OutlinedButton(
     style: OutlinedButton.styleFrom(
@@ -16,9 +17,7 @@ Widget SearchItemContainer({
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(10.0))),
     ),
-    onPressed: () {
-      print("clicked...");
-    },
+    onPressed: onPressed,
     child: Row(
       mainAxisSize: MainAxisSize.max,
       mainAxisAlignment: MainAxisAlignment.start,
@@ -59,7 +58,7 @@ Widget SearchItemContainer({
   );
 }
 
-Widget SearchItemContainerSkeleton({
+Widget ItemContainerSkeleton({
   double titleWidth = 200,
   double descHeight = 20,
 }) {
@@ -92,40 +91,4 @@ Widget SearchItemContainerSkeleton({
       ],
     ),
   );
-  // return OutlinedButton(
-  //   style: OutlinedButton.styleFrom(
-  //     fixedSize: Size(200, 100),
-  //     backgroundColor: Colors.blue,
-  //     textStyle: TextStyle(color: Colors.white),
-  //     padding: EdgeInsets.all(18.0),
-  //     shape: RoundedRectangleBorder(
-  //         borderRadius: BorderRadius.all(Radius.circular(10.0))),
-  //   ),
-  //   onPressed: () {},
-  //   child: Row(
-  //     mainAxisSize: MainAxisSize.max,
-  //     mainAxisAlignment: MainAxisAlignment.start,
-  //     crossAxisAlignment: CrossAxisAlignment.stretch,
-  //     children: [
-  //       Expanded(
-  //         flex: 5,
-  //         child: Column(
-  //           crossAxisAlignment: CrossAxisAlignment.start,
-  //           mainAxisSize: MainAxisSize.min,
-  //           children: [
-  //             FittedBox(
-  //               fit: BoxFit.fitWidth,
-  //               child: SkeletonContainer.square(width: 100, height: 10),
-  //             ),
-  //             Flexible(
-  //               flex: 1,
-  //               fit: FlexFit.tight,
-  //               child: SkeletonContainer.square(width: 100, height: 100),
-  //             ),
-  //           ],
-  //         ),
-  //       ),
-  //     ],
-  //   ),
-  // );
 }

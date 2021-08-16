@@ -17,7 +17,7 @@ class _SearchState extends State<Search> {
   Widget Function(BuildContext context, AsyncSnapshot snapshot) futureBuilder =
       (BuildContext context, AsyncSnapshot snapshot) {
     var rand = new Random();
-    List<SearchItemDataHolder> _searchItemDataHolder = [];
+    List<ObjectItemDataHolder> _searchItemDataHolder = [];
     if (snapshot.hasData) {
       // done loading
 
@@ -26,17 +26,20 @@ class _SearchState extends State<Search> {
       if (snapshot.data is List<Medicine>) {
         snapshot.data.forEach((Medicine medicine) {
           String desc = medicine.description;
-          SearchItemDataHolder drugData =
-              SearchItemDataHolder(name: medicine.brandName, description: desc);
+          ObjectItemDataHolder drugData = ObjectItemDataHolder(
+            name: medicine.brandName,
+            description: desc,
+            object: medicine,
+          );
 
           _searchItemDataHolder.add(drugData);
         });
       } else if (snapshot.data is List<Pharmacy>) {
         snapshot.data.forEach((Pharmacy pharmacy) {
-          SearchItemDataHolder pharmaData = SearchItemDataHolder(
-            name: pharmacy.name,
-            description: pharmacy.address,
-          );
+          ObjectItemDataHolder pharmaData = ObjectItemDataHolder(
+              name: pharmacy.name,
+              description: pharmacy.address,
+              object: pharmacy);
           _searchItemDataHolder.add(pharmaData);
         });
       }
@@ -44,9 +47,28 @@ class _SearchState extends State<Search> {
       return ListView.separated(
         shrinkWrap: true,
         itemBuilder: (BuildContext context, int index) {
-          return SearchItemContainer(
+          return ItemContainer(
             title: _searchItemDataHolder[index].name,
             description: _searchItemDataHolder[index].description,
+            onPressed: () {
+              // reroute to their desire information page
+              // evaluate the obj of searchItemDataHolder
+              if (_searchItemDataHolder[index].object is Medicine) {
+                // reroute to medicine information page
+                Navigator.popAndPushNamed(
+                  context,
+                  medicineInfoPage,
+                  arguments: _searchItemDataHolder[index].object,
+                );
+              } else if (_searchItemDataHolder[index].object is Pharmacy) {
+                // reroute to pharmacy information page
+                Navigator.popAndPushNamed(
+                  context,
+                  pharmacyInfoPage,
+                  arguments: _searchItemDataHolder[index].object,
+                );
+              }
+            },
           );
         },
         separatorBuilder: (BuildContext context, int index) => const Divider(),
@@ -63,7 +85,7 @@ class _SearchState extends State<Search> {
       itemBuilder: (BuildContext context, int index) {
         double titleWidth = rand.nextInt(200).clamp(50, 200).floorToDouble();
         double descHeight = rand.nextInt(100).clamp(20, 100).floorToDouble();
-        return SearchItemContainerSkeleton(
+        return ItemContainerSkeleton(
           titleWidth: titleWidth,
           descHeight: descHeight,
         );
@@ -89,7 +111,7 @@ class _SearchState extends State<Search> {
   );
 
   Future futurePharma = Future.delayed(
-    Duration(seconds: 10),
+    Duration(seconds: 5),
     () {
       return [
         new Pharmacy(1, 9.0000, 214.2123, "PharmaX", "AddressX"),
@@ -100,6 +122,7 @@ class _SearchState extends State<Search> {
   @override
   void dispose() {
     // TODO: implement dispose
+    print("Dispose search page.");
     _searchController.dispose();
     super.dispose();
   }
@@ -107,7 +130,7 @@ class _SearchState extends State<Search> {
   @override
   void deactivate() {
     // TODO: implement deactivate
-    print("Deactive Search page.");
+    print("Deactive search page.");
     super.deactivate();
   }
 
@@ -125,7 +148,7 @@ class _SearchState extends State<Search> {
           onPressed: () {
             Navigator.popAndPushNamed(
               context,
-              "/",
+              landingPage,
             );
           },
           child: Icon(
@@ -196,10 +219,4 @@ class _SearchState extends State<Search> {
       ),
     );
   }
-}
-
-class SearchItemDataHolder {
-  final String name;
-  final String description;
-  SearchItemDataHolder({required this.name, required this.description});
 }

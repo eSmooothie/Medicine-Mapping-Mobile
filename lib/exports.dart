@@ -9,5 +9,6 @@ export '/helper/searchItemContainer.dart';
 
 export '/objects/medicine.dart';
 export '/objects/pharmacy.dart';
+export '/objects/objectDataHolder.dart';
 
 export 'dart:math';
