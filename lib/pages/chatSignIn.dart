@@ -15,30 +15,6 @@ class _SignInState extends State<SignIn> {
   TextEditingController _phoneNumberController = TextEditingController();
   TextEditingController _passswordController = TextEditingController();
 
-  Widget Function(BuildContext context, AsyncSnapshot snapshot) _futureBuilder =
-      (BuildContext context, AsyncSnapshot snapshot) {
-    if (snapshot.hasData) {
-      bool isLogin = snapshot.data[0];
-
-      return Text("hi");
-    } else if (snapshot.hasError) {
-      return Center(
-        child: Text(
-          "Error: ${snapshot.error}",
-        ),
-      );
-    }
-
-    return Center(
-      child: Flex(
-        direction: Axis.vertical,
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: Utility.loadingCircular(),
-      ),
-    );
-  };
-
   Future _future = Future(() async {
     final storage = new FlutterSecureStorage();
     final options = IOSOptions(accessibility: IOSAccessibility.first_unlock);
@@ -81,104 +57,124 @@ class _SignInState extends State<SignIn> {
         centerTitle: true,
       ),
       body: SafeArea(
-        // child: FutureBuilder(
-        //   builder: _futureBuilder,
-        //   future: _future,
-        // ),
-        child: Center(
-          child: Flex(
-            direction: Axis.vertical,
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Expanded(
-                  flex: 3,
-                  child: Container(
-                    margin: EdgeInsets.only(top: 50.0),
-                    child: Text(
-                      "Sign In",
-                      style: TextStyle(
-                          fontSize: 50.0,
-                          color: Colors.blue,
-                          fontWeight: FontWeight.bold),
-                    ),
-                  )),
-              Flexible(
-                flex: 2,
-                child: CustomWidget.textField(
-                  controller: _phoneNumberController,
-                  keyboardType: TextInputType.phone,
-                  labelText: "Phone number",
-                  hintText: "09xxxxxxxxx",
-                  width: 250,
-                  height: 100,
-                  errorText: _phoneNumberErr,
-                ),
-              ),
-              Flexible(
-                flex: 2,
-                child: Container(
-                  margin: EdgeInsets.only(top: 5.0),
-                  child: CustomWidget.textField(
-                    controller: _passswordController,
-                    keyboardType: TextInputType.visiblePassword,
-                    isPassword: true,
-                    labelText: "Password",
-                    hintText: "",
-                    width: 250,
-                    height: 100,
-                    errorText: _passwordErr,
-                  ),
-                ),
-              ),
-              Flexible(
-                flex: 2,
-                fit: FlexFit.loose,
-                child: Container(
-                  margin: EdgeInsets.only(top: 20.0),
-                  child: CustomWidget.textButton(
-                      onPressed: () {
-                        print("Sign up");
-                      },
-                      child: Text(
-                        "Sign up",
-                        style: TextStyle(
-                          fontSize: 18.0,
+        child: FutureBuilder(
+          future: _future,
+          builder: (BuildContext context, AsyncSnapshot snapshot) {
+            if (snapshot.hasData) {
+              bool isLogin = snapshot.data[0];
+
+              if (isLogin) {
+                return Center(
+                  child: Flex(
+                    direction: Axis.vertical,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      Expanded(
+                          flex: 3,
+                          child: Container(
+                            margin: EdgeInsets.only(top: 50.0),
+                            child: Text(
+                              "Sign In",
+                              style: TextStyle(
+                                  fontSize: 50.0,
+                                  color: Colors.blue,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          )),
+                      Flexible(
+                        flex: 2,
+                        child: CustomWidget.textField(
+                          controller: _phoneNumberController,
+                          keyboardType: TextInputType.phone,
+                          labelText: "Phone number",
+                          hintText: "09xxxxxxxxx",
+                          width: 250,
+                          height: 100,
+                          errorText: _phoneNumberErr,
                         ),
-                      )),
-                ),
-              ),
-              Flexible(
-                flex: 5,
-                child: Container(
-                  margin: EdgeInsets.only(top: 50.0),
-                  child: CustomWidget.outlinedButton(
-                    onPressed: () {
-                      if (_passswordController.text == "" ||
-                          _phoneNumberController.text == "") {
-                        setState(() {
-                          _phoneNumberErr = "Required";
-                          _passwordErr = "Required";
-                        });
-                      } else {
-                        // check if credentials
-                        setState(() {
-                          _phoneNumberErr = " ";
-                          _passwordErr = "Invalid password or phone number.";
-                        });
-                      }
-                    },
-                    minWidth: 250,
-                    child: Icon(
-                      Icons.arrow_right_alt,
-                      color: Colors.white,
-                    ),
+                      ),
+                      Flexible(
+                        flex: 2,
+                        child: Container(
+                          margin: EdgeInsets.only(top: 5.0),
+                          child: CustomWidget.textField(
+                            controller: _passswordController,
+                            keyboardType: TextInputType.visiblePassword,
+                            isPassword: true,
+                            labelText: "Password",
+                            hintText: "",
+                            width: 250,
+                            height: 100,
+                            errorText: _passwordErr,
+                          ),
+                        ),
+                      ),
+                      Flexible(
+                        flex: 2,
+                        fit: FlexFit.loose,
+                        child: Container(
+                          margin: EdgeInsets.only(top: 20.0),
+                          child: CustomWidget.textButton(
+                              onPressed: () {
+                                print("Sign up");
+                              },
+                              child: Text(
+                                "Sign up",
+                                style: TextStyle(
+                                  fontSize: 18.0,
+                                ),
+                              )),
+                        ),
+                      ),
+                      Flexible(
+                        flex: 5,
+                        child: Container(
+                          margin: EdgeInsets.only(top: 50.0),
+                          child: CustomWidget.outlinedButton(
+                            onPressed: () {
+                              if (_passswordController.text == "" ||
+                                  _phoneNumberController.text == "") {
+                                setState(() {
+                                  _phoneNumberErr = "Required";
+                                  _passwordErr = "Required";
+                                });
+                              } else {
+                                // check if credentials
+                                setState(() {
+                                  _phoneNumberErr = " ";
+                                  _passwordErr =
+                                      "Invalid password or phone number.";
+                                });
+                              }
+                            },
+                            minWidth: 250,
+                            child: Icon(
+                              Icons.arrow_right_alt,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
                   ),
+                );
+              }
+            } else if (snapshot.hasError) {
+              return Center(
+                child: Text(
+                  "Error: ${snapshot.error}",
                 ),
-              )
-            ],
-          ),
+              );
+            }
+            return Flex(
+              direction: Axis.vertical,
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: Utility.loadingCircular(),
+            );
+          },
         ),
       ),
     );
