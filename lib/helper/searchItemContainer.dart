@@ -93,3 +93,105 @@ Widget ItemContainerSkeleton({
     ),
   );
 }
+
+Widget InboxItemContainerSkeleton({
+  double titleWidth = 200,
+  double descHeight = 20,
+}) {
+  return Container(
+    height: 100,
+    padding: EdgeInsets.all(10.0),
+    decoration: BoxDecoration(
+      border: Border.all(
+        color: Colors.grey,
+      ),
+      borderRadius: BorderRadius.circular(0),
+    ),
+    child: Flex(
+      direction: Axis.horizontal,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Expanded(
+          flex: 1,
+          child: SkeletonContainer.square(
+            height: 50,
+            width: 50,
+          ),
+        ),
+        Expanded(
+          flex: 5,
+          child: SkeletonContainer.square(height: descHeight),
+        ),
+      ],
+    ),
+  );
+}
+
+Widget InboxItemContainer({
+  required dynamic Function() onPressed,
+  required String pharmacyName,
+  Widget? notif,
+}) {
+  return CustomWidget.outlinedButton(
+    onPressed: onPressed,
+    child: Flex(
+      direction: Axis.horizontal,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Expanded(
+          flex: 1,
+          child: Icon(
+            Icons.account_circle,
+            size: 50.0,
+          ),
+        ),
+        Expanded(
+          flex: 5,
+          child: Text(
+            "$pharmacyName",
+            textAlign: TextAlign.left,
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 18.0,
+            ),
+          ),
+        ),
+        Expanded(
+          flex: 1,
+          child: (notif == null) ? Text("") : notif,
+        ),
+      ],
+    ),
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+    backgroundColor: Colors.blue.shade100,
+    fixedSize: Size.fromHeight(100),
+  );
+}
+
+Widget InboxNotifaction({
+  required int newMessage,
+}) {
+  return Ink(
+    decoration: BoxDecoration(
+      color: Colors.red,
+      shape: BoxShape.circle,
+    ),
+    width: 40,
+    height: 40,
+    child: InkWell(
+      child: Center(
+        child: Text(
+          "$newMessage",
+          style: TextStyle(
+            fontSize: 18.0,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        ),
+      ),
+    ),
+  );
+}

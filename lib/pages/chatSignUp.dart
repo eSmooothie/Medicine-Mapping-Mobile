@@ -125,6 +125,8 @@ class _SignUpState extends State<SignUp> {
                         // Save data to db.
                         // Save data to storage.
                         // Proceed to inbox
+                        print("x");
+                        Navigator.popAndPushNamed(context, inboxPage);
                       }
                     },
                     minWidth: 250,

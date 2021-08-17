@@ -49,6 +49,7 @@ class CustomWidget {
     required Widget child,
     double minWidth = 150,
     double minHeight = 50,
+    Size? fixedSize,
     Color backgroundColor = Colors.blue,
     BorderSide? side,
     OutlinedBorder? shape,
@@ -58,6 +59,7 @@ class CustomWidget {
       child: child,
       style: OutlinedButton.styleFrom(
         minimumSize: Size(minWidth, minHeight),
+        fixedSize: fixedSize,
         backgroundColor: backgroundColor,
         side: side,
         shape: shape,

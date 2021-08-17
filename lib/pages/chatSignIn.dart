@@ -140,6 +140,7 @@ class _SignInState extends State<SignIn> {
                           margin: EdgeInsets.only(top: 50.0),
                           child: CustomWidget.outlinedButton(
                             onPressed: () {
+                              Navigator.popAndPushNamed(context, inboxPage);
                               if (_passswordController.text == "" ||
                                   _phoneNumberController.text == "") {
                                 setState(() {
@@ -153,6 +154,8 @@ class _SignInState extends State<SignIn> {
                                   _passwordErr =
                                       "Invalid password or phone number.";
                                 });
+
+                                Navigator.popAndPushNamed(context, inboxPage);
                               }
                             },
                             minWidth: 250,
