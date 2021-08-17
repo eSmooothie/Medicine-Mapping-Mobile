@@ -28,4 +28,9 @@ class SvgIcons {
     'assets/icons/get_direction.svg',
     semanticsLabel: "Get Direction",
   );
+
+  static final Widget userProfileHolder = SvgPicture.asset(
+    'assets/icons/user-profile-holder.svg',
+    semanticsLabel: "User profile holder",
+  );
 }
