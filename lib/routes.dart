@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:research_mobile_app/helper/page_transition.dart';
 import 'package:research_mobile_app/pages/chatSignIn.dart';
+import 'package:research_mobile_app/pages/chatSignUp.dart';
 import 'package:research_mobile_app/pages/landing.dart';
 import 'package:research_mobile_app/pages/search.dart';
 import 'package:research_mobile_app/pages/medicineInfo.dart';
@@ -12,7 +13,8 @@ const String landingPage = "/";
 const String searchPage = "/search";
 const String medicineInfoPage = "/medicineInfo";
 const String pharmacyInfoPage = "/pharmacyInfo";
-const String signUpPage = "/signUp";
+const String signInPage = "/signIn";
+const String signUpPage = "/singUp";
 
 // set route
 Route<dynamic> appRoutes(RouteSettings route) {
@@ -41,8 +43,10 @@ Route<dynamic> appRoutes(RouteSettings route) {
         arguments: route.arguments,
       ));
 
-    case signUpPage:
+    case signInPage:
       return Transition().page(SignIn());
+    case signUpPage:
+      return Transition().page(SignUp());
     default:
       return Transition().page(
         LandingPage(title: "Map"),

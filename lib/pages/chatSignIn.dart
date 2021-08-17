@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:research_mobile_app/exports.dart';
@@ -118,7 +120,11 @@ class _SignInState extends State<SignIn> {
                           margin: EdgeInsets.only(top: 20.0),
                           child: CustomWidget.textButton(
                               onPressed: () {
-                                print("Sign up");
+                                setState(() {
+                                  _passwordErr = null;
+                                  _phoneNumberErr = null;
+                                });
+                                Navigator.pushNamed(context, signUpPage);
                               },
                               child: Text(
                                 "Sign up",
@@ -168,11 +174,13 @@ class _SignInState extends State<SignIn> {
                 ),
               );
             }
-            return Flex(
-              direction: Axis.vertical,
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: Utility.loadingCircular(),
+            return Center(
+              child: Flex(
+                direction: Axis.vertical,
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: Utility.loadingCircular(),
+              ),
             );
           },
         ),
@@ -191,6 +199,14 @@ class _SignInState extends State<SignIn> {
   void dispose() {
     // TODO: implement dispose
     print("Dispose sign up.");
+
+    try {
+      _passswordController.dispose();
+      _passswordController.dispose();
+    } catch (e) {
+      print(e.toString());
+    }
+
     super.dispose();
   }
 }
