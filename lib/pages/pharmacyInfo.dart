@@ -238,13 +238,13 @@ class _PharmacyInformationState extends State<PharmacyInformation> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          print("chat");
+          Navigator.pushNamed(context, signUpPage);
         },
         child: Icon(
           Icons.sms,
-          color: Colors.blue,
+          color: Colors.white,
         ),
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.blue,
         elevation: 10.0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(50.0),

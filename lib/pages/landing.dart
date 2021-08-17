@@ -51,7 +51,8 @@ class _LandingPageState extends State<LandingPage> {
             ];
           } else {
             // waiting
-            children = Utility.loadingCircular;
+            children =
+                Utility.loadingCircular(loadingLabel: "Loading google map...");
           }
           return Center(
             child: Column(

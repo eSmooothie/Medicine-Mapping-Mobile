@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
 
 class Utility {
-  static List<Widget> loadingCircular = [
-    SizedBox(
-      child: CircularProgressIndicator(),
-      width: 50,
-      height: 50,
-    ),
-    Padding(
-      padding: EdgeInsets.only(top: 16),
-      child: Text("Loading google map..."),
-    ),
-  ];
+  static List<Widget> loadingCircular({String loadingLabel = "Loading..."}) {
+    return [
+      SizedBox(
+        child: CircularProgressIndicator(),
+        width: 50,
+        height: 50,
+      ),
+      Padding(
+        padding: EdgeInsets.only(top: 16),
+        child: Text(loadingLabel),
+      ),
+    ];
+  }
 
   Widget medicineContainer({
     required String brandName,
