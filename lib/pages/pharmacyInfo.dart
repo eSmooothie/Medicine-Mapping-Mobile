@@ -77,13 +77,13 @@ class _PharmacyInformationState extends State<PharmacyInformation> {
     Duration(seconds: 3),
     () {
       return [
-        new Medicine("1", "brandX", "genericX", "2", "vial", true,
+        new Medicine("1", "brandX", "genericX", "2", "vial", "",
             "xqwe qwe qwe qwe qw eqw eqwe qwe qwe qwe qwe qwe wq qweqwe qwe qw"),
-        new Medicine("2", "brandY", "genericY", "3", "capsule", true, "y"),
-        new Medicine("3", "brandZ", "genericZ", "6", "tablet", true, "z"),
-        new Medicine("4", "brandXZ", "genericXZ", "16", "tablet", true, "Xz"),
-        new Medicine("4", "brandYZ", "genericXZ", "16", "tablet", true, "Yz"),
-        new Medicine("4", "brandZZ", "genericXZ", "16", "tablet", true, "Zz"),
+        new Medicine("2", "brandY", "genericY", "3", "capsule", "", "y"),
+        new Medicine("3", "brandZ", "genericZ", "6", "tablet", "", "z"),
+        new Medicine("4", "brandXZ", "genericXZ", "16", "tablet", "", "Xz"),
+        new Medicine("4", "brandYZ", "genericXZ", "16", "tablet", "", "Yz"),
+        new Medicine("4", "brandZZ", "genericXZ", "16", "tablet", "", "Zz"),
       ];
     },
   );

@@ -11,4 +11,6 @@ export '/objects/medicine.dart';
 export '/objects/pharmacy.dart';
 export '/objects/objectDataHolder.dart';
 
+export '/httprequest/httprequest.dart';
+
 export 'dart:math';

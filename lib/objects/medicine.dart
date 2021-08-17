@@ -9,7 +9,7 @@ class Medicine {
   final String genericName;
   final String dosage;
   final String dosageForm;
-  final bool isOTC;
+  final String categories;
   final String description;
 
   Medicine(
@@ -18,7 +18,7 @@ class Medicine {
     this.genericName,
     this.dosage,
     this.dosageForm,
-    this.isOTC,
+    this.categories,
     this.description,
   );
 
@@ -36,6 +36,6 @@ class Medicine {
   @override
   String toString() {
     // TODO: implement toString
-    return "{id:$id brandName:$brandName genericName:$genericName dosage:$dosage dosageForm:$dosageForm isOTC:$isOTC description:$description}";
+    return "{id:$id brandName:$brandName genericName:$genericName dosage:$dosage dosageForm:$dosageForm isOTC:$categories description:$description}";
   }
 }

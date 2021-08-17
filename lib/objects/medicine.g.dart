@@ -13,7 +13,7 @@ Medicine _$MedicineFromJson(Map<String, dynamic> json) {
     json['genericName'] as String,
     json['dosage'] as String,
     json['dosageForm'] as String,
-    json['isOTC'] as bool,
+    json['categories'] as String,
     json['description'] as String,
   );
 }
@@ -24,6 +24,6 @@ Map<String, dynamic> _$MedicineToJson(Medicine instance) => <String, dynamic>{
       'genericName': instance.genericName,
       'dosage': instance.dosage,
       'dosageForm': instance.dosageForm,
-      'isOTC': instance.isOTC,
+      'categories': instance.categories,
       'description': instance.description,
     };

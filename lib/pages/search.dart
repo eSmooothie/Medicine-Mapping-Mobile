@@ -27,10 +27,11 @@ class _SearchState extends State<Search> {
       // and map each object
       if (snapshot.data is List<Medicine>) {
         snapshot.data.forEach((Medicine medicine) {
-          String desc = medicine.description;
+          String desc =
+              "${medicine.genericName}\n${medicine.dosage} ${medicine.dosageForm}";
           ObjectItemDataHolder drugData = ObjectItemDataHolder(
             name: medicine.brandName,
-            description: desc,
+            description: desc.toUpperCase(),
             object: medicine,
           );
 
@@ -102,20 +103,9 @@ class _SearchState extends State<Search> {
   };
 
   // future medicine
-  Future futureMedicine = Future.delayed(
-    Duration(seconds: 4),
-    () {
-      return [
-        new Medicine("1", "brandX", "genericX", "2", "vial", true,
-            "xqwe qwe qwe qwe qw eqw eqwe qwe qwe qwe qwe qwe wq qweqwe qwe qw"),
-        new Medicine("2", "brandY", "genericY", "3", "capsule", true, "y"),
-        new Medicine("3", "brandZ", "genericZ", "6", "tablet", true, "z"),
-        new Medicine("4", "brandXZ", "genericXZ", "16", "tablet", true, "Xz"),
-        new Medicine("4", "brandYZ", "genericXZ", "16", "tablet", true, "Yz"),
-        new Medicine("4", "brandZZ", "genericXZ", "16", "tablet", true, "Zz"),
-      ];
-    },
-  );
+  Future futureMedicine = Future(() async {
+    return await MyHttpRequest().QueryAllMedicine();
+  });
 
   // future pharmacy
   Future futurePharma = Future.delayed(
