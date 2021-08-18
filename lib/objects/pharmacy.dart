@@ -4,11 +4,12 @@ part 'pharmacy.g.dart';
 
 @JsonSerializable()
 class Pharmacy {
-  final int id;
-  final double lat;
-  final double lng;
+  final String id;
+  final String lat;
+  final String lng;
   final String name;
   final String address;
+  final String contactNo;
 
   Pharmacy(
     this.id,
@@ -16,6 +17,7 @@ class Pharmacy {
     this.lng,
     this.name,
     this.address,
+    this.contactNo,
   );
 
   factory Pharmacy.fromJson(Map<String, dynamic> json) =>

@@ -78,7 +78,7 @@ class _MedicineInfoState extends State<MedicineInfo> {
     };
 
     List<Pharmacy> pharmacies = [
-      new Pharmacy(1, 9.0000, 214.2123, "PharmaX", "AddressX"),
+      new Pharmacy("1", "9.0000", "214.2123", "PharmaX", "AddressX", ""),
     ];
 
     data['pharmacies'] = pharmacies;

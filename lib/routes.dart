@@ -9,6 +9,7 @@ import 'package:research_mobile_app/pages/landing.dart';
 import 'package:research_mobile_app/pages/search.dart';
 import 'package:research_mobile_app/pages/medicineInfo.dart';
 import 'package:research_mobile_app/pages/pharmacyInfo.dart';
+import 'package:research_mobile_app/pages/getDirection.dart';
 
 // Routes of the app
 const String landingPage = "/";
@@ -19,6 +20,8 @@ const String signInPage = "/signIn";
 const String signUpPage = "/singUp";
 const String inboxPage = "/inbox";
 const String chatBoxPage = "/chatBox";
+const String getDirectionPage = "/getDirection";
+
 // set route
 Route<dynamic> appRoutes(RouteSettings route) {
   switch (route.name) {
@@ -54,6 +57,8 @@ Route<dynamic> appRoutes(RouteSettings route) {
     case inboxPage:
       return Transition().page(Inbox());
 
+    case getDirectionPage:
+      return Transition().page(GetDirection());
     case chatBoxPage:
       return Transition().page(ChatBox(
         arguments: route.arguments,

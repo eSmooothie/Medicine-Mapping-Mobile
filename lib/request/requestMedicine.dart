@@ -1,18 +1,14 @@
 import 'dart:convert';
-
 import 'package:http/http.dart' as http;
+
 import 'package:research_mobile_app/objects/medicine.dart';
+import 'package:research_mobile_app/request/httpRequest.dart';
 
-class MyHttpRequest {
-  static const String url = "http://192.168.254.104:9093/";
+class RequestMedicine extends MyHttpRequest {
+  final String _getAll = "api/get/medicine/all";
 
-  Future<List<Medicine>> QueryAllMedicine() async {
-    final response = await http.get(
-      Uri.parse(url + "api/get/medicine/all"),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-    );
+  Future<List<Medicine>> QueryAll() async {
+    final response = await getRequest(requestPath: _getAll);
     if (response.statusCode == 201) {
       List<Medicine> _allMedicine = [];
       var data = jsonDecode(response.body);

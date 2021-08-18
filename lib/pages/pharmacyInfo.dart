@@ -177,7 +177,7 @@ class _PharmacyInformationState extends State<PharmacyInformation> {
                         color: Colors.transparent,
                       ),
                       onPressed: () {
-                        print("get direction.");
+                        Navigator.pushNamed(context, getDirectionPage);
                       },
                       child: SizedBox(
                         child: SvgIcons.getDirection,

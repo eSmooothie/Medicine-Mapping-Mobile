@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:research_mobile_app/exports.dart';
+import 'package:research_mobile_app/request/requestPharmacy.dart';
 
 class Search extends StatefulWidget {
   const Search({Key? key, required this.title, this.arguments})
@@ -104,18 +105,13 @@ class _SearchState extends State<Search> {
 
   // future medicine
   Future futureMedicine = Future(() async {
-    return await MyHttpRequest().QueryAllMedicine();
+    return await RequestMedicine().QueryAll();
   });
 
   // future pharmacy
-  Future futurePharma = Future.delayed(
-    Duration(seconds: 4),
-    () {
-      return [
-        new Pharmacy(1, 9.0000, 214.2123, "PharmaX", "AddressX"),
-      ];
-    },
-  );
+  Future futurePharma = Future(() async {
+    return await RequestPharmacy().QueryAll();
+  });
 
   @override
   void dispose() {

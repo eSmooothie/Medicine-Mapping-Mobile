@@ -15,9 +15,9 @@ class _InboxState extends State<Inbox> {
   Future _future = Future(() async {
     await Future.delayed(Duration(seconds: 10));
     return [
-      new Pharmacy(1, 9.0000, 214.2123, "PharmaX", "AddressX"),
-      new Pharmacy(2, 19.0000, 214.2123, "PharmaZ", "AddressZ"),
-      new Pharmacy(3, 29.0000, 214.2123, "PharmaY", "AddressY"),
+      new Pharmacy("1", "9.0000", "214.2123", "PharmaX", "AddressX", ""),
+      new Pharmacy("2", "19.0000", "214.2123", "PharmaZ", "AddressZ", ""),
+      new Pharmacy("3", "29.0000", "214.2123", "PharmaY", "AddressY", ""),
     ];
   });
 
@@ -44,7 +44,7 @@ class _InboxState extends State<Inbox> {
               snapshot.data.forEach((Pharmacy pharmacy) {
                 int newMessage = 0; // message that has not ben seen yet
                 InboxInfo info = new InboxInfo(
-                    id: pharmacy.id,
+                    id: int.parse(pharmacy.id),
                     pharmacyName: pharmacy.name,
                     newMessages: newMessage);
                 _inboxInfo.add(info);

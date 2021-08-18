@@ -9,6 +9,7 @@ import 'package:flutter/services.dart'
 import 'package:location/location.dart';
 import 'package:research_mobile_app/exports.dart';
 import 'package:research_mobile_app/objects/pharmacy.dart';
+import 'package:research_mobile_app/request/requestPharmacy.dart';
 
 class Gmap {
   late GoogleMapController mapController;
@@ -151,16 +152,15 @@ class Gmap {
     });
   }
 
-  void _initPharmacy() {
+  Future<void> _initPharmacy() async {
     print("initializing pharmacy marker in the google map.");
-    List<Pharmacy> pharmacies = [
-      new Pharmacy(1, 8.228210, 124.241222, "PharmaX", "AddressX"),
-      new Pharmacy(2, 8.232329, 124.237471, "PharmaY", "AddressY"),
-    ];
+    List<Pharmacy> pharmacies = await RequestPharmacy().QueryAll();
 
     // loop
     pharmacies.forEach((Pharmacy pharmacy) {
-      LatLng pos = LatLng(pharmacy.lat, pharmacy.lng);
+      double lat = double.parse(pharmacy.lat);
+      double lng = double.parse(pharmacy.lng);
+      LatLng pos = LatLng(lat, lng);
       Map<String, Object> args = {
         'from': landingPage,
         'pharmacy': pharmacy,
@@ -192,7 +192,7 @@ class Gmap {
     }
 
     if (showPharmacy) {
-      _initPharmacy();
+      await _initPharmacy();
     }
 
     if (_locationSubscription != null) {
