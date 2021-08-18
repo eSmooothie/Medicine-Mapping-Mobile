@@ -33,6 +33,9 @@ dependencies:
   location: ^4.2.0
   skeleton_text: ^3.0.0
   flutter_secure_storage: ^4.2.1
+  geolocator: ^7.0.3
+  geocoding: ^2.0.0
+  flutter_polyline_points: ^1.0.0
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2

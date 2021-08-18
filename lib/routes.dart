@@ -4,12 +4,14 @@ import 'package:research_mobile_app/helper/page_transition.dart';
 import 'package:research_mobile_app/pages/chat.dart';
 import 'package:research_mobile_app/pages/chatSignIn.dart';
 import 'package:research_mobile_app/pages/chatSignUp.dart';
+import 'package:research_mobile_app/pages/displayDirection.dart';
 import 'package:research_mobile_app/pages/inbox.dart';
 import 'package:research_mobile_app/pages/landing.dart';
 import 'package:research_mobile_app/pages/search.dart';
 import 'package:research_mobile_app/pages/medicineInfo.dart';
 import 'package:research_mobile_app/pages/pharmacyInfo.dart';
 import 'package:research_mobile_app/pages/getDirection.dart';
+import 'package:research_mobile_app/pages/test.dart';
 
 // Routes of the app
 const String landingPage = "/";
@@ -21,6 +23,9 @@ const String signUpPage = "/singUp";
 const String inboxPage = "/inbox";
 const String chatBoxPage = "/chatBox";
 const String getDirectionPage = "/getDirection";
+const String displayDirection = "/displayDirection";
+
+const String testPage = "/test";
 
 // set route
 Route<dynamic> appRoutes(RouteSettings route) {
@@ -58,12 +63,18 @@ Route<dynamic> appRoutes(RouteSettings route) {
       return Transition().page(Inbox());
 
     case getDirectionPage:
-      return Transition().page(GetDirection());
+      return Transition().page(GetDirection(
+        arguments: route.arguments,
+      ));
     case chatBoxPage:
       return Transition().page(ChatBox(
         arguments: route.arguments,
       ));
+    case displayDirection:
+      return Transition().page(DisplayDirection());
 
+    case testPage:
+      return Transition().page(Test());
     default:
       return Transition().page(
         LandingPage(title: "Map"),

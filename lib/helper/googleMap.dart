@@ -187,9 +187,6 @@ class Gmap {
   }) async {
     // wait for the user to allow the app to use the location
     bool isPermitted = await _checkLocationService();
-    if (isPermitted) {
-      await _userLocation();
-    }
 
     if (showPharmacy) {
       await _initPharmacy();
@@ -205,6 +202,7 @@ class Gmap {
 
     return GoogleMap(
       onMapCreated: _onMapCreated,
+      myLocationEnabled: isPermitted,
       initialCameraPosition: CameraPosition(target: _center, zoom: zoom),
       zoomControlsEnabled: false,
       mapToolbarEnabled: false,

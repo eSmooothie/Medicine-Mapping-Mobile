@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:research_mobile_app/exports.dart';
 
 class PharmacyInformation extends StatefulWidget {
@@ -177,7 +178,18 @@ class _PharmacyInformationState extends State<PharmacyInformation> {
                         color: Colors.transparent,
                       ),
                       onPressed: () {
-                        Navigator.pushNamed(context, getDirectionPage);
+                        List<Object> args = [
+                          LatLng(
+                            double.parse(_pharmaInfo.lat),
+                            double.parse(_pharmaInfo.lng),
+                          ),
+                          _pharmaInfo.address,
+                        ];
+                        Navigator.pushNamed(
+                          context,
+                          getDirectionPage,
+                          arguments: args,
+                        );
                       },
                       child: SizedBox(
                         child: SvgIcons.getDirection,
