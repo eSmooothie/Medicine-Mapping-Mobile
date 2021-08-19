@@ -90,68 +90,6 @@ class Gmap {
     _markers[markerId] = newMarker;
   }
 
-  // customMarker
-  Future<Uint8List> userMarkerIcon() async {
-    ByteData byteData = await DefaultAssetBundle.of(context)
-        .load("assets/images/userLocationMarker.png");
-    return byteData.buffer.asUint8List();
-  }
-
-  void _updateUserMarkerAndCircle(
-      {required LocationData newLocationData, required Uint8List imageData}) {
-    LatLng latLng =
-        LatLng(newLocationData.latitude!, newLocationData.longitude!);
-
-    MarkerId markerId = MarkerId("user");
-    final Marker userMarker = Marker(
-      markerId: markerId,
-      position: latLng,
-      rotation: newLocationData.heading!,
-      zIndex: 2,
-      flat: true,
-      draggable: false,
-      anchor: Offset(0.5, 0.5),
-      icon: BitmapDescriptor.fromBytes(imageData),
-    );
-    CircleId circleId = CircleId("userCircle");
-    final Circle userCircle = Circle(
-      circleId: circleId,
-      radius: newLocationData.accuracy!,
-      zIndex: 1,
-      strokeColor: Colors.blue,
-      center: latLng,
-      strokeWidth: 5,
-      fillColor: Colors.blue.withAlpha(70),
-    );
-
-    // updt user marker
-    _markers[markerId] = userMarker;
-    _circles[circleId] = userCircle;
-  }
-
-  Future<void> _userLocation() async {
-    Uint8List imageData = await userMarkerIcon();
-    _userPos = await _userLocationTracker.getLocation();
-    _updateUserMarkerAndCircle(newLocationData: _userPos, imageData: imageData);
-  }
-
-  void _followUser() async {
-    Uint8List imageData = await userMarkerIcon();
-
-    _locationSubscription =
-        _userLocationTracker.onLocationChanged.listen((newLocalData) {
-      mapController
-          .animateCamera(CameraUpdate.newCameraPosition(new CameraPosition(
-        bearing: 192.8334901395799,
-        target: LatLng(newLocalData.latitude!, newLocalData.longitude!),
-        tilt: 0,
-        zoom: 18.00,
-      )));
-      _updateUserMarkerAndCircle(
-          newLocationData: newLocalData, imageData: imageData);
-    });
-  }
-
   Future<void> _initPharmacy() async {
     print("initializing pharmacy marker in the google map.");
     List<Pharmacy> pharmacies = await RequestPharmacy().QueryAll();
@@ -182,50 +120,37 @@ class Gmap {
   // The larger the value of zoom the more it is closer to the map.
   Future<Widget> initMap({
     double zoom = 12.0,
-    bool showPharmacy = true,
-    bool followUser = false,
   }) async {
     // wait for the user to allow the app to use the location
     bool isPermitted = await _checkLocationService();
 
-    if (showPharmacy) {
-      await _initPharmacy();
+    if (!isPermitted) {
+      throw Exception(
+          "Enable to load the map please do allow the application to access your location. Thank you.");
     }
-
-    if (_locationSubscription != null) {
-      _locationSubscription!.cancel();
-    }
-
-    if (followUser) {
-      _followUser();
-    }
-
+    await _initPharmacy();
+    LocationData _userPos = await _userLocationTracker.getLocation();
     return GoogleMap(
-      onMapCreated: _onMapCreated,
+      onMapCreated: (GoogleMapController controller) async {
+        mapController = controller;
+        mapController.setMapStyle(_mapStyle);
+
+        mapController
+            .animateCamera(CameraUpdate.newCameraPosition(new CameraPosition(
+          bearing: 0,
+          target: LatLng(_userPos.latitude!, _userPos.longitude!),
+          tilt: 0,
+          zoom: 15.00,
+        )));
+      },
       myLocationEnabled: isPermitted,
+      myLocationButtonEnabled: false,
       initialCameraPosition: CameraPosition(target: _center, zoom: zoom),
       zoomControlsEnabled: false,
       mapToolbarEnabled: false,
       markers: Set<Marker>.of(_markers.values),
       circles: Set<Circle>.of(_circles.values),
     );
-  }
-
-  void _onMapCreated(GoogleMapController controller) async {
-    mapController = controller;
-    mapController.setMapStyle(_mapStyle);
-
-    try {
-      mapController
-          .animateCamera(CameraUpdate.newCameraPosition(new CameraPosition(
-        bearing: 192.8334901395799,
-        target: LatLng(_userPos.latitude!, _userPos.longitude!),
-        tilt: 0,
-        zoom: 18.00,
-      )));
-    } catch (e) {
-      print(e.toString());
-    }
   }
 
   Future<bool> _checkLocationService() async {
@@ -249,13 +174,6 @@ class Gmap {
   }
 
   void dispose() {
-    if (_locationSubscription != null) {
-      _locationSubscription!.cancel();
-    }
-    try {
-      mapController.dispose();
-    } catch (e) {
-      print(e.toString());
-    }
+    mapController.dispose();
   }
 }

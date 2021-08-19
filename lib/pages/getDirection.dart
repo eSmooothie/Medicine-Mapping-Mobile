@@ -530,8 +530,9 @@ class _GetDirectionState extends State<GetDirection> {
           onTap: () {
             print("Route tap.");
             Map<String, dynamic> args = {
+              "routeName": key,
               "bounds": value["bounds"],
-              "steps": value["steps"][0],
+              "steps": value["steps"],
               "overviewPolyline": value["overview_polyline"],
               "destinationLocation": destinationLoc,
             };
