@@ -535,6 +535,9 @@ class _GetDirectionState extends State<GetDirection> {
               "steps": value["steps"],
               "overviewPolyline": value["overview_polyline"],
               "destinationLocation": destinationLoc,
+              "destinationAddress": destinationAddress,
+              "destinationTime": value["duration"]["text"],
+              "destinationDistance": value["distance"]["text"]
             };
             Navigator.pushNamed(
               context,

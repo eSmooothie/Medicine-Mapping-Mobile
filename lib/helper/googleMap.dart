@@ -174,6 +174,10 @@ class Gmap {
   }
 
   void dispose() {
-    mapController.dispose();
+    try {
+      mapController.dispose();
+    } catch (e) {
+      print(e);
+    }
   }
 }

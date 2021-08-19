@@ -20,7 +20,7 @@ class _DisplayDirectionState extends State<DisplayDirection>
       CameraPosition(target: LatLng(8.2280, 124.2452), zoom: 12.0);
 
   late GoogleMapController mapController;
-  late String travelMode;
+  String travelMode = "";
   late String routeName;
 
   Location _trackUser = new Location();
@@ -39,6 +39,10 @@ class _DisplayDirectionState extends State<DisplayDirection>
   var steps;
   var overviewPolyline;
   var destinationLocation;
+
+  String destinationAddress = "";
+  String destinationTime = "";
+  String destinationDistance = "";
 
   void _setRoute({bool debug = false}) {
     if (debug) {
@@ -209,7 +213,37 @@ class _DisplayDirectionState extends State<DisplayDirection>
           origin: myLocationPostion,
           destination: destinationLocation,
         );
-        var newRouteData = updatedRoute[routeName];
+        updatedRoute.remove("start_address");
+        var newRouteData;
+        if (updatedRoute.containsKey(routeName)) {
+          newRouteData = updatedRoute[routeName];
+        } else {
+          updatedRoute.forEach((key, value) {
+            newRouteData = updatedRoute[key];
+            return;
+          });
+        }
+
+        setState(() {
+          if (newRouteData != null) {
+            destinationDistance = newRouteData["distance"]["text"];
+            destinationTime = newRouteData["duration"]["text"];
+          }
+        });
+        double southWestLatitude = newRouteData["bounds"]["southwest"]["lat"];
+        double southWestLongitude = newRouteData["bounds"]["southwest"]["lng"];
+
+        double northEastLatitude = newRouteData["bounds"]["northeast"]["lat"];
+        double northEastLongitude = newRouteData["bounds"]["northeast"]["lng"];
+        mapController.animateCamera(
+          CameraUpdate.newLatLngBounds(
+            LatLngBounds(
+              northeast: LatLng(northEastLatitude, northEastLongitude),
+              southwest: LatLng(southWestLatitude, southWestLongitude),
+            ),
+            100.0,
+          ),
+        );
         updatePolyline(
           encodedPolyline: newRouteData["overview_polyline"]["points"],
         );
@@ -246,6 +280,7 @@ class _DisplayDirectionState extends State<DisplayDirection>
             mapType: MapType.normal,
             zoomGesturesEnabled: true,
             zoomControlsEnabled: false,
+            scrollGesturesEnabled: false,
             buildingsEnabled: false,
             onMapCreated: (GoogleMapController controller) async {
               mapController = controller;
@@ -259,11 +294,112 @@ class _DisplayDirectionState extends State<DisplayDirection>
                 destinationLocation = arguments["destinationLocation"];
                 travelMode = steps[0]["travel_mode"];
                 routeName = arguments["routeName"];
+                destinationAddress = arguments["destinationAddress"];
+                destinationDistance = arguments["destinationDistance"];
+                destinationTime = arguments["destinationTime"];
               });
 
               _setRoute();
               startTimer();
             },
+          ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Container(
+              height: MediaQuery.of(context).size.height / 5,
+              width: MediaQuery.of(context).size.width,
+              color: Colors.white,
+              padding: EdgeInsets.all(25.0),
+              child: Flex(
+                direction: Axis.vertical,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    flex: 1,
+                    child: Text(
+                      "$destinationAddress",
+                      style: TextStyle(
+                        color: Colors.blue,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18.0,
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Flex(
+                      direction: Axis.horizontal,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          children: [
+                            Text(
+                              "TIME",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Colors.blue,
+                                fontWeight: FontWeight.normal,
+                                fontSize: 14.0,
+                              ),
+                            ),
+                            Text(
+                              "$destinationTime",
+                              style: TextStyle(
+                                color: Colors.blue,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16.0,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Column(
+                          children: [
+                            Text(
+                              "DISTANCE",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Colors.blue,
+                                fontWeight: FontWeight.normal,
+                                fontSize: 14.0,
+                              ),
+                            ),
+                            Text(
+                              "$destinationDistance",
+                              style: TextStyle(
+                                color: Colors.blue,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16.0,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Column(
+                          children: [
+                            Text(
+                              "METHOD",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Colors.blue,
+                                fontWeight: FontWeight.normal,
+                                fontSize: 14.0,
+                              ),
+                            ),
+                            Text(
+                              "$travelMode",
+                              style: TextStyle(
+                                color: Colors.blue,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16.0,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
         ],
       ),

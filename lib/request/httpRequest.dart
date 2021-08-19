@@ -20,4 +20,15 @@ class MyHttpRequest {
       },
     );
   }
+
+  @protected
+  dynamic postRequest({
+    required String requestPath,
+    required Object? data,
+  }) async {
+    return await http.post(
+      Uri.parse(_url + requestPath),
+      body: data,
+    );
+  }
 }

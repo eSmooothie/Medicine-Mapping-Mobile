@@ -1,8 +1,10 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:research_mobile_app/exports.dart';
+import 'package:research_mobile_app/request/requestPatient.dart';
 
 class SignIn extends StatefulWidget {
   const SignIn({Key? key}) : super(key: key);
@@ -13,11 +15,10 @@ class SignIn extends StatefulWidget {
 
 class _SignInState extends State<SignIn> {
   String? _phoneNumberErr;
-  String? _passwordErr;
-  TextEditingController _phoneNumberController = TextEditingController();
-  TextEditingController _passswordController = TextEditingController();
 
-  Future _future = Future(() async {
+  TextEditingController _phoneNumberController = TextEditingController();
+
+  Future _future = Future<bool>(() async {
     final storage = new FlutterSecureStorage();
     final options = IOSOptions(accessibility: IOSAccessibility.first_unlock);
     final AccountInfo _accountInfo;
@@ -25,29 +26,23 @@ class _SignInState extends State<SignIn> {
     // check if credential is stored in the local storage.
     try {
       _storedInfo = await storage.readAll();
-      if (_storedInfo.containsKey("id") &&
-          _storedInfo.containsKey("firstName") &&
+      if (_storedInfo.containsKey("firstName") &&
           _storedInfo.containsKey("lastName") &&
-          _storedInfo.containsKey("password") &&
           _storedInfo.containsKey("phoneNumber")) {
         _accountInfo = new AccountInfo(
-            id: _storedInfo['id']!,
             firstName: _storedInfo['firstName']!,
             lastName: _storedInfo['lastName']!,
-            password: _storedInfo['password']!,
             phoneNumber: _storedInfo['phoneNumber']!);
 
-        // check data from database if exist
-        return [false];
+        return true;
       } else {
-        // login
-
-        return [true];
+        // need to enter credentials
+        return false;
       }
     } catch (e) {
       storage.deleteAll();
     }
-    return true;
+    return false;
   });
 
   @override
@@ -55,7 +50,7 @@ class _SignInState extends State<SignIn> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: Text("Chat"),
+        title: Text("Sign In"),
         centerTitle: true,
       ),
       body: SafeArea(
@@ -63,9 +58,13 @@ class _SignInState extends State<SignIn> {
           future: _future,
           builder: (BuildContext context, AsyncSnapshot snapshot) {
             if (snapshot.hasData) {
-              bool isLogin = snapshot.data[0];
+              bool hasCredentials = snapshot.data;
 
-              if (isLogin) {
+              if (hasCredentials) {
+                SchedulerBinding.instance!.addPostFrameCallback((timeStamp) {
+                  Navigator.popAndPushNamed(context, inboxPage);
+                });
+              } else {
                 return Center(
                   child: Flex(
                     direction: Axis.vertical,
@@ -99,29 +98,12 @@ class _SignInState extends State<SignIn> {
                       ),
                       Flexible(
                         flex: 2,
-                        child: Container(
-                          margin: EdgeInsets.only(top: 5.0),
-                          child: CustomWidget.textField(
-                            controller: _passswordController,
-                            keyboardType: TextInputType.visiblePassword,
-                            isPassword: true,
-                            labelText: "Password",
-                            hintText: "",
-                            width: 250,
-                            height: 100,
-                            errorText: _passwordErr,
-                          ),
-                        ),
-                      ),
-                      Flexible(
-                        flex: 2,
                         fit: FlexFit.loose,
                         child: Container(
                           margin: EdgeInsets.only(top: 20.0),
                           child: CustomWidget.textButton(
                               onPressed: () {
                                 setState(() {
-                                  _passwordErr = null;
                                   _phoneNumberErr = null;
                                 });
                                 Navigator.pushNamed(context, signUpPage);
@@ -139,23 +121,49 @@ class _SignInState extends State<SignIn> {
                         child: Container(
                           margin: EdgeInsets.only(top: 50.0),
                           child: CustomWidget.outlinedButton(
-                            onPressed: () {
-                              Navigator.popAndPushNamed(context, inboxPage);
-                              if (_passswordController.text == "" ||
-                                  _phoneNumberController.text == "") {
+                            onPressed: () async {
+                              if (_phoneNumberController.text == "") {
                                 setState(() {
                                   _phoneNumberErr = "Required";
-                                  _passwordErr = "Required";
                                 });
                               } else {
-                                // check if credentials
-                                setState(() {
-                                  _phoneNumberErr = " ";
-                                  _passwordErr =
-                                      "Invalid password or phone number.";
-                                });
-
-                                Navigator.popAndPushNamed(context, inboxPage);
+                                // check phone number if exist
+                                Map<String, dynamic> data = {
+                                  'phoneNumber': _phoneNumberController.text,
+                                };
+                                Map<String, dynamic> request =
+                                    await RequestPatient().getUserInfo(
+                                  data: data,
+                                );
+                                // print(request);
+                                if (!request.containsKey("phoneNumber")) {
+                                  setState(() {
+                                    _phoneNumberErr = "Invalid phone number";
+                                    _phoneNumberController.clear();
+                                  });
+                                } else {
+                                  final storage = new FlutterSecureStorage();
+                                  final options = IOSOptions(
+                                      accessibility:
+                                          IOSAccessibility.first_unlock);
+                                  try {
+                                    storage.write(
+                                      key: "firstName",
+                                      value: request["firstName"],
+                                    );
+                                    storage.write(
+                                      key: "lastName",
+                                      value: request["lastName"],
+                                    );
+                                    storage.write(
+                                      key: "phoneNumber",
+                                      value: request["phoneNumber"],
+                                    );
+                                  } catch (e) {
+                                    storage.deleteAll();
+                                  }
+                                  Navigator.popAndPushNamed(context, inboxPage);
+                                }
                               }
                             },
                             minWidth: 250,
@@ -203,13 +211,7 @@ class _SignInState extends State<SignIn> {
     // TODO: implement dispose
     print("Dispose sign up.");
 
-    try {
-      _passswordController.dispose();
-      _passswordController.dispose();
-    } catch (e) {
-      print(e.toString());
-    }
-
+    _phoneNumberController.dispose();
     super.dispose();
   }
 }
@@ -218,14 +220,10 @@ class AccountInfo {
   final String phoneNumber;
   final String firstName;
   final String lastName;
-  final String password;
-  final String id;
 
   AccountInfo({
-    required this.id,
     required this.firstName,
     required this.lastName,
-    required this.password,
     required this.phoneNumber,
   });
 }

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:research_mobile_app/exports.dart';
+import 'package:research_mobile_app/request/requestPatient.dart';
+import 'package:research_mobile_app/request/requestPharmacy.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({Key? key}) : super(key: key);
@@ -10,11 +13,9 @@ class SignUp extends StatefulWidget {
 
 class _SignUpState extends State<SignUp> {
   String? _phoneNumberErr;
-  String? _passwordErr;
   String? _firstNameErr;
   String? _lastNameErr;
   TextEditingController _phoneNumberController = TextEditingController();
-  TextEditingController _passswordController = TextEditingController();
   TextEditingController _firstNameController = TextEditingController();
   TextEditingController _lastNameController = TextEditingController();
   @override
@@ -49,7 +50,7 @@ class _SignUpState extends State<SignUp> {
                 flex: 2,
                 child: CustomWidget.textField(
                   controller: _firstNameController,
-                  keyboardType: TextInputType.phone,
+                  keyboardType: TextInputType.text,
                   labelText: "First Name",
                   hintText: "",
                   width: 250,
@@ -61,7 +62,7 @@ class _SignUpState extends State<SignUp> {
                 flex: 2,
                 child: CustomWidget.textField(
                   controller: _lastNameController,
-                  keyboardType: TextInputType.phone,
+                  keyboardType: TextInputType.text,
                   labelText: "Last Name",
                   hintText: "",
                   width: 250,
@@ -82,31 +83,12 @@ class _SignUpState extends State<SignUp> {
                 ),
               ),
               Flexible(
-                flex: 2,
-                child: Container(
-                  margin: EdgeInsets.only(top: 5.0),
-                  child: CustomWidget.textField(
-                    controller: _passswordController,
-                    keyboardType: TextInputType.visiblePassword,
-                    isPassword: true,
-                    labelText: "Password",
-                    hintText: "",
-                    width: 250,
-                    height: 100,
-                    errorText: _passwordErr,
-                  ),
-                ),
-              ),
-              Flexible(
                 flex: 5,
                 child: Container(
                   margin: EdgeInsets.only(top: 50.0),
                   child: CustomWidget.outlinedButton(
-                    onPressed: () {
+                    onPressed: () async {
                       setState(() {
-                        _passwordErr = (_passswordController.text == "")
-                            ? "Required"
-                            : null;
                         _phoneNumberErr = (_phoneNumberController.text == "")
                             ? "Required"
                             : null;
@@ -120,13 +102,54 @@ class _SignUpState extends State<SignUp> {
 
                       if (_lastNameErr == null &&
                           _firstNameErr == null &&
-                          _phoneNumberErr == null &&
-                          _passwordErr == null) {
+                          _phoneNumberErr == null) {
                         // Save data to db.
-                        // Save data to storage.
-                        // Proceed to inbox
-                        print("x");
-                        Navigator.popAndPushNamed(context, inboxPage);
+                        Map<String, String> newUserInfo = {
+                          'firstName': _firstNameController.text,
+                          'lastName': _lastNameController.text,
+                          'phoneNumber': _phoneNumberController.text,
+                        };
+                        var response = await RequestPatient().addNewUser(
+                          data: newUserInfo,
+                        );
+                        print(response);
+                        if (response['statusCode'] == "400") {
+                          Utility().errorDialog(
+                            context: context,
+                            errtitle: "Code: ${response['statusCode']}",
+                            errContent: "${response['reasonPhrase']}",
+                          );
+
+                          setState(() {
+                            _phoneNumberController.clear();
+                          });
+                        } else {
+                          // Save data to storage.
+
+                          final storage = new FlutterSecureStorage();
+                          final options = IOSOptions(
+                              accessibility: IOSAccessibility.first_unlock);
+                          try {
+                            storage.write(
+                              key: "firstName",
+                              value: newUserInfo["firstName"],
+                            );
+                            storage.write(
+                              key: "lastName",
+                              value: newUserInfo["lastName"],
+                            );
+                            storage.write(
+                              key: "phoneNumber",
+                              value: newUserInfo["phoneNumber"],
+                            );
+                          } catch (e) {
+                            storage.deleteAll();
+                          }
+
+                          // Back to sign in.
+
+                          Navigator.popAndPushNamed(context, signInPage);
+                        }
                       }
                     },
                     minWidth: 250,
@@ -155,6 +178,9 @@ class _SignUpState extends State<SignUp> {
   void dispose() {
     // TODO: implement dispose
     print("Dispose sign up page.");
+    _firstNameController.dispose();
+    _lastNameController.dispose();
+    _phoneNumberController.dispose();
     super.dispose();
   }
 }
