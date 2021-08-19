@@ -17,6 +17,7 @@ class _GetDirectionState extends State<GetDirection> {
   late LatLng destinationLoc;
   late String destinationAddress;
   int travelMode = 0;
+  int totalRoute = 0;
 
   @override
   void initState() {
@@ -106,9 +107,21 @@ class _GetDirectionState extends State<GetDirection> {
                     builder: (BuildContext context, AsyncSnapshot snapshot) {
                       String from = "start_add";
                       List<dynamic> snapshotData = [];
+                      int _totalWalkingRoute = 0;
+                      int _totalBicycleRoute = 0;
+                      int _totalDrivingRoute = 0;
                       if (snapshot.hasData) {
                         snapshotData = snapshot.data;
                         from = snapshotData[3];
+                        _totalWalkingRoute = (snapshotData[0].length - 1 > 0)
+                            ? snapshotData[travelMode].length - 1
+                            : 0;
+                        _totalBicycleRoute = (snapshotData[1].length - 1 > 0)
+                            ? snapshotData[travelMode].length - 1
+                            : 0;
+                        _totalDrivingRoute = (snapshotData[2].length - 1 > 0)
+                            ? snapshotData[travelMode].length - 1
+                            : 0;
                         return Flex(
                           direction: Axis.vertical,
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -192,8 +205,8 @@ class _GetDirectionState extends State<GetDirection> {
                                       child: CustomWidget.outlinedButton(
                                         onPressed: () {
                                           setState(() {
-                                            print("mode:$travelMode");
                                             travelMode = 0;
+
                                             print("mode:$travelMode");
                                           });
                                         },
@@ -213,8 +226,8 @@ class _GetDirectionState extends State<GetDirection> {
                                       child: CustomWidget.outlinedButton(
                                         onPressed: () {
                                           setState(() {
-                                            print("mode:$travelMode");
                                             travelMode = 1;
+
                                             print("mode:$travelMode");
                                           });
                                         },
@@ -236,9 +249,9 @@ class _GetDirectionState extends State<GetDirection> {
                                       child: CustomWidget.outlinedButton(
                                         onPressed: () {
                                           setState(() {
-                                            print("mode:$travelMode");
                                             travelMode = 2;
-                                            print("mode:$travelMode");
+
+                                            print("mode:$travelMode ");
                                           });
                                         },
                                         child: Text(
@@ -273,19 +286,17 @@ class _GetDirectionState extends State<GetDirection> {
                                       ),
                                     ),
                                   ),
-                                  Expanded(
-                                    flex: 1,
-                                    child: Text(
-                                      (snapshotData[travelMode].length - 1 > 0)
-                                          ? "+${snapshotData[travelMode].length - 1}"
-                                          : "0",
-                                      // "",
-                                      style: TextStyle(
-                                        color: Colors.blue,
-                                        fontSize: 18.0,
-                                      ),
-                                    ),
-                                  ),
+                                  // Expanded(
+                                  //   flex: 1,
+                                  //   child: Text(
+                                  //     (totalRoute > 0) ? "+$totalRoute" : "0",
+                                  //     // "",
+                                  //     style: TextStyle(
+                                  //       color: Colors.blue,
+                                  //       fontSize: 18.0,
+                                  //     ),
+                                  //   ),
+                                  // ),
                                 ],
                               ),
                             ),
@@ -518,7 +529,17 @@ class _GetDirectionState extends State<GetDirection> {
         child: InkWell(
           onTap: () {
             print("Route tap.");
-            // Navigator.pushNamed(context, testPage);
+            Map<String, dynamic> args = {
+              "bounds": value["bounds"],
+              "steps": value["steps"][0],
+              "overviewPolyline": value["overview_polyline"],
+              "destinationLocation": destinationLoc,
+            };
+            Navigator.pushNamed(
+              context,
+              displayDirectionPage,
+              arguments: args,
+            );
           },
           child: Flex(
             direction: Axis.vertical,

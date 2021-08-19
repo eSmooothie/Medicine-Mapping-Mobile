@@ -23,7 +23,7 @@ const String signUpPage = "/singUp";
 const String inboxPage = "/inbox";
 const String chatBoxPage = "/chatBox";
 const String getDirectionPage = "/getDirection";
-const String displayDirection = "/displayDirection";
+const String displayDirectionPage = "/displayDirection";
 
 const String testPage = "/test";
 
@@ -70,8 +70,10 @@ Route<dynamic> appRoutes(RouteSettings route) {
       return Transition().page(ChatBox(
         arguments: route.arguments,
       ));
-    case displayDirection:
-      return Transition().page(DisplayDirection());
+    case displayDirectionPage:
+      return Transition().page(DisplayDirection(
+        arguments: route.arguments,
+      ));
 
     case testPage:
       return Transition().page(Test());
