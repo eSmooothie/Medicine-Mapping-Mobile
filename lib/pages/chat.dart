@@ -1,8 +1,11 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:research_mobile_app/exports.dart';
 import 'package:research_mobile_app/request/requestChat.dart';
 
@@ -28,6 +31,8 @@ class _ChatBoxState extends State<ChatBox> with WidgetsBindingObserver {
 
   final storage = new FlutterSecureStorage();
   final options = IOSOptions(accessibility: IOSAccessibility.first_unlock);
+
+  final ImagePicker _imagePicker = ImagePicker();
 
   @override
   void initState() {
@@ -67,6 +72,14 @@ class _ChatBoxState extends State<ChatBox> with WidgetsBindingObserver {
         _streamController.sink.add(x);
         waitingForResponse = false;
       }
+    });
+
+    SchedulerBinding.instance!.addPostFrameCallback((timeStamp) {
+      _scrollController.animateTo(
+        _scrollController.position.maxScrollExtent,
+        duration: Duration(milliseconds: 100),
+        curve: Curves.easeOut,
+      );
     });
   }
 
@@ -125,15 +138,6 @@ class _ChatBoxState extends State<ChatBox> with WidgetsBindingObserver {
       pharmacy = pharmacyInfo;
     });
     // go to latest message execute only once
-    if (hasConvo) {
-      Timer(Duration(milliseconds: 500), () {
-        _scrollController.animateTo(
-          _scrollController.position.maxScrollExtent,
-          duration: Duration(milliseconds: 100),
-          curve: Curves.easeOut,
-        );
-      });
-    }
 
     return Scaffold(
       appBar: AppBar(
@@ -204,8 +208,21 @@ class _ChatBoxState extends State<ChatBox> with WidgetsBindingObserver {
                   Expanded(
                     flex: 1,
                     child: CustomWidget.outlinedButton(
-                      onPressed: () {
+                      onPressed: () async {
                         print("upload image..");
+                        // Pick an image from the gallery.
+                        final XFile? image = await _imagePicker.pickImage(
+                            source: ImageSource.gallery);
+
+                        File _file = File(image!.path);
+                        String? phoneNumber =
+                            await storage.read(key: "phoneNumber");
+                        var response = await RequestChat().sendImage(
+                          tmpFile: _file,
+                          chatId: chatId!,
+                          phoneNumber: phoneNumber!,
+                        );
+                        print(image);
                       },
                       child: Icon(Icons.image),
                       backgroundColor: Colors.transparent,
@@ -345,6 +362,13 @@ class ChatLineHolder extends StatelessWidget {
     required String message,
     required String time,
   }) {
+    Pattern pattern = ":";
+    // evaluate if a message is link.
+    List<String> splitImage = message.split(":");
+    bool isImage = false;
+    if (splitImage[0] == "http") {
+      isImage = true;
+    }
     return [
       Flexible(
         flex: 5,
@@ -368,7 +392,11 @@ class ChatLineHolder extends StatelessWidget {
               SizedBox(
                 height: 10.0,
               ),
-              Text("$message"),
+              (isImage)
+                  ? Image.network(
+                      "$message",
+                    )
+                  : Text("$message"),
               SizedBox(
                 height: 20.0,
               ),
