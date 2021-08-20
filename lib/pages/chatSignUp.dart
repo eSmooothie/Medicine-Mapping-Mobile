@@ -5,13 +5,14 @@ import 'package:research_mobile_app/request/requestPatient.dart';
 import 'package:research_mobile_app/request/requestPharmacy.dart';
 
 class SignUp extends StatefulWidget {
-  const SignUp({Key? key}) : super(key: key);
-
+  const SignUp({Key? key, this.arguments}) : super(key: key);
+  final Object? arguments;
   @override
   _SignUpState createState() => _SignUpState();
 }
 
 class _SignUpState extends State<SignUp> {
+  var pharmacyInfo;
   String? _phoneNumberErr;
   String? _firstNameErr;
   String? _lastNameErr;
@@ -20,6 +21,9 @@ class _SignUpState extends State<SignUp> {
   TextEditingController _lastNameController = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    setState(() {
+      pharmacyInfo = widget.arguments;
+    });
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -103,52 +107,72 @@ class _SignUpState extends State<SignUp> {
                       if (_lastNameErr == null &&
                           _firstNameErr == null &&
                           _phoneNumberErr == null) {
-                        // Save data to db.
-                        Map<String, String> newUserInfo = {
-                          'firstName': _firstNameController.text,
-                          'lastName': _lastNameController.text,
-                          'phoneNumber': _phoneNumberController.text,
-                        };
-                        var response = await RequestPatient().addNewUser(
-                          data: newUserInfo,
-                        );
-                        print(response);
-                        if (response['statusCode'] == "400") {
-                          Utility().errorDialog(
-                            context: context,
-                            errtitle: "Code: ${response['statusCode']}",
-                            errContent: "${response['reasonPhrase']}",
-                          );
+                        // check if legit phone number
+                        bool phoneNumberIsValid = true;
 
+                        // Pattern pattern = r'^(?:[+0]9)?[0-9]{10}$';
+                        RegExp regExp = new RegExp(r"^(?:[+0]9)?[0-9]{9}$");
+                        if (!regExp.hasMatch(_phoneNumberController.text)) {
+                          phoneNumberIsValid = false;
+                        }
+
+                        if (!phoneNumberIsValid) {
                           setState(() {
+                            _phoneNumberErr = "Invalid phone number";
                             _phoneNumberController.clear();
                           });
                         } else {
-                          // Save data to storage.
+                          // Save data to db.
+                          Map<String, String> newUserInfo = {
+                            'firstName': _firstNameController.text,
+                            'lastName': _lastNameController.text,
+                            'phoneNumber': _phoneNumberController.text,
+                          };
+                          var response = await RequestPatient().addNewUser(
+                            data: newUserInfo,
+                          );
+                          print(response);
+                          if (response['statusCode'] == "400") {
+                            Utility().errorDialog(
+                              context: context,
+                              errtitle: "Code: ${response['statusCode']}",
+                              errContent: "${response['reasonPhrase']}",
+                            );
 
-                          final storage = new FlutterSecureStorage();
-                          final options = IOSOptions(
-                              accessibility: IOSAccessibility.first_unlock);
-                          try {
-                            storage.write(
-                              key: "firstName",
-                              value: newUserInfo["firstName"],
+                            setState(() {
+                              _phoneNumberController.clear();
+                            });
+                          } else {
+                            // Save data to storage.
+
+                            final storage = new FlutterSecureStorage();
+                            final options = IOSOptions(
+                                accessibility: IOSAccessibility.first_unlock);
+                            try {
+                              storage.write(
+                                key: "firstName",
+                                value: newUserInfo["firstName"],
+                              );
+                              storage.write(
+                                key: "lastName",
+                                value: newUserInfo["lastName"],
+                              );
+                              storage.write(
+                                key: "phoneNumber",
+                                value: newUserInfo["phoneNumber"],
+                              );
+                            } catch (e) {
+                              storage.deleteAll();
+                            }
+
+                            // Back to sign in.
+
+                            Navigator.popAndPushNamed(
+                              context,
+                              signInPage,
+                              arguments: pharmacyInfo,
                             );
-                            storage.write(
-                              key: "lastName",
-                              value: newUserInfo["lastName"],
-                            );
-                            storage.write(
-                              key: "phoneNumber",
-                              value: newUserInfo["phoneNumber"],
-                            );
-                          } catch (e) {
-                            storage.deleteAll();
                           }
-
-                          // Back to sign in.
-
-                          Navigator.popAndPushNamed(context, signInPage);
                         }
                       }
                     },

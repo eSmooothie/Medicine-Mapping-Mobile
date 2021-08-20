@@ -250,7 +250,14 @@ class _PharmacyInformationState extends State<PharmacyInformation> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.pushNamed(context, signInPage);
+          List<Object> args = [
+            _pharmaInfo,
+          ];
+          Navigator.pushNamed(
+            context,
+            signInPage,
+            arguments: _pharmaInfo,
+          );
         },
         child: Icon(
           Icons.sms,

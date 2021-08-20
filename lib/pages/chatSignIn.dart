@@ -7,15 +7,15 @@ import 'package:research_mobile_app/exports.dart';
 import 'package:research_mobile_app/request/requestPatient.dart';
 
 class SignIn extends StatefulWidget {
-  const SignIn({Key? key}) : super(key: key);
-
+  const SignIn({Key? key, this.arguments}) : super(key: key);
+  final Object? arguments;
   @override
   _SignInState createState() => _SignInState();
 }
 
 class _SignInState extends State<SignIn> {
   String? _phoneNumberErr;
-
+  var pharmacyInfo;
   TextEditingController _phoneNumberController = TextEditingController();
 
   Future _future = Future<bool>(() async {
@@ -24,6 +24,7 @@ class _SignInState extends State<SignIn> {
     final AccountInfo _accountInfo;
     final Map<String, String> _storedInfo;
     // check if credential is stored in the local storage.
+
     try {
       _storedInfo = await storage.readAll();
       if (_storedInfo.containsKey("firstName") &&
@@ -47,6 +48,9 @@ class _SignInState extends State<SignIn> {
 
   @override
   Widget build(BuildContext context) {
+    setState(() {
+      pharmacyInfo = widget.arguments;
+    });
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -61,8 +65,15 @@ class _SignInState extends State<SignIn> {
               bool hasCredentials = snapshot.data;
 
               if (hasCredentials) {
+                List<Object> args = [
+                  pharmacyInfo,
+                ];
                 SchedulerBinding.instance!.addPostFrameCallback((timeStamp) {
-                  Navigator.popAndPushNamed(context, inboxPage);
+                  Navigator.popAndPushNamed(
+                    context,
+                    chatBoxPage,
+                    arguments: pharmacyInfo,
+                  );
                 });
               } else {
                 return Center(
@@ -106,7 +117,11 @@ class _SignInState extends State<SignIn> {
                                 setState(() {
                                   _phoneNumberErr = null;
                                 });
-                                Navigator.pushNamed(context, signUpPage);
+                                Navigator.pushNamed(
+                                  context,
+                                  signUpPage,
+                                  arguments: pharmacyInfo,
+                                );
                               },
                               child: Text(
                                 "Sign up",
@@ -127,6 +142,16 @@ class _SignInState extends State<SignIn> {
                                   _phoneNumberErr = "Required";
                                 });
                               } else {
+                                // check if legit phone number
+                                bool phoneNumberIsValid = true;
+
+                                // Pattern pattern = r'^(?:[+0]9)?[0-9]{10}$';
+                                RegExp regExp =
+                                    new RegExp(r"^(?:[+0]9)?[0-9]{9}$");
+                                if (!regExp
+                                    .hasMatch(_phoneNumberController.text)) {
+                                  phoneNumberIsValid = false;
+                                }
                                 // check phone number if exist
                                 Map<String, dynamic> data = {
                                   'phoneNumber': _phoneNumberController.text,
@@ -136,7 +161,8 @@ class _SignInState extends State<SignIn> {
                                   data: data,
                                 );
                                 // print(request);
-                                if (!request.containsKey("phoneNumber")) {
+                                if (!request.containsKey("phoneNumber") ||
+                                    !phoneNumberIsValid) {
                                   setState(() {
                                     _phoneNumberErr = "Invalid phone number";
                                     _phoneNumberController.clear();
@@ -162,7 +188,15 @@ class _SignInState extends State<SignIn> {
                                   } catch (e) {
                                     storage.deleteAll();
                                   }
-                                  Navigator.popAndPushNamed(context, inboxPage);
+                                  // Navigator.popAndPushNamed(context, inboxPage);
+                                  List<Object> args = [
+                                    pharmacyInfo,
+                                  ];
+                                  Navigator.popAndPushNamed(
+                                    context,
+                                    chatBoxPage,
+                                    arguments: pharmacyInfo,
+                                  );
                                 }
                               }
                             },

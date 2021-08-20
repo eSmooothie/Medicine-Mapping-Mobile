@@ -55,9 +55,17 @@ Route<dynamic> appRoutes(RouteSettings route) {
       ));
 
     case signInPage:
-      return Transition().page(SignIn());
+      return Transition().page(
+        SignIn(
+          arguments: route.arguments,
+        ),
+      );
     case signUpPage:
-      return Transition().page(SignUp());
+      return Transition().page(
+        SignUp(
+          arguments: route.arguments,
+        ),
+      );
 
     case inboxPage:
       return Transition().page(Inbox());
