@@ -45,6 +45,7 @@ class _ChatBoxState extends State<ChatBox> with WidgetsBindingObserver {
   void dispose() {
     timer?.cancel(); // Cancelling a timer on dispose
     WidgetsBinding.instance!.removeObserver(this); // Removing an observer
+    _scrollController.dispose();
     super.dispose();
   }
 
@@ -75,11 +76,7 @@ class _ChatBoxState extends State<ChatBox> with WidgetsBindingObserver {
     });
 
     SchedulerBinding.instance!.addPostFrameCallback((timeStamp) {
-      _scrollController.animateTo(
-        _scrollController.position.maxScrollExtent,
-        duration: Duration(milliseconds: 50),
-        curve: Curves.easeOut,
-      );
+      _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
     });
   }
 
@@ -154,7 +151,7 @@ class _ChatBoxState extends State<ChatBox> with WidgetsBindingObserver {
           minWidth: 50.0,
           side: BorderSide(color: Colors.transparent),
         ),
-        title: Text("Pharmacy Name"),
+        title: Text(pharmacy.name),
         centerTitle: true,
       ),
       body: Column(
@@ -200,7 +197,7 @@ class _ChatBoxState extends State<ChatBox> with WidgetsBindingObserver {
               height: 70.0,
               decoration: BoxDecoration(
                 color: Colors.white,
-                border: Border(top: BorderSide(color: Colors.black)),
+                border: Border(top: BorderSide(color: Colors.grey.shade300)),
               ),
               child: Flex(
                 direction: Axis.horizontal,
