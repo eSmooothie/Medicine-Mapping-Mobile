@@ -6,7 +6,7 @@ import 'package:research_mobile_app/exports.dart';
 class RequestChat extends MyHttpRequest {
   final String _convoPath = "api/get/chat";
   final String _sendMessagePath = "api/send/message";
-  Future<Map<String, String>> getConversation({required Object? data}) async {
+  Future<Map<String, dynamic>> getConversation({required Object? data}) async {
     Map<String, String> result = {};
 
     Response response = await postRequest(
