@@ -4,8 +4,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:research_mobile_app/exports.dart';
 import 'package:research_mobile_app/request/requestChat.dart';
 
@@ -77,7 +77,7 @@ class _ChatBoxState extends State<ChatBox> with WidgetsBindingObserver {
     SchedulerBinding.instance!.addPostFrameCallback((timeStamp) {
       _scrollController.animateTo(
         _scrollController.position.maxScrollExtent,
-        duration: Duration(milliseconds: 100),
+        duration: Duration(milliseconds: 50),
         curve: Curves.easeOut,
       );
     });
@@ -286,6 +286,7 @@ class _ChatBoxState extends State<ChatBox> with WidgetsBindingObserver {
 
 class ChatLineHolder extends StatelessWidget {
   final ChatLine chatLine;
+
   const ChatLineHolder({
     Key? key,
     required this.chatLine,
@@ -293,6 +294,10 @@ class ChatLineHolder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final DateFormat dateFormat = DateFormat("M/d/y, hh:mm a");
+    DateTime dt = DateTime.parse(chatLine.time);
+    String time = dateFormat.format(dt);
+    // print(time);
     return Container(
       decoration: BoxDecoration(
         color: (chatLine.from == "me") ? Colors.blue.shade100 : Colors.white,
@@ -307,12 +312,12 @@ class ChatLineHolder extends StatelessWidget {
             ? otherMessage(
                 from: chatLine.from,
                 message: chatLine.message,
-                time: chatLine.time,
+                time: time,
               )
             : myMessage(
                 from: chatLine.from,
                 message: chatLine.message,
-                time: chatLine.time,
+                time: time,
               ),
       ),
     );
