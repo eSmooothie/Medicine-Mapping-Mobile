@@ -12,17 +12,6 @@ class filterDrawer extends StatefulWidget {
 }
 
 class _filterDrawerState extends State<filterDrawer> {
-  Map<String, bool> filterItem1 = {
-    "x": false,
-    "y": false,
-    "z": false,
-  };
-  Map<String, bool> filterItem2 = {
-    "x1": false,
-    "y1": false,
-    "z1": false,
-  };
-
   List<String> _filterHeaderList = [];
   Map<String, Map<String, bool>> _filterItemsList = {};
 
@@ -74,19 +63,14 @@ class _filterDrawerState extends State<filterDrawer> {
         label: Text("$key: ${_filterItemsList[filterHeader]![key]}"),
         onSelected: (isSelect) {
           setState(() {
-            if (_filterItemsList[filterHeader]!.containsKey(key)) {
-              _filterItemsList[filterHeader]![key] =
-                  !_filterItemsList[filterHeader]![key]!;
-            } else {
-              _filterItemsList[filterHeader]![key] = isSelect;
-            }
+            // update the state of the object
+            _filterItemsList[filterHeader]![key] =
+                !_filterItemsList[filterHeader]![key]!;
           });
 
           // print("$key: ${_filterItemsList[filterHeader]![key]}");
         },
-        selected: (_filterItemsList[filterHeader]!.containsKey(key))
-            ? _filterItemsList[filterHeader]![key]!
-            : false,
+        selected: _filterItemsList[filterHeader]![key]!,
       );
       _items.add(_filterChip);
     });
@@ -127,7 +111,6 @@ class _filterDrawerState extends State<filterDrawer> {
   Widget build(BuildContext context) {
     setState(() {
       _filterHeaderList = [];
-      // _filterItemsList = {};
       filters = widget.filters;
       if (_initVar) {
         generateMapFilterObjects();
