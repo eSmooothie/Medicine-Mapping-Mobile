@@ -2,6 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:research_mobile_app/exports.dart';
+import 'package:research_mobile_app/helper/filterDrawer.dart';
 import 'package:research_mobile_app/request/requestPharmacy.dart';
 
 class Search extends StatefulWidget {
@@ -158,10 +159,14 @@ class _SearchState extends State<Search> {
         title: Text(widget.title),
         actions: [Container()],
       ),
-      endDrawer: Drawer(
-        child: _filterMedicine(),
+      endDrawer: filterDrawer(
+        filters: {
+          'filter_1': ['x', 'y', 'z'],
+          'filter_2': ['x1', 'y1', 'z1'],
+        },
       ),
       drawerEnableOpenDragGesture: false,
+      endDrawerEnableOpenDragGesture: false,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.fromLTRB(18.0, 18.0, 18.0, 0),
@@ -243,199 +248,6 @@ class _SearchState extends State<Search> {
         ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-    );
-  }
-
-  Widget _filterMedicine() {
-    return ListView(
-      children: [
-        // Classification
-        Padding(
-          padding: EdgeInsets.all(8.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Card(
-                margin: EdgeInsets.only(top: 20.0),
-                child: Text(
-                  "Classification",
-                  style: TextStyle(
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              Container(
-                width: 200,
-                height: 300,
-                padding: EdgeInsets.all(10.0),
-                child: GridView.count(
-                  primary: true,
-                  shrinkWrap: true,
-                  crossAxisCount: 2,
-                  childAspectRatio: 200 / 70,
-                  mainAxisSpacing: 4.0,
-                  crossAxisSpacing: 4.0,
-                  children: [
-                    OutlinedButton(
-                      onPressed: () {},
-                      child: Text("X"),
-                    ),
-                    OutlinedButton(
-                      onPressed: () {},
-                      child: Text("X"),
-                    ),
-                    OutlinedButton(
-                      onPressed: () {},
-                      child: Text("X"),
-                    ),
-                    OutlinedButton(
-                      onPressed: () {},
-                      child: Text("X"),
-                    ),
-                    OutlinedButton(
-                      onPressed: () {},
-                      child: Text("X"),
-                    ),
-                    OutlinedButton(
-                      onPressed: () {},
-                      child: Text("X"),
-                    ),
-                    OutlinedButton(
-                      onPressed: () {},
-                      child: Text("X"),
-                    ),
-                    OutlinedButton(
-                      onPressed: () {},
-                      child: Text("X"),
-                    ),
-                    OutlinedButton(
-                      onPressed: () {},
-                      child: Text("X"),
-                    ),
-                    OutlinedButton(
-                      onPressed: () {},
-                      child: Text("X"),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-        // Form
-        Padding(
-          padding: EdgeInsets.all(8.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Card(
-                margin: EdgeInsets.only(top: 50.0),
-                child: Text(
-                  "Medicine Form",
-                  style: TextStyle(
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              Container(
-                width: 200,
-                height: 300,
-                padding: EdgeInsets.all(10.0),
-                child: GridView.count(
-                  crossAxisCount: 2,
-                  childAspectRatio: 200 / 70,
-                  mainAxisSpacing: 4.0,
-                  crossAxisSpacing: 4.0,
-                  children: [
-                    OutlinedButton(
-                      onPressed: () {},
-                      child: Text("X"),
-                    ),
-                    OutlinedButton(
-                      onPressed: () {},
-                      child: Text("X"),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ), // Sort
-
-        // Sort by name
-        Padding(
-          padding: EdgeInsets.all(8.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Card(
-                margin: EdgeInsets.only(top: 50.0),
-                child: Text(
-                  "Sort",
-                  style: TextStyle(
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              Container(
-                width: 200,
-                height: 300,
-                padding: EdgeInsets.all(10.0),
-                child: GridView.count(
-                  crossAxisCount: 2,
-                  childAspectRatio: 200 / 70,
-                  mainAxisSpacing: 4.0,
-                  crossAxisSpacing: 4.0,
-                  children: [
-                    OutlinedButton(
-                      onPressed: () {},
-                      child: Text("X"),
-                    ),
-                    OutlinedButton(
-                      onPressed: () {},
-                      child: Text("X"),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-
-        // Submit button
-        SafeArea(
-          child: Container(
-            alignment: Alignment.bottomCenter,
-            height: 70,
-            child: Flex(
-              direction: Axis.horizontal,
-              children: [
-                Expanded(
-                  child: OutlinedButton(
-                    style: OutlinedButton.styleFrom(
-                      minimumSize: Size(200, 70),
-                    ),
-                    onPressed: () {},
-                    child: Text("Close"),
-                  ),
-                ),
-                Expanded(
-                  child: OutlinedButton(
-                    style: OutlinedButton.styleFrom(
-                      minimumSize: Size(200, 70),
-                    ),
-                    onPressed: () {},
-                    child: Text("Submit"),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        )
-      ],
     );
   }
 
