@@ -17,93 +17,8 @@ class Search extends StatefulWidget {
 class _SearchState extends State<Search> {
   late String searchBy;
   TextEditingController _searchController = TextEditingController();
-
-  // future builder
-  Widget Function(BuildContext context, AsyncSnapshot snapshot) futureBuilder =
-      (BuildContext context, AsyncSnapshot snapshot) {
-    var rand = new Random();
-    List<ObjectItemDataHolder> _searchItemDataHolder = [];
-    if (snapshot.hasData) {
-      // done loading
-
-      // check data object type
-      // and map each object
-      if (snapshot.data is List<Medicine>) {
-        snapshot.data.forEach((Medicine medicine) {
-          String desc =
-              "${medicine.genericName}\n${medicine.dosage} ${medicine.dosageForm}";
-          ObjectItemDataHolder drugData = ObjectItemDataHolder(
-            name: medicine.brandName,
-            description: desc.toUpperCase(),
-            object: medicine,
-          );
-
-          _searchItemDataHolder.add(drugData);
-        });
-      } else if (snapshot.data is List<Pharmacy>) {
-        snapshot.data.forEach((Pharmacy pharmacy) {
-          ObjectItemDataHolder pharmaData = ObjectItemDataHolder(
-              name: pharmacy.name,
-              description: pharmacy.address,
-              object: pharmacy);
-          _searchItemDataHolder.add(pharmaData);
-        });
-      }
-
-      return ListView.separated(
-        shrinkWrap: true,
-        itemBuilder: (BuildContext context, int index) {
-          return ItemContainer(
-            title: _searchItemDataHolder[index].name,
-            description: _searchItemDataHolder[index].description,
-            onPressed: () {
-              // reroute to their desire information page
-              // evaluate the obj of searchItemDataHolder
-              if (_searchItemDataHolder[index].object is Medicine) {
-                // reroute to medicine information page
-                Navigator.pushNamed(
-                  context,
-                  medicineInfoPage,
-                  arguments: _searchItemDataHolder[index].object,
-                );
-              } else if (_searchItemDataHolder[index].object is Pharmacy) {
-                // reroute to pharmacy information page
-                Map<String, Object> args = {
-                  'from': searchPage,
-                  'pharmacy': _searchItemDataHolder[index].object,
-                };
-                Navigator.pushNamed(
-                  context,
-                  pharmacyInfoPage,
-                  arguments: args,
-                );
-              }
-            },
-          );
-        },
-        separatorBuilder: (BuildContext context, int index) => const Divider(),
-        itemCount: snapshot.data.length,
-      );
-    } else if (snapshot.hasError) {
-      // error encountered.
-      return Text("Error: ${snapshot.error}");
-    }
-
-    // display skeleton animation while waiting for the data
-    return ListView.separated(
-      shrinkWrap: true,
-      itemBuilder: (BuildContext context, int index) {
-        double titleWidth = rand.nextInt(200).clamp(50, 200).floorToDouble();
-        double descHeight = rand.nextInt(100).clamp(20, 100).floorToDouble();
-        return ItemContainerSkeleton(
-          titleWidth: titleWidth,
-          descHeight: descHeight,
-        );
-      },
-      separatorBuilder: (BuildContext context, int index) => const Divider(),
-      itemCount: 7,
-    );
-  };
+  List<Object> _items = [];
+  List<Object> _searchResults = [];
 
   // future medicine
   Future futureMedicine = Future(() async {
@@ -191,6 +106,7 @@ class _SearchState extends State<Search> {
                         radius: 50.0,
                         hintText: "",
                         labelText: "Label",
+                        onChanged: onSearchTextChange,
                       ),
                     ),
                     _showDrawer(context),
@@ -202,7 +118,138 @@ class _SearchState extends State<Search> {
                 child: FutureBuilder(
                   future:
                       (searchBy == 'pharmacy') ? futurePharma : futureMedicine,
-                  builder: futureBuilder,
+                  builder: (BuildContext context, AsyncSnapshot snapshot) {
+                    var rand = new Random();
+                    List<ObjectItemDataHolder> _searchItemDataHolder = [];
+                    if (snapshot.hasData) {
+                      // done loading
+
+                      // check data object type
+                      // and map each object
+                      if (snapshot.data is List<Medicine>) {
+                        _items.clear();
+                        snapshot.data.forEach((Medicine medicine) {
+                          _items.add(medicine);
+                        });
+                      } else if (snapshot.data is List<Pharmacy>) {
+                        _items.clear();
+                        snapshot.data.forEach((Pharmacy pharmacy) {
+                          _items.add(pharmacy);
+                        });
+                      }
+
+                      if (_searchResults.isNotEmpty ||
+                          _searchController.text.isNotEmpty) {
+                        _searchItemDataHolder.clear();
+                        print("$_searchResults");
+                        _searchResults.forEach((item) {
+                          if (item is Medicine) {
+                            String desc =
+                                "${item.genericName}\n${item.dosage} ${item.dosageForm}";
+                            ObjectItemDataHolder drugData =
+                                ObjectItemDataHolder(
+                              name: item.brandName,
+                              description: desc.toUpperCase(),
+                              object: item,
+                            );
+                            _searchItemDataHolder.add(drugData);
+                          } else if (item is Pharmacy) {
+                            ObjectItemDataHolder pharmaData =
+                                ObjectItemDataHolder(
+                                    name: item.name,
+                                    description: item.address,
+                                    object: item);
+                            _searchItemDataHolder.add(pharmaData);
+                          }
+                        });
+                      } else {
+                        _searchItemDataHolder.clear();
+                        _items.forEach((item) {
+                          if (item is Medicine) {
+                            String desc =
+                                "${item.genericName}\n${item.dosage} ${item.dosageForm}";
+                            ObjectItemDataHolder drugData =
+                                ObjectItemDataHolder(
+                              name: item.brandName,
+                              description: desc.toUpperCase(),
+                              object: item,
+                            );
+
+                            _searchItemDataHolder.add(drugData);
+                          } else if (item is Pharmacy) {
+                            ObjectItemDataHolder pharmaData =
+                                ObjectItemDataHolder(
+                                    name: item.name,
+                                    description: item.address,
+                                    object: item);
+                            _searchItemDataHolder.add(pharmaData);
+                          }
+                        });
+                      }
+
+                      return ListView.separated(
+                        shrinkWrap: true,
+                        itemBuilder: (BuildContext context, int index) {
+                          return ItemContainer(
+                            title: _searchItemDataHolder[index].name,
+                            description:
+                                _searchItemDataHolder[index].description,
+                            onPressed: () {
+                              // reroute to their desire information page
+                              // evaluate the obj of searchItemDataHolder
+                              if (_searchItemDataHolder[index].object
+                                  is Medicine) {
+                                // reroute to medicine information page
+                                Navigator.pushNamed(
+                                  context,
+                                  medicineInfoPage,
+                                  arguments:
+                                      _searchItemDataHolder[index].object,
+                                );
+                              } else if (_searchItemDataHolder[index].object
+                                  is Pharmacy) {
+                                // reroute to pharmacy information page
+                                Map<String, Object> args = {
+                                  'from': searchPage,
+                                  'pharmacy':
+                                      _searchItemDataHolder[index].object,
+                                };
+                                Navigator.pushNamed(
+                                  context,
+                                  pharmacyInfoPage,
+                                  arguments: args,
+                                );
+                              }
+                            },
+                          );
+                        },
+                        separatorBuilder: (BuildContext context, int index) =>
+                            const Divider(),
+                        itemCount: _searchItemDataHolder.length,
+                      );
+                    } else if (snapshot.hasError) {
+                      // error encountered.
+                      return Text("Error: ${snapshot.error}");
+                    }
+
+                    // display skeleton animation while waiting for the data
+                    return ListView.separated(
+                      shrinkWrap: true,
+                      itemBuilder: (BuildContext context, int index) {
+                        double titleWidth =
+                            rand.nextInt(200).clamp(50, 200).floorToDouble();
+                        double descHeight =
+                            rand.nextInt(100).clamp(20, 100).floorToDouble();
+                        return ItemContainerSkeleton(
+                          titleWidth: titleWidth,
+                          descHeight: descHeight,
+                        );
+                      },
+                      separatorBuilder: (BuildContext context, int index) =>
+                          const Divider(),
+                      itemCount: 7,
+                    );
+                  },
                 ),
               ),
             ],
@@ -249,6 +296,35 @@ class _SearchState extends State<Search> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
+  }
+
+  onSearchTextChange(String text) {
+    // print(text);
+    // clear result
+    _searchResults.clear();
+    if (text.isEmpty) {
+      setState(() {});
+      return;
+    }
+
+    // search match text
+
+    _items.forEach((item) {
+      if (item is Medicine) {
+        // print(item.brandName);
+        if (item.brandName.toLowerCase().contains(text) ||
+            item.genericName.toLowerCase().contains(text)) {
+          _searchResults.add(item);
+        }
+      } else if (item is Pharmacy) {
+        // print(item.name);
+        if (item.name.toLowerCase().contains(text)) {
+          _searchResults.add(item);
+        }
+      }
+    });
+
+    setState(() {});
   }
 
   Builder _showDrawer(BuildContext context) {
