@@ -10,20 +10,26 @@ Medicine _$MedicineFromJson(Map<String, dynamic> json) {
   return Medicine(
     json['id'] as String,
     json['brandName'] as String,
-    json['genericName'] as String,
     json['dosage'] as String,
-    json['dosageForm'] as String,
-    json['categories'] as String,
-    json['description'] as String,
+    json['form'] as String,
+    json['usage'] as String,
+    json['category'] as String,
+    (json['genericNames'] as List<dynamic>)
+        .map((e) => GenericName.fromJson(e as Map<String, dynamic>))
+        .toList(),
+    (json['medicineClassification'] as List<dynamic>)
+        .map((e) => MedicineClassification.fromJson(e as Map<String, dynamic>))
+        .toList(),
   );
 }
 
 Map<String, dynamic> _$MedicineToJson(Medicine instance) => <String, dynamic>{
       'id': instance.id,
       'brandName': instance.brandName,
-      'genericName': instance.genericName,
+      'genericNames': instance.genericNames,
+      'medicineClassification': instance.medicineClassification,
       'dosage': instance.dosage,
-      'dosageForm': instance.dosageForm,
-      'categories': instance.categories,
-      'description': instance.description,
+      'form': instance.form,
+      'category': instance.category,
+      'usage': instance.usage,
     };

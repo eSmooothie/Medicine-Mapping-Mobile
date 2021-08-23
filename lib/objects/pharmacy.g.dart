@@ -13,7 +13,6 @@ Pharmacy _$PharmacyFromJson(Map<String, dynamic> json) {
     json['lng'] as String,
     json['name'] as String,
     json['address'] as String,
-    json['contactNo'] as String,
   );
 }
 
@@ -23,5 +22,4 @@ Map<String, dynamic> _$PharmacyToJson(Pharmacy instance) => <String, dynamic>{
       'lng': instance.lng,
       'name': instance.name,
       'address': instance.address,
-      'contactNo': instance.contactNo,
     };

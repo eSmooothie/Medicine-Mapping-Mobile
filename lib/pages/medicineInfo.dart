@@ -13,7 +13,10 @@ class MedicineInfo extends StatefulWidget {
 }
 
 class _MedicineInfoState extends State<MedicineInfo> {
-  late var drugInfo;
+  late var args;
+  late Medicine drugInfo;
+  late String genericNames;
+  late String classification;
 
   Widget Function(BuildContext context, AsyncSnapshot snapshot) _futureBuilder =
       (BuildContext context, AsyncSnapshot snapshot) {
@@ -78,7 +81,8 @@ class _MedicineInfoState extends State<MedicineInfo> {
     };
 
     List<Pharmacy> pharmacies = [
-      new Pharmacy("1", "9.0000", "214.2123", "PharmaX", "AddressX", ""),
+      new Pharmacy("1", "21312", "xx", "qwe", "qw3e123"),
+      new Pharmacy("2", "213qwe12", "xx", "qwqqqe", "qw3e123"),
     ];
 
     data['pharmacies'] = pharmacies;
@@ -102,7 +106,22 @@ class _MedicineInfoState extends State<MedicineInfo> {
   @override
   Widget build(BuildContext context) {
     setState(() {
-      drugInfo = widget.arguments;
+      args = widget.arguments;
+      if (args is Medicine) {
+        drugInfo = args;
+        List<String> medicineGenericNames = [];
+        drugInfo.genericNames.forEach((element) {
+          medicineGenericNames.add(element.name);
+        });
+        genericNames = medicineGenericNames.join(", ").toUpperCase();
+
+        List<String> generalClassificationNames = [];
+        drugInfo.medicineClassification.forEach((element) {
+          generalClassificationNames.add(element.generalClassificationName);
+        });
+        classification = generalClassificationNames.join(", ").toUpperCase();
+        // print(drugInfo);
+      }
     });
     return Scaffold(
       appBar: AppBar(
@@ -125,17 +144,11 @@ class _MedicineInfoState extends State<MedicineInfo> {
         title: Text(widget.title),
         centerTitle: true,
       ),
-      body: SafeArea(
-          child: Container(
-        child: Flex(
-          direction: Axis.vertical,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          mainAxisSize: MainAxisSize.max,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              flex: 1,
-              child: Flex(
+      body: CustomScrollView(
+        slivers: [
+          SliverList(
+            delegate: SliverChildListDelegate([
+              Flex(
                 direction: Axis.horizontal,
                 children: [
                   Expanded(
@@ -146,7 +159,7 @@ class _MedicineInfoState extends State<MedicineInfo> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Container(
-                          padding: EdgeInsets.all(10.0),
+                          padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
                           child: Text(
                             "${drugInfo.brandName}",
                             style: TextStyle(
@@ -156,9 +169,49 @@ class _MedicineInfoState extends State<MedicineInfo> {
                           ),
                         ),
                         Container(
-                          padding: EdgeInsets.all(10.0),
+                          padding: EdgeInsets.fromLTRB(10, 0, 0, 10),
                           child: Text(
-                            "${drugInfo.description}",
+                            "$genericNames",
+                            style: TextStyle(
+                              fontSize: 14.0,
+                              fontWeight: FontWeight.normal,
+                            ),
+                          ),
+                        ),
+                        Container(
+                          padding: EdgeInsets.only(left: 10),
+                          child: Text(
+                            "Classification:",
+                            style: TextStyle(
+                              fontSize: 14.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        Container(
+                          padding: EdgeInsets.fromLTRB(10, 0, 0, 10),
+                          child: Text(
+                            "$classification",
+                            style: TextStyle(
+                              fontSize: 14.0,
+                              fontWeight: FontWeight.normal,
+                            ),
+                          ),
+                        ),
+                        Container(
+                          padding: EdgeInsets.only(left: 10.0),
+                          child: Text(
+                            "Packaging:",
+                            style: TextStyle(
+                              fontSize: 14.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        Container(
+                          padding: EdgeInsets.only(left: 10.0),
+                          child: Text(
+                            "${drugInfo.dosage}\t${drugInfo.form}",
                             style: TextStyle(
                               fontSize: 14.0,
                               fontWeight: FontWeight.normal,
@@ -186,20 +239,17 @@ class _MedicineInfoState extends State<MedicineInfo> {
                       )),
                 ],
               ),
-            ),
-            Expanded(
-              flex: 5,
-              child: Container(
-                padding: EdgeInsets.fromLTRB(10.0, 5.0, 10.0, 5.0),
+              Padding(
+                padding: const EdgeInsets.all(10.0),
                 child: FutureBuilder(
                   future: _future(drugInfo),
                   builder: _futureBuilder,
                 ),
               ),
-            ),
-          ],
-        ),
-      )),
+            ]),
+          ),
+        ],
+      ),
     );
   }
 }

@@ -1,4 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:research_mobile_app/objects/genericName.dart';
+import 'package:research_mobile_app/objects/medicineClassification.dart';
 
 part 'medicine.g.dart';
 
@@ -6,20 +8,22 @@ part 'medicine.g.dart';
 class Medicine {
   final String id;
   final String brandName;
-  final String genericName;
+  final List<GenericName> genericNames;
+  final List<MedicineClassification> medicineClassification;
   final String dosage;
-  final String dosageForm;
-  final String categories;
-  final String description;
+  final String form;
+  final String category;
+  final String usage;
 
   Medicine(
     this.id,
     this.brandName,
-    this.genericName,
     this.dosage,
-    this.dosageForm,
-    this.categories,
-    this.description,
+    this.form,
+    this.usage,
+    this.category,
+    this.genericNames,
+    this.medicineClassification,
   );
 
   /// A necessary factory constructor for creating a new Medicine instance
@@ -32,10 +36,4 @@ class Medicine {
   /// to JSON. The implementation simply calls the private, generated
   /// helper method `_$MedicineToJson`.
   Map<String, dynamic> toJson() => _$MedicineToJson(this);
-
-  @override
-  String toString() {
-    // TODO: implement toString
-    return "{id:$id brandName:$brandName genericName:$genericName dosage:$dosage dosageForm:$dosageForm isOTC:$categories description:$description}";
-  }
 }

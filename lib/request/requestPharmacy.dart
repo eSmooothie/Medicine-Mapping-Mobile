@@ -12,8 +12,8 @@ class RequestPharmacy extends MyHttpRequest {
       List<Pharmacy> _allPharmacy = [];
       var data = jsonDecode(response.body);
       data.forEach((element) {
-        Pharmacy pharmacy = Pharmacy.fromJson(element);
-        _allPharmacy.add(pharmacy);
+        // Pharmacy pharmacy = Pharmacy.fromJson(element);
+        // _allPharmacy.add(pharmacy);
       });
 
       return _allPharmacy;

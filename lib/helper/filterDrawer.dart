@@ -67,7 +67,6 @@ class _filterDrawerState extends State<filterDrawer> {
             _filterItemsList[filterHeader]![key] =
                 !_filterItemsList[filterHeader]![key]!;
           });
-
           // print("$key: ${_filterItemsList[filterHeader]![key]}");
         },
         selected: _filterItemsList[filterHeader]![key]!,

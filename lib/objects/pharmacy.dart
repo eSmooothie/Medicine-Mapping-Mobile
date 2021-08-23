@@ -9,7 +9,6 @@ class Pharmacy {
   final String lng;
   final String name;
   final String address;
-  final String contactNo;
 
   Pharmacy(
     this.id,
@@ -17,7 +16,6 @@ class Pharmacy {
     this.lng,
     this.name,
     this.address,
-    this.contactNo,
   );
 
   factory Pharmacy.fromJson(Map<String, dynamic> json) =>

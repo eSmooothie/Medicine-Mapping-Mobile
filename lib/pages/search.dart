@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:research_mobile_app/exports.dart';
 import 'package:research_mobile_app/helper/filterDrawer.dart';
+import 'package:research_mobile_app/objects/genericName.dart';
 import 'package:research_mobile_app/request/requestPharmacy.dart';
 
 class Search extends StatefulWidget {
@@ -27,7 +28,8 @@ class _SearchState extends State<Search> {
 
   // future pharmacy
   Future futurePharma = Future(() async {
-    return await RequestPharmacy().QueryAll();
+    // return await RequestPharmacy().QueryAll();
+    return null;
   });
 
   @override
@@ -141,17 +143,24 @@ class _SearchState extends State<Search> {
                       if (_searchResults.isNotEmpty ||
                           _searchController.text.isNotEmpty) {
                         _searchItemDataHolder.clear();
-                        print("$_searchResults");
+                        // print("$_searchResults");
                         _searchResults.forEach((item) {
                           if (item is Medicine) {
-                            String desc =
-                                "${item.genericName}\n${item.dosage} ${item.dosageForm}";
+                            List<String> medicineGenericNames = [];
+                            item.genericNames.forEach((element) {
+                              medicineGenericNames.add(element.name);
+                            });
+                            String description =
+                                medicineGenericNames.join(", ");
+                            description =
+                                description + "\n${item.dosage} ${item.form}";
                             ObjectItemDataHolder drugData =
                                 ObjectItemDataHolder(
                               name: item.brandName,
-                              description: desc.toUpperCase(),
+                              description: description.toUpperCase(),
                               object: item,
                             );
+
                             _searchItemDataHolder.add(drugData);
                           } else if (item is Pharmacy) {
                             ObjectItemDataHolder pharmaData =
@@ -166,12 +175,18 @@ class _SearchState extends State<Search> {
                         _searchItemDataHolder.clear();
                         _items.forEach((item) {
                           if (item is Medicine) {
-                            String desc =
-                                "${item.genericName}\n${item.dosage} ${item.dosageForm}";
+                            List<String> medicineGenericNames = [];
+                            item.genericNames.forEach((element) {
+                              medicineGenericNames.add(element.name);
+                            });
+                            String description =
+                                medicineGenericNames.join(", ");
+                            description =
+                                description + "\n${item.dosage} ${item.form}";
                             ObjectItemDataHolder drugData =
                                 ObjectItemDataHolder(
                               name: item.brandName,
-                              description: desc.toUpperCase(),
+                              description: description.toUpperCase(),
                               object: item,
                             );
 
@@ -311,9 +326,13 @@ class _SearchState extends State<Search> {
 
     _items.forEach((item) {
       if (item is Medicine) {
-        // print(item.brandName);
+        List<String> medicineGenericNames = [];
+        item.genericNames.forEach((element) {
+          medicineGenericNames.add(element.name);
+        });
+        String genericNames = medicineGenericNames.join(", ").toUpperCase();
         if (item.brandName.toLowerCase().contains(text) ||
-            item.genericName.toLowerCase().contains(text)) {
+            genericNames.toLowerCase().contains(text)) {
           _searchResults.add(item);
         }
       } else if (item is Pharmacy) {

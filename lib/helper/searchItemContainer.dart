@@ -8,53 +8,54 @@ Widget ItemContainer({
   required String description,
   required void Function()? onPressed,
 }) {
-  return OutlinedButton(
-    style: OutlinedButton.styleFrom(
-      fixedSize: Size(200, 100),
-      backgroundColor: Colors.blue.shade100,
-      textStyle: TextStyle(color: Colors.white),
-      padding: EdgeInsets.all(18.0),
-      shape: RoundedRectangleBorder(
-          side: BorderSide(color: Colors.blue.shade100),
-          borderRadius: BorderRadius.all(Radius.circular(10.0))),
-    ),
-    onPressed: onPressed,
-    child: Row(
-      mainAxisSize: MainAxisSize.max,
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Expanded(
-          flex: 5,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              FittedBox(
-                fit: BoxFit.fitWidth,
-                child: Text(
-                  "$title",
-                  style: TextStyle(
-                    color: Colors.blue.shade800,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
+  return IntrinsicHeight(
+    child: OutlinedButton(
+      style: OutlinedButton.styleFrom(
+        backgroundColor: Colors.blue.shade100,
+        textStyle: TextStyle(color: Colors.white),
+        padding: EdgeInsets.all(18.0),
+        shape: RoundedRectangleBorder(
+            side: BorderSide(color: Colors.blue.shade100),
+            borderRadius: BorderRadius.all(Radius.circular(10.0))),
+      ),
+      onPressed: onPressed,
+      child: Row(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Expanded(
+            flex: 5,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                FittedBox(
+                  fit: BoxFit.fitWidth,
+                  child: Text(
+                    "$title",
+                    style: TextStyle(
+                      color: Colors.blue.shade800,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
-              ),
-              Flexible(
-                flex: 1,
-                fit: FlexFit.tight,
-                child: Text(
-                  "$description",
-                  style: TextStyle(
-                    color: Colors.blue.shade800,
+                Flexible(
+                  flex: 1,
+                  fit: FlexFit.tight,
+                  child: Text(
+                    "$description",
+                    style: TextStyle(
+                      color: Colors.blue.shade800,
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     ),
   );
 }
