@@ -224,6 +224,7 @@ class _PharmacyInformationState extends State<PharmacyInformation> {
                           medicineDescription: description,
                           price: item.price.toString(),
                           isStock: (item.isStock == 1) ? true : false,
+                          medicineObj: item.medicine,
                         );
 
                         _items.add(holder);
@@ -238,7 +239,14 @@ class _PharmacyInformationState extends State<PharmacyInformation> {
                                 _items[index].medicineDescription,
                             price: _items[index].price,
                             isStock: _items[index].isStock,
-                            onPressed: () {},
+                            onPressed: () {
+                              // reroute to medicine information page
+                              Navigator.pushNamed(
+                                context,
+                                medicineInfoPage,
+                                arguments: _items[index].medicineObj,
+                              );
+                            },
                           );
                         },
                         separatorBuilder: (BuildContext context, int index) =>
