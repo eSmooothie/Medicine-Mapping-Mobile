@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:research_mobile_app/exports.dart';
+import 'package:research_mobile_app/exportHelper.dart';
 import 'package:research_mobile_app/request/requestPatient.dart';
 
 class SignIn extends StatefulWidget {

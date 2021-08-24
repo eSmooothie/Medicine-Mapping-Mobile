@@ -1,7 +1,8 @@
 import 'dart:convert';
 
 import 'package:http/http.dart';
-import 'package:research_mobile_app/exports.dart';
+
+import 'httpRequest.dart';
 
 class RequestPatient extends MyHttpRequest {
   String addNewUserPath = "api/new/user";

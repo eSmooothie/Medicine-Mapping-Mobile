@@ -1,10 +1,9 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
-import 'package:research_mobile_app/exports.dart';
+import 'package:research_mobile_app/exportHelper.dart';
+import 'package:research_mobile_app/exportModel.dart';
+import 'package:research_mobile_app/exportRequest.dart';
 import 'package:research_mobile_app/helper/filterDrawer.dart';
-import 'package:research_mobile_app/objects/genericName.dart';
-import 'package:research_mobile_app/request/requestPharmacy.dart';
 
 class Search extends StatefulWidget {
   const Search({Key? key, required this.title, this.arguments})
@@ -16,21 +15,61 @@ class Search extends StatefulWidget {
 }
 
 class _SearchState extends State<Search> {
+  late var args;
   late String searchBy;
+  Map<String, Map<String, bool>> filter = {};
+  Map<String, Map<String, bool>> filterData = {};
+
   TextEditingController _searchController = TextEditingController();
   List<Object> _items = [];
   List<Object> _searchResults = [];
 
   // future medicine
-  Future futureMedicine = Future(() async {
-    return await RequestMedicine().QueryAll();
-  });
+  Future futureMedicine() async {
+    bool isFiltered = false;
+
+    Map<String, List<String>> _filter = {};
+    // loop through filter
+    filter.forEach((key, value) {
+      List<String> _params = [];
+      // get the name with true value
+      // and store it in _params
+      value.forEach((key, value) {
+        // if one value is true then it is filtered
+        if (value) {
+          isFiltered = true;
+          _params.add(key);
+        }
+      });
+      String newKey = key.replaceAll(" ", "");
+      _filter[newKey] = _params;
+    });
+
+    if (isFiltered) {
+      return await RequestMedicine().filterMedicine(filter: _filter);
+    } else {
+      return await RequestMedicine().QueryAll();
+    }
+  }
 
   // future pharmacy
   Future futurePharma = Future(() async {
     // return await RequestPharmacy().QueryAll();
     return null;
   });
+
+  void initVariables() async {
+    await Future.delayed(Duration(seconds: 3));
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    initVariables();
+    print("initState");
+  }
 
   @override
   void dispose() {
@@ -50,8 +89,14 @@ class _SearchState extends State<Search> {
   @override
   Widget build(BuildContext context) {
     setState(() {
-      searchBy = widget.arguments.toString();
-      searchBy = searchBy.substring(1, searchBy.length - 1);
+      args = widget.arguments;
+      if (args is List) {
+        searchBy = args[0];
+
+        if (args.length > 1) {
+          filter = args[1];
+        }
+      }
     });
 
     return Scaffold(
@@ -76,11 +121,15 @@ class _SearchState extends State<Search> {
         title: Text(widget.title),
         actions: [Container()],
       ),
-      endDrawer: filterDrawer(
+      endDrawer: FilterDrawer(
         filters: {
-          'filter_1': ['x', 'y', 'z'],
-          'filter_2': ['x1', 'y1', 'z1'],
+          'General Classification': {'x': true, 'y': false, 'z': false},
+          'Medicine Form': {
+            'form_1': false,
+            'form_2': false,
+          },
         },
+        searchBy: searchBy,
       ),
       drawerEnableOpenDragGesture: false,
       endDrawerEnableOpenDragGesture: false,
@@ -118,8 +167,9 @@ class _SearchState extends State<Search> {
               Expanded(
                 flex: 5,
                 child: FutureBuilder(
-                  future:
-                      (searchBy == 'pharmacy') ? futurePharma : futureMedicine,
+                  future: (searchBy == 'pharmacy')
+                      ? futurePharma
+                      : futureMedicine(),
                   builder: (BuildContext context, AsyncSnapshot snapshot) {
                     var rand = new Random();
                     List<ObjectItemDataHolder> _searchItemDataHolder = [];

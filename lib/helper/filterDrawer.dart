@@ -1,54 +1,54 @@
 import 'package:flutter/material.dart';
+import 'package:research_mobile_app/exportHelper.dart';
 
-class filterDrawer extends StatefulWidget {
-  final Map<String, List<String>> filters;
-  const filterDrawer({
+class FilterDrawer extends StatefulWidget {
+  final Map<String, Map<String, bool>> filters;
+  final String searchBy;
+  const FilterDrawer({
     Key? key,
     required this.filters,
+    required this.searchBy,
   }) : super(key: key);
 
   @override
-  _filterDrawerState createState() => _filterDrawerState();
+  _FilterDrawerState createState() => _FilterDrawerState();
 }
 
-class _filterDrawerState extends State<filterDrawer> {
+class _FilterDrawerState extends State<FilterDrawer> {
   List<String> _filterHeaderList = [];
   Map<String, Map<String, bool>> _filterItemsList = {};
-
-  Map<String, List<String>> filters = {};
-
-  bool _initVar = true;
 
   Widget _filters({
     required String filterHeader,
     required Map<String, bool> filterItems,
   }) {
-    return Container(
-      color: Colors.orange,
-      height: 400,
-      child: Flex(
-        direction: Axis.vertical,
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Flexible(
-              child: Text(
-            "$filterHeader",
-            style: TextStyle(
-              fontSize: 18.0,
-              fontWeight: FontWeight.bold,
-            ),
-          )),
-          Expanded(
-            child: Wrap(
-              spacing: 10.0,
-              children: _filterItems(
-                filterLabel: filterItems,
-                filterHeader: filterHeader,
+    return IntrinsicHeight(
+      child: Container(
+        color: Colors.orange,
+        child: Flex(
+          direction: Axis.vertical,
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Flexible(
+                child: Text(
+              "$filterHeader",
+              style: TextStyle(
+                fontSize: 18.0,
+                fontWeight: FontWeight.bold,
+              ),
+            )),
+            Expanded(
+              child: Wrap(
+                spacing: 10.0,
+                children: _filterItems(
+                  filterLabel: filterItems,
+                  filterHeader: filterHeader,
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -76,23 +76,8 @@ class _filterDrawerState extends State<filterDrawer> {
     return _items;
   }
 
-  void generateMapFilterObjects() {
-    filters.forEach((key, value) {
-      print("$key: $value");
-      Map<String, bool> obj = {};
-      _filterHeaderList.add(key);
-      value.forEach((label) {
-        obj[label] = false;
-      });
-      _filterItemsList[key] = obj;
-    });
-  }
-
   List<Widget> _displayFilters() {
     List<Widget> _container = [];
-
-    // print(_filterHeaderList);
-    // print(_filterItemsList);
 
     _filterItemsList.forEach((key, value) {
       Widget item = _filters(
@@ -110,11 +95,7 @@ class _filterDrawerState extends State<filterDrawer> {
   Widget build(BuildContext context) {
     setState(() {
       _filterHeaderList = [];
-      filters = widget.filters;
-      if (_initVar) {
-        generateMapFilterObjects();
-        _initVar = false;
-      }
+      _filterItemsList = widget.filters;
     });
     return Drawer(
       child: Stack(
@@ -157,6 +138,7 @@ class _filterDrawerState extends State<filterDrawer> {
                       ),
                     ),
                   ),
+                  // Submit
                   Expanded(
                     child: Container(
                       decoration: BoxDecoration(
@@ -167,7 +149,15 @@ class _filterDrawerState extends State<filterDrawer> {
                       ),
                       child: InkWell(
                         onTap: () {
-                          print("submit");
+                          List<Object> args = [
+                            widget.searchBy,
+                            _filterItemsList,
+                          ];
+                          Navigator.popAndPushNamed(
+                            context,
+                            searchPage,
+                            arguments: args,
+                          );
                         },
                         child: Center(
                           child: Text(

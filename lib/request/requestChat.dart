@@ -2,9 +2,9 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:http/http.dart' as http;
-import 'package:research_mobile_app/exports.dart';
 import 'package:path/path.dart';
-import 'package:async/async.dart';
+
+import 'httpRequest.dart';
 
 class RequestChat extends MyHttpRequest {
   final String _convoPath = "api/get/chat";

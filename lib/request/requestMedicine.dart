@@ -1,7 +1,6 @@
 import 'dart:convert';
-import 'package:http/http.dart' as http;
 
-import 'package:research_mobile_app/objects/medicine.dart';
+import 'package:research_mobile_app/exportModel.dart';
 import 'package:research_mobile_app/request/httpRequest.dart';
 
 class RequestMedicine extends MyHttpRequest {
@@ -22,5 +21,13 @@ class RequestMedicine extends MyHttpRequest {
       throw Exception(
           "Failed to get response \nError Code: ${response.statusCode}");
     }
+  }
+
+  Future<List<Medicine>> filterMedicine({
+    required Map<String, List<String>> filter,
+  }) async {
+    List<Medicine> listMedicine = [];
+    print(filter);
+    return listMedicine;
   }
 }

@@ -1,6 +1,5 @@
 import 'dart:convert';
-import 'package:http/http.dart' as http;
-import 'package:research_mobile_app/exports.dart';
+import 'package:research_mobile_app/exportModel.dart';
 import 'package:research_mobile_app/request/httpRequest.dart';
 
 class RequestPharmacy extends MyHttpRequest {

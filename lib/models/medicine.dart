@@ -1,6 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:research_mobile_app/objects/genericName.dart';
-import 'package:research_mobile_app/objects/medicineClassification.dart';
+import 'package:research_mobile_app/models/genericName.dart';
+import 'package:research_mobile_app/models/medicineClassification.dart';
 
 part 'medicine.g.dart';
 

@@ -6,7 +6,8 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:research_mobile_app/exports.dart';
+import 'package:research_mobile_app/exportHelper.dart';
+import 'package:research_mobile_app/exportModel.dart';
 import 'package:research_mobile_app/request/requestChat.dart';
 
 class ChatBox extends StatefulWidget {

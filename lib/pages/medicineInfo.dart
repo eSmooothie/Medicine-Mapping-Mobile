@@ -1,7 +1,8 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:research_mobile_app/exports.dart';
+import 'package:research_mobile_app/exportHelper.dart';
+import 'package:research_mobile_app/exportModel.dart';
 
 class MedicineInfo extends StatefulWidget {
   const MedicineInfo({Key? key, required this.title, this.arguments})

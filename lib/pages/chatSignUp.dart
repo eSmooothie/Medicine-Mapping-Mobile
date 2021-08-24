@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:research_mobile_app/exports.dart';
+import 'package:research_mobile_app/exportHelper.dart';
 import 'package:research_mobile_app/request/requestPatient.dart';
 import 'package:research_mobile_app/request/requestPharmacy.dart';
 

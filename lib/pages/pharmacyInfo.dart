@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:research_mobile_app/exports.dart';
+import 'package:research_mobile_app/exportHelper.dart';
+import 'package:research_mobile_app/exportModel.dart';
 
 class PharmacyInformation extends StatefulWidget {
   const PharmacyInformation({
