@@ -19,6 +19,7 @@ class _SearchState extends State<Search> {
   late String searchBy;
   Map<String, Map<String, bool>> filter = {};
   Map<String, Map<String, bool>> filterData = {};
+  bool isFiltered = false;
 
   TextEditingController _searchController = TextEditingController();
   List<Object> _items = [];
@@ -26,8 +27,6 @@ class _SearchState extends State<Search> {
 
   // future medicine
   Future futureMedicine() async {
-    bool isFiltered = false;
-
     Map<String, List<String>> _filter = {};
     // loop through filter
     filter.forEach((key, value) {
@@ -37,7 +36,10 @@ class _SearchState extends State<Search> {
       value.forEach((key, value) {
         // if one value is true then it is filtered
         if (value) {
-          isFiltered = true;
+          setState(() {
+            isFiltered = true;
+          });
+
           _params.add(key);
         }
       });
@@ -59,7 +61,26 @@ class _SearchState extends State<Search> {
   });
 
   void initVariables() async {
-    await Future.delayed(Duration(seconds: 3));
+    // get all general classification
+    List<GeneralClassification> genClass =
+        await RequestMedicine().getGeneralClassification();
+    // map classification names
+    Map<String, bool> genClassNames = {};
+    genClass.forEach((element) {
+      genClassNames[element.NAME] = false;
+    });
+    // get all medicine form
+    List<MedicineForm> _medicineForms =
+        await RequestMedicine().getMedicineForm();
+    // map medicine form
+    Map<String, bool> _medForm = {};
+    _medicineForms.forEach((element) {
+      _medForm[element.NAME] = false;
+    });
+    setState(() {
+      filterData["General Classification"] = genClassNames;
+      filterData["Medicine Form"] = _medForm;
+    });
   }
 
   @override
@@ -69,6 +90,14 @@ class _SearchState extends State<Search> {
 
     initVariables();
     print("initState");
+    args = widget.arguments;
+    if (args is List) {
+      searchBy = args[0];
+
+      if (args.length > 1) {
+        filter = args[1];
+      }
+    }
   }
 
   @override
@@ -88,16 +117,7 @@ class _SearchState extends State<Search> {
 
   @override
   Widget build(BuildContext context) {
-    setState(() {
-      args = widget.arguments;
-      if (args is List) {
-        searchBy = args[0];
-
-        if (args.length > 1) {
-          filter = args[1];
-        }
-      }
-    });
+    // setState(() {});
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -122,13 +142,7 @@ class _SearchState extends State<Search> {
         actions: [Container()],
       ),
       endDrawer: FilterDrawer(
-        filters: {
-          'General Classification': {'x': true, 'y': false, 'z': false},
-          'Medicine Form': {
-            'form_1': false,
-            'form_2': false,
-          },
-        },
+        filters: (isFiltered) ? filter : filterData,
         searchBy: searchBy,
       ),
       drawerEnableOpenDragGesture: false,
@@ -304,10 +318,13 @@ class _SearchState extends State<Search> {
                         double titleWidth =
                             rand.nextInt(200).clamp(50, 200).floorToDouble();
                         double descHeight =
-                            rand.nextInt(100).clamp(20, 100).floorToDouble();
+                            rand.nextInt(150).clamp(20, 150).floorToDouble();
+                        double containerHeight =
+                            rand.nextInt(150).clamp(80, 150).floorToDouble();
                         return ItemContainerSkeleton(
                           titleWidth: titleWidth,
                           descHeight: descHeight,
+                          containerHeight: containerHeight,
                         );
                       },
                       separatorBuilder: (BuildContext context, int index) =>

@@ -17,6 +17,7 @@ class FilterDrawer extends StatefulWidget {
 class _FilterDrawerState extends State<FilterDrawer> {
   List<String> _filterHeaderList = [];
   Map<String, Map<String, bool>> _filterItemsList = {};
+  bool reset = false;
 
   Widget _filters({
     required String filterHeader,
@@ -24,6 +25,7 @@ class _FilterDrawerState extends State<FilterDrawer> {
   }) {
     return IntrinsicHeight(
       child: Container(
+        padding: EdgeInsets.all(10.0),
         color: Colors.orange,
         child: Flex(
           direction: Axis.vertical,
@@ -57,10 +59,29 @@ class _FilterDrawerState extends State<FilterDrawer> {
     required String filterHeader,
     required Map<String, bool> filterLabel,
   }) {
+    if (reset) {
+      Map<String, Map<String, bool>> resetItem = {};
+      _filterItemsList.forEach((key, value) {
+        String _filterHead = key;
+        Map<String, bool> _filterItem = {};
+        value.forEach((key, value) {
+          _filterItem[key] = false;
+        });
+        resetItem[_filterHead] = _filterItem;
+      });
+
+      _filterItemsList = resetItem;
+      // done reset
+
+      setState(() {
+        reset = false;
+      });
+    }
+
     List<FilterChip> _items = [];
     filterLabel.forEach((key, value) {
       FilterChip _filterChip = FilterChip(
-        label: Text("$key: ${_filterItemsList[filterHeader]![key]}"),
+        label: Text("$key"),
         onSelected: (isSelect) {
           setState(() {
             // update the state of the object
@@ -92,11 +113,17 @@ class _FilterDrawerState extends State<FilterDrawer> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    // TODO: implement initState
+    super.initState();
     setState(() {
       _filterHeaderList = [];
       _filterItemsList = widget.filters;
     });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Drawer(
       child: Stack(
         fit: StackFit.expand,
@@ -123,7 +150,9 @@ class _FilterDrawerState extends State<FilterDrawer> {
                       ),
                       child: InkWell(
                         onTap: () {
-                          print("reset");
+                          setState(() {
+                            reset = true;
+                          });
                         },
                         child: Center(
                           child: Text(

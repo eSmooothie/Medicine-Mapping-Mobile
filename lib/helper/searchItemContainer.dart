@@ -63,9 +63,10 @@ Widget ItemContainer({
 Widget ItemContainerSkeleton({
   double titleWidth = 200,
   double descHeight = 20,
+  double containerHeight = 100,
 }) {
   return Container(
-    height: 100,
+    height: containerHeight,
     padding: EdgeInsets.all(18.0),
     decoration: BoxDecoration(
       border: Border.all(

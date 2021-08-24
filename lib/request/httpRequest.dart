@@ -41,6 +41,8 @@ class MyHttpRequest {
       var request = await http.get(newUri, headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       });
+
+      return request;
     } else {
       // Post
     }
