@@ -13,6 +13,9 @@ Pharmacy _$PharmacyFromJson(Map<String, dynamic> json) {
     json['lng'] as String,
     json['name'] as String,
     json['address'] as String,
+    (json['contactDetail'] as List<dynamic>?)
+        ?.map((e) => ContactDetail.fromJson(e as Map<String, dynamic>))
+        .toList(),
   );
 }
 
@@ -22,4 +25,5 @@ Map<String, dynamic> _$PharmacyToJson(Pharmacy instance) => <String, dynamic>{
       'lng': instance.lng,
       'name': instance.name,
       'address': instance.address,
+      'contactDetail': instance.contactDetail,
     };

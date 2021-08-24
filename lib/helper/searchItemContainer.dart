@@ -197,3 +197,95 @@ Widget InboxNotifaction({
     ),
   );
 }
+
+Widget InventoryItemContainer({
+  required String medicineName,
+  required String medicineDescription,
+  required String price,
+  required bool isStock,
+  required void Function()? onPressed,
+}) {
+  return IntrinsicHeight(
+    child: OutlinedButton(
+      style: OutlinedButton.styleFrom(
+        backgroundColor: Colors.blue.shade100,
+        textStyle: TextStyle(color: Colors.white),
+        padding: EdgeInsets.all(18.0),
+        shape: RoundedRectangleBorder(
+            side: BorderSide(color: Colors.blue.shade100),
+            borderRadius: BorderRadius.all(Radius.circular(10.0))),
+      ),
+      onPressed: onPressed,
+      child: Row(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Expanded(
+            flex: 5,
+            child: Flex(
+              direction: Axis.horizontal,
+              children: [
+                Expanded(
+                  flex: 5,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      FittedBox(
+                        fit: BoxFit.fitWidth,
+                        child: Text(
+                          "$medicineName",
+                          style: TextStyle(
+                            color: Colors.blue.shade800,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      Flexible(
+                        flex: 1,
+                        fit: FlexFit.tight,
+                        child: Text(
+                          "$medicineDescription",
+                          style: TextStyle(
+                            color: Colors.blue.shade800,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "P$price",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text(
+                        "Price",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 14.0,
+                          fontWeight: FontWeight.normal,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
+}

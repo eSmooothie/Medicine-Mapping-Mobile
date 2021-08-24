@@ -56,8 +56,8 @@ class _SearchState extends State<Search> {
 
   // future pharmacy
   Future futurePharma = Future(() async {
-    // return await RequestPharmacy().QueryAll();
-    return null;
+    return await RequestPharmacy().QueryAll();
+    // return null;
   });
 
   void initVariables() async {
@@ -221,7 +221,7 @@ class _SearchState extends State<Search> {
                             ObjectItemDataHolder drugData =
                                 ObjectItemDataHolder(
                               name: item.brandName,
-                              description: description.toUpperCase(),
+                              description: description,
                               object: item,
                             );
 
@@ -250,7 +250,7 @@ class _SearchState extends State<Search> {
                             ObjectItemDataHolder drugData =
                                 ObjectItemDataHolder(
                               name: item.brandName,
-                              description: description.toUpperCase(),
+                              description: description,
                               object: item,
                             );
 

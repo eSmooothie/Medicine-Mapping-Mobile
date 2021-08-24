@@ -47,4 +47,10 @@ class MyHttpRequest {
       // Post
     }
   }
+
+  void throwException({
+    required http.Response response,
+  }) {
+    throw Exception("Error ${response.statusCode}: ${response.reasonPhrase}");
+  }
 }

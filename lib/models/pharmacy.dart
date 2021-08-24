@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:research_mobile_app/models/contactDetail.dart';
 
 part 'pharmacy.g.dart';
 
@@ -9,6 +10,7 @@ class Pharmacy {
   final String lng;
   final String name;
   final String address;
+  final List<ContactDetail>? contactDetail;
 
   Pharmacy(
     this.id,
@@ -16,6 +18,7 @@ class Pharmacy {
     this.lng,
     this.name,
     this.address,
+    this.contactDetail,
   );
 
   factory Pharmacy.fromJson(Map<String, dynamic> json) =>
