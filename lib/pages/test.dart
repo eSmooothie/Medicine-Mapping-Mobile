@@ -6,8 +6,6 @@ import 'package:geocoding/geocoding.dart' as geo;
 import 'package:location/location.dart' as loc;
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-import 'dart:math' show cos, sqrt, asin;
-
 import 'package:location/location.dart';
 
 class Test extends StatefulWidget {
@@ -25,9 +23,7 @@ class _TestState extends State<Test> {
 // Map storing polylines created by connecting two points
   Map<PolylineId, Polyline> polylines = {};
   _getAddress() async {
-    Map<String, double> currentLocation;
     LocationData? myLocation;
-    String error;
 
     try {
       myLocation = await location.getLocation();
@@ -56,9 +52,6 @@ class _TestState extends State<Test> {
       print("dAdd: $_destAddress");
 
       // Convert  the given address into Location
-      List<geo.Location> startLoc =
-          await geo.locationFromAddress(_currentAddress);
-      List<geo.Location> destLoc = await geo.locationFromAddress(_destAddress);
 
       // LatLng startPos = LatLng(
       //   startLoc[0].latitude,

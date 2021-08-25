@@ -26,7 +26,6 @@ class _ChatBoxState extends State<ChatBox> with WidgetsBindingObserver {
   Timer? timer;
   bool waitingForResponse = false;
   StreamController _streamController = new StreamController<dynamic>();
-  Stream? _stream;
   ScrollController _scrollController = new ScrollController();
   bool scrollToLatest = true;
 
@@ -48,6 +47,12 @@ class _ChatBoxState extends State<ChatBox> with WidgetsBindingObserver {
     WidgetsBinding.instance!.removeObserver(this); // Removing an observer
     _scrollController.dispose();
     super.dispose();
+  }
+
+  @override
+  void deactivate() {
+    super.deactivate();
+    _streamController.close();
   }
 
   @override
@@ -215,7 +220,7 @@ class _ChatBoxState extends State<ChatBox> with WidgetsBindingObserver {
                         File _file = File(image!.path);
                         String? phoneNumber =
                             await storage.read(key: "phoneNumber");
-                        var response = await RequestChat().sendImage(
+                        await RequestChat().sendImage(
                           tmpFile: _file,
                           chatId: chatId!,
                           phoneNumber: phoneNumber!,
@@ -339,7 +344,7 @@ class ChatLineHolder extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "${from}",
+                "$from",
                 style: TextStyle(
                   fontSize: 18.0,
                   fontWeight: FontWeight.bold,
@@ -349,7 +354,7 @@ class ChatLineHolder extends StatelessWidget {
               SizedBox(
                 height: 10.0,
               ),
-              Text("${message}"),
+              Text("$message"),
               SizedBox(
                 height: 20.0,
               ),
@@ -365,7 +370,6 @@ class ChatLineHolder extends StatelessWidget {
     required String message,
     required String time,
   }) {
-    Pattern pattern = ":";
     // evaluate if a message is link.
     List<String> splitImage = message.split(":");
     bool isImage = false;

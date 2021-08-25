@@ -4,7 +4,9 @@ part 'medicineForm.g.dart';
 
 @JsonSerializable()
 class MedicineForm {
+  // ignore: non_constant_identifier_names
   final String ID;
+  // ignore: non_constant_identifier_names
   final String NAME;
 
   MedicineForm(

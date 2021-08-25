@@ -15,7 +15,6 @@ class FilterDrawer extends StatefulWidget {
 }
 
 class _FilterDrawerState extends State<FilterDrawer> {
-  List<String> _filterHeaderList = [];
   Map<String, Map<String, bool>> _filterItemsList = {};
   bool reset = false;
 
@@ -113,10 +112,8 @@ class _FilterDrawerState extends State<FilterDrawer> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     setState(() {
-      _filterHeaderList = [];
       _filterItemsList = widget.filters;
     });
   }

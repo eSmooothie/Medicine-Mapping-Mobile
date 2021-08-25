@@ -16,7 +16,6 @@ class _LandingPageState extends State<LandingPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
   }
 
@@ -107,15 +106,12 @@ class _LandingPageState extends State<LandingPage> {
 
   @override
   void deactivate() {
-    // TODO: implement deactivate
     print("Deactivate landing page");
     super.deactivate();
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
-
     map.dispose();
 
     super.dispose();

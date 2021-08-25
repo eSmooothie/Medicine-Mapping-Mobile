@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:research_mobile_app/exportHelper.dart';
 import 'package:research_mobile_app/request/requestPatient.dart';
-import 'package:research_mobile_app/request/requestPharmacy.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({Key? key, this.arguments}) : super(key: key);
@@ -146,8 +145,6 @@ class _SignUpState extends State<SignUp> {
                             // Save data to storage.
 
                             final storage = new FlutterSecureStorage();
-                            final options = IOSOptions(
-                                accessibility: IOSAccessibility.first_unlock);
                             try {
                               storage.write(
                                 key: "firstName",
@@ -193,14 +190,12 @@ class _SignUpState extends State<SignUp> {
 
   @override
   void deactivate() {
-    // TODO: implement deactivate
     print("Deactivate sign up page.");
     super.deactivate();
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
     print("Dispose sign up page.");
     _firstNameController.dispose();
     _lastNameController.dispose();

@@ -6,6 +6,7 @@ import 'package:research_mobile_app/request/httpRequest.dart';
 class RequestPharmacy extends MyHttpRequest {
   final String _getAll = "api/get/pharmacy/all";
   final String _getInventory = "api/get/pharmacy/inventory";
+  // ignore: non_constant_identifier_names
   Future<List<Pharmacy>> QueryAll() async {
     final response = await getRequest(requestPath: _getAll);
     if (response.statusCode == 201) {

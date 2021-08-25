@@ -20,8 +20,6 @@ class PharmacyInformation extends StatefulWidget {
 class _PharmacyInformationState extends State<PharmacyInformation> {
   late Pharmacy _pharmaInfo;
   late var _arguments;
-  late var _from;
-  late var _medicineInfo;
   TextEditingController _searchDrugController = TextEditingController();
 
   Future _future() async {
@@ -34,12 +32,10 @@ class _PharmacyInformationState extends State<PharmacyInformation> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     setState(() {
       _arguments = widget.arguments;
-      _from = _arguments['from'];
-      _medicineInfo = _arguments!['medicine'];
+
       _pharmaInfo = _arguments['pharmacy'];
     });
   }
@@ -293,9 +289,6 @@ class _PharmacyInformationState extends State<PharmacyInformation> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          List<Object> args = [
-            _pharmaInfo,
-          ];
           Navigator.pushNamed(
             context,
             signInPage,

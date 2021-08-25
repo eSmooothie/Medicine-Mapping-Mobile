@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:research_mobile_app/exportHelper.dart';
 
+// ignore: non_constant_identifier_names
 Widget ItemContainer({
   required String title,
   required String description,
@@ -60,6 +61,7 @@ Widget ItemContainer({
   );
 }
 
+// ignore: non_constant_identifier_names
 Widget ItemContainerSkeleton({
   double titleWidth = 200,
   double descHeight = 20,
@@ -96,6 +98,7 @@ Widget ItemContainerSkeleton({
   );
 }
 
+// ignore: non_constant_identifier_names
 Widget InboxItemContainerSkeleton({
   double titleWidth = 200,
   double descHeight = 20,
@@ -131,6 +134,7 @@ Widget InboxItemContainerSkeleton({
   );
 }
 
+// ignore: non_constant_identifier_names
 Widget InboxItemContainer({
   required dynamic Function() onPressed,
   required String pharmacyName,
@@ -173,6 +177,7 @@ Widget InboxItemContainer({
   );
 }
 
+// ignore: non_constant_identifier_names
 Widget InboxNotifaction({
   required int newMessage,
 }) {
@@ -198,6 +203,7 @@ Widget InboxNotifaction({
   );
 }
 
+// ignore: non_constant_identifier_names
 Widget InventoryItemContainer({
   required String medicineName,
   required String medicineDescription,
@@ -290,6 +296,7 @@ Widget InventoryItemContainer({
   );
 }
 
+// ignore: non_constant_identifier_names
 Widget PharmaMedicineItemContainer({
   required String pharmacyName,
   required String pharmacyAddress,

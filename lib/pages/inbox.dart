@@ -19,8 +19,6 @@ class _InboxState extends State<Inbox> {
 
   @override
   void initState() {
-    // TODO: implement initState
-
     super.initState();
   }
 
@@ -101,14 +99,12 @@ class _InboxState extends State<Inbox> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     print("Dispose inbox page.");
     super.dispose();
   }
 
   @override
   void deactivate() {
-    // TODO: implement deactivate
     print("Deactive inbox page.");
     super.deactivate();
   }

@@ -2,9 +2,9 @@ import 'dart:convert';
 
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
-import 'package:location/location.dart';
+import 'package:research_mobile_app/request/httpRequest.dart';
 
-class MapRequest {
+class MapRequest extends MyHttpRequest {
   final String _apiKey = "AIzaSyDzgtPJeqX3e4XCPTelTsenA-gPz3LzxaY";
 
   Future<String> getAddress({required LatLng position}) async {
@@ -18,8 +18,10 @@ class MapRequest {
       var result = rawData["results"][0];
       String formattedAddress = result["formatted_address"];
       return formattedAddress;
+    } else {
+      throwException(response: response);
     }
-    throw Exception("Error ${response.statusCode}: ${response.reasonPhrase}");
+    return "";
   }
 
   Future<Map<String, dynamic>> getRoute({
@@ -34,10 +36,10 @@ class MapRequest {
         "https://maps.googleapis.com/maps/api/directions/json?origin=${origin.latitude},${origin.longitude}&destination=${destination.latitude},${destination.longitude}&avoid=$avoid&mode=$mode&alternatives=$alternative&key=$_apiKey";
     Uri url = Uri.parse(_apiUri);
     final response = await http.get(url);
+    Map<String, dynamic> allPossibleRoute = {};
     if (response.statusCode == 200) {
       var rawData = jsonDecode(response.body);
       var routes = rawData["routes"];
-      Map<String, dynamic> allPossibleRoute = {};
 
       routes.forEach((dynamic routeData) {
         // print(routeData);
@@ -55,7 +57,9 @@ class MapRequest {
       });
 
       return allPossibleRoute;
+    } else {
+      throwException(response: response);
     }
-    throw Exception("Error ${response.statusCode}: ${response.reasonPhrase}");
+    return allPossibleRoute;
   }
 }

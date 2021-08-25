@@ -21,7 +21,6 @@ class _GetDirectionState extends State<GetDirection> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     setState(() {
@@ -107,21 +106,11 @@ class _GetDirectionState extends State<GetDirection> {
                     builder: (BuildContext context, AsyncSnapshot snapshot) {
                       String from = "start_add";
                       List<dynamic> snapshotData = [];
-                      int _totalWalkingRoute = 0;
-                      int _totalBicycleRoute = 0;
-                      int _totalDrivingRoute = 0;
+
                       if (snapshot.hasData) {
                         snapshotData = snapshot.data;
                         from = snapshotData[3];
-                        _totalWalkingRoute = (snapshotData[0].length - 1 > 0)
-                            ? snapshotData[travelMode].length - 1
-                            : 0;
-                        _totalBicycleRoute = (snapshotData[1].length - 1 > 0)
-                            ? snapshotData[travelMode].length - 1
-                            : 0;
-                        _totalDrivingRoute = (snapshotData[2].length - 1 > 0)
-                            ? snapshotData[travelMode].length - 1
-                            : 0;
+
                         return Flex(
                           direction: Axis.vertical,
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -583,14 +572,12 @@ class _GetDirectionState extends State<GetDirection> {
 
   @override
   void deactivate() {
-    // TODO: implement deactivate
     print("Deactive get direction page.");
     super.deactivate();
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
     print("Dispose get direction.");
     super.dispose();
   }

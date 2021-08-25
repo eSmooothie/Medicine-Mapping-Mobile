@@ -12,6 +12,7 @@ class RequestMedicine extends MyHttpRequest {
   final String _getAveragePrice = "api/get/medicine/average_price";
   final String _getPharmacies = "api/get/medicine/offer/pharmacies";
   final String _addToTrend = "api/add/tred/medicine";
+  // ignore: non_constant_identifier_names
   Future<List<Medicine>> QueryAll() async {
     final response = await getRequest(requestPath: _getAll);
     if (response.statusCode == 201) {

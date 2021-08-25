@@ -47,21 +47,18 @@ class _MedicineInfoState extends State<MedicineInfo> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     print("Dispose medicine Info page.");
     super.dispose();
   }
 
   @override
   void deactivate() {
-    // TODO: implement deactivate
     print("Deactivate medicine Info page.");
     super.deactivate();
   }
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     setState(() {
@@ -92,9 +89,6 @@ class _MedicineInfoState extends State<MedicineInfo> {
       appBar: AppBar(
         leading: CustomWidget.outlinedButton(
           onPressed: () {
-            List<Object> args = [
-              "medicine",
-            ];
             Navigator.pop(context);
           },
           child: Icon(

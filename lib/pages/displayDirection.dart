@@ -30,7 +30,6 @@ class _DisplayDirectionState extends State<DisplayDirection>
 
   late String _mapStyle;
   bool waitingForResponse = false;
-  StreamController _streamController = new StreamController<dynamic>();
   // Map storing polylines created by connecting two points
   Set<Marker> markers = {};
   Map<PolylineId, Polyline> polylines = {};
@@ -202,8 +201,6 @@ class _DisplayDirectionState extends State<DisplayDirection>
       if (!waitingForResponse) {
         waitingForResponse = true;
         LocationData currentLocation = await _trackUser.getLocation();
-        // print(
-        //     "_curretUserPos: ${currentLocation.latitude} ${currentLocation.longitude}");
 
         LatLng myLocationPostion = LatLng(
           currentLocation.latitude!,
@@ -255,7 +252,6 @@ class _DisplayDirectionState extends State<DisplayDirection>
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     String loadMapStyle = 'assets/default_mapStyle.txt';
     rootBundle.loadString(loadMapStyle).then((string) {
@@ -408,14 +404,12 @@ class _DisplayDirectionState extends State<DisplayDirection>
 
   @override
   void deactivate() {
-    // TODO: implement deactivate
     print("Deactive display direction.");
     super.deactivate();
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
     timer?.cancel();
     print("Dispose display direction.");
     super.dispose();

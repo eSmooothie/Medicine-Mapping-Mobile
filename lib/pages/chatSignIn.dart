@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -20,7 +18,6 @@ class _SignInState extends State<SignIn> {
 
   Future _future = Future<bool>(() async {
     final storage = new FlutterSecureStorage();
-    final options = IOSOptions(accessibility: IOSAccessibility.first_unlock);
     final AccountInfo _accountInfo;
     final Map<String, String> _storedInfo;
     // check if credential is stored in the local storage.
@@ -80,9 +77,6 @@ class _SignInState extends State<SignIn> {
               bool hasCredentials = snapshot.data;
 
               if (hasCredentials) {
-                List<Object> args = [
-                  pharmacyInfo,
-                ];
                 SchedulerBinding.instance!.addPostFrameCallback((timeStamp) {
                   Navigator.popAndPushNamed(
                     context,
@@ -184,9 +178,6 @@ class _SignInState extends State<SignIn> {
                                   });
                                 } else {
                                   final storage = new FlutterSecureStorage();
-                                  final options = IOSOptions(
-                                      accessibility:
-                                          IOSAccessibility.first_unlock);
                                   try {
                                     storage.write(
                                       key: "firstName",
@@ -204,9 +195,6 @@ class _SignInState extends State<SignIn> {
                                     storage.deleteAll();
                                   }
                                   // Navigator.popAndPushNamed(context, inboxPage);
-                                  List<Object> args = [
-                                    pharmacyInfo,
-                                  ];
                                   Navigator.popAndPushNamed(
                                     context,
                                     chatBoxPage,
@@ -253,14 +241,12 @@ class _SignInState extends State<SignIn> {
 
   @override
   void deactivate() {
-    // TODO: implement deactivate
     print("Deactive sign up.");
     super.deactivate();
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
     print("Dispose sign up.");
 
     _phoneNumberController.dispose();

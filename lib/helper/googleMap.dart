@@ -1,11 +1,9 @@
 import 'dart:async';
-import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:flutter/services.dart'
-    show ByteData, PlatformException, rootBundle;
+import 'package:flutter/services.dart' show rootBundle;
 import 'package:location/location.dart';
 import 'package:research_mobile_app/exportHelper.dart';
 import 'package:research_mobile_app/exportModel.dart';
@@ -17,12 +15,10 @@ class Gmap {
   late bool _serviceEnabled;
   late PermissionStatus _permissionGranted;
   final LatLng _center = const LatLng(8.2280, 124.2452);
-  late LocationData _userPos;
 
   BuildContext context;
   Map<MarkerId, Marker> _markers = <MarkerId, Marker>{};
   Map<CircleId, Circle> _circles = <CircleId, Circle>{};
-  StreamSubscription? _locationSubscription;
   Location _userLocationTracker = new Location();
 
   bool darkMode = false;

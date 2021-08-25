@@ -85,7 +85,6 @@ class _SearchState extends State<Search> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     initVariables();
@@ -102,7 +101,6 @@ class _SearchState extends State<Search> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     print("Dispose search page.");
     _searchController.dispose();
     super.dispose();
@@ -110,7 +108,6 @@ class _SearchState extends State<Search> {
 
   @override
   void deactivate() {
-    // TODO: implement deactivate
     print("Deactive search page.");
     super.deactivate();
   }
