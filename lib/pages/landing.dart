@@ -12,8 +12,6 @@ class LandingPage extends StatefulWidget {
 }
 
 class _LandingPageState extends State<LandingPage> {
-  late Gmap map;
-
   @override
   void initState() {
     super.initState();
@@ -21,8 +19,6 @@ class _LandingPageState extends State<LandingPage> {
 
   @override
   Widget build(BuildContext context) {
-    map = Gmap(context: context);
-
     return Scaffold(
       appBar: AppBar(
         leading: Container(),
@@ -36,13 +32,13 @@ class _LandingPageState extends State<LandingPage> {
         shadowColor: Colors.transparent,
       ),
       body: FutureBuilder(
-        future: map.initMap(),
-        builder: (BuildContext context, AsyncSnapshot<Widget> snapshot) {
+        future: Future.delayed(Duration(seconds: 1), () => " "),
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
           List<Widget> children;
 
           if (snapshot.hasData) {
             // done waiting
-            return snapshot.data!;
+            return Gmap();
           } else if (snapshot.hasError) {
             // error
             children = CustomWidget.errorContainer(
@@ -112,7 +108,7 @@ class _LandingPageState extends State<LandingPage> {
 
   @override
   void dispose() {
-    map.dispose();
+    print("Dispose landing page");
 
     super.dispose();
   }
