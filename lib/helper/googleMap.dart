@@ -128,8 +128,15 @@ class Gmap {
       throw Exception(
           "Enable to load the map please do allow the application to access your location. Thank you.");
     }
-    await _initPharmacy();
+
+    if (_markers.isEmpty) {
+      await _initPharmacy();
+    }
+
     LocationData _userPos = await _userLocationTracker.getLocation();
+
+    await Future.delayed(Duration(seconds: 1));
+
     return GoogleMap(
       onMapCreated: (GoogleMapController controller) async {
         mapController = controller;
