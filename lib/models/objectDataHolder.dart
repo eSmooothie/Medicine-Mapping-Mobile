@@ -26,3 +26,19 @@ class InventoryItemDataHolder {
     required this.medicineObj,
   });
 }
+
+class PharmacyMedicineDataHolder {
+  final String pharmacyName;
+  final String pharmacyAddress;
+  final double price;
+  final bool isStock;
+  final Pharmacy pharmacyObj;
+
+  PharmacyMedicineDataHolder({
+    required this.pharmacyName,
+    required this.pharmacyAddress,
+    required this.price,
+    required this.isStock,
+    required this.pharmacyObj,
+  });
+}
