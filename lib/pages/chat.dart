@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+// import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -37,6 +38,11 @@ class _ChatBoxState extends State<ChatBox> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
+    // get the pharamcy info
+    setState(() {
+      pharmacyInfo = widget.arguments;
+      pharmacy = pharmacyInfo;
+    });
     WidgetsBinding.instance!.addObserver(this); // Adding an observer
     setTimer(true); // Setting a timer on init
   }
@@ -135,11 +141,6 @@ class _ChatBoxState extends State<ChatBox> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    // get the pharamcy info
-    setState(() {
-      pharmacyInfo = widget.arguments;
-      pharmacy = pharmacyInfo;
-    });
     // go to latest message execute only once
 
     return Scaffold(
@@ -217,15 +218,17 @@ class _ChatBoxState extends State<ChatBox> with WidgetsBindingObserver {
                         final XFile? image = await _imagePicker.pickImage(
                             source: ImageSource.gallery);
 
-                        File _file = File(image!.path);
-                        String? phoneNumber =
-                            await storage.read(key: "phoneNumber");
-                        await RequestChat().sendImage(
-                          tmpFile: _file,
-                          chatId: chatId!,
-                          phoneNumber: phoneNumber!,
-                        );
-                        print(image);
+                        if (image != null) {
+                          File _file = File(image.path);
+                          String? phoneNumber =
+                              await storage.read(key: "phoneNumber");
+                          await RequestChat().sendImage(
+                            tmpFile: _file,
+                            chatId: chatId!,
+                            phoneNumber: phoneNumber!,
+                          );
+                          print(image);
+                        }
                       },
                       child: Icon(Icons.image),
                       backgroundColor: Colors.transparent,

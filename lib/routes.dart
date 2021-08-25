@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'package:research_mobile_app/helper/page_transition.dart';
 import 'package:research_mobile_app/pages/chat.dart';
