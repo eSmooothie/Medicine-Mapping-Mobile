@@ -35,7 +35,17 @@ class _SignInState extends State<SignIn> {
             lastName: _storedInfo['lastName']!,
             phoneNumber: _storedInfo['phoneNumber']!);
 
-        return true;
+        // check if exist in db
+        Map<String, dynamic> data = {
+          "phoneNumber": _accountInfo.phoneNumber,
+        };
+        Map<String, dynamic> result =
+            await RequestPatient().getUserInfo(data: data);
+
+        if (result.containsKey("phoneNumber")) {
+          return true;
+        }
+        return false;
       } else {
         // need to enter credentials
         return false;
@@ -47,10 +57,15 @@ class _SignInState extends State<SignIn> {
   });
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    super.initState();
     setState(() {
       pharmacyInfo = widget.arguments;
     });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -214,8 +229,11 @@ class _SignInState extends State<SignIn> {
               }
             } else if (snapshot.hasError) {
               return Center(
-                child: Text(
-                  "Error: ${snapshot.error}",
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: CustomWidget.errorContainer(
+                      errorMessage: snapshot.error.toString()),
                 ),
               );
             }
