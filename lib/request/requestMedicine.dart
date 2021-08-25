@@ -8,8 +8,10 @@ class RequestMedicine extends MyHttpRequest {
   final String _getAll = "api/get/medicine/all";
   final String _getGeneralClassification = "api/get/GeneralClassifications";
   final String _getMedicineForm = "api/get/MedicineForms";
-  final String _filterMedicine = "/api/get/medicine/filter";
-
+  final String _filterMedicine = "api/get/medicine/filter";
+  final String _getAveragePrice = "api/get/medicine/average_price";
+  final String _getPharmacies = "api/get/medicine/offer/pharmacies";
+  final String _addToTrend = "api/add/tred/medicine";
   Future<List<Medicine>> QueryAll() async {
     final response = await getRequest(requestPath: _getAll);
     if (response.statusCode == 201) {
@@ -86,5 +88,62 @@ class RequestMedicine extends MyHttpRequest {
       throw Exception("Error ${response.statusCode}: ${response.reasonPhrase}");
     }
     return listData;
+  }
+
+  Future<double> getAveragePrice({required String id}) async {
+    double avgPrice = 0;
+    Map<String, dynamic> data = {
+      "medicineId": id,
+    };
+    Response response = await postRequest(
+      requestPath: _getAveragePrice,
+      data: data,
+    );
+
+    if (response.statusCode == 200) {
+      var decode = jsonDecode(response.body);
+      avgPrice = decode["AvgPrice"];
+    } else {
+      throwException(response: response);
+    }
+
+    return avgPrice;
+  }
+
+  Future<List<MedicinePharmacy>> getPharmacies({required String id}) async {
+    List<MedicinePharmacy> listPharmacies = [];
+    Map<String, dynamic> data = {
+      "medicineId": id,
+    };
+    Response response = await postRequest(
+      requestPath: _getPharmacies,
+      data: data,
+    );
+    if (response.statusCode == 200) {
+      var decode = jsonDecode(response.body);
+      decode.forEach((json) {
+        MedicinePharmacy data = MedicinePharmacy.fromJson(json);
+        listPharmacies.add(data);
+      });
+    } else {
+      throwException(response: response);
+    }
+
+    return listPharmacies;
+  }
+
+  Future addToTrend({required String id}) async {
+    Map<String, dynamic> data = {
+      "medicineId": id,
+    };
+
+    Response response = await postRequest(
+      requestPath: _addToTrend,
+      data: data,
+    );
+
+    if (response.statusCode != 200) {
+      throwException(response: response);
+    }
   }
 }

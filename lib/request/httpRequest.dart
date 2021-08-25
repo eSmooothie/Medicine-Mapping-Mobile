@@ -2,6 +2,7 @@ import 'package:meta/meta.dart';
 import 'package:http/http.dart' as http;
 
 class MyHttpRequest {
+  // String _url = "https://med-mapping.com/";
   String _url = "http://192.168.254.104:9093/";
 
   String get serverUrl {
