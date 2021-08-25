@@ -114,4 +114,25 @@ class CustomWidget {
       ),
     );
   }
+
+  static List<Widget> errorContainer({
+    required String errorMessage,
+  }) {
+    return <Widget>[
+      const Icon(
+        Icons.error_outline,
+        color: Colors.red,
+        size: 60,
+      ),
+      Center(
+        child: Padding(
+          padding: const EdgeInsets.only(top: 16),
+          child: Text(
+            'Error: $errorMessage',
+            textAlign: TextAlign.center,
+          ),
+        ),
+      )
+    ];
+  }
 }
