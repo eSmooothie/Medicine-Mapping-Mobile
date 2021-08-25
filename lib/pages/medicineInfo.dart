@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:research_mobile_app/exportHelper.dart';
 import 'package:research_mobile_app/exportModel.dart';
+import 'package:research_mobile_app/exportRequest.dart';
 
 class MedicineInfo extends StatefulWidget {
   const MedicineInfo({Key? key, required this.title, this.arguments})
@@ -18,76 +19,30 @@ class _MedicineInfoState extends State<MedicineInfo> {
   late Medicine drugInfo;
   late String genericNames;
   late String classification;
+  double averagePrice = 0.0;
 
-  Widget Function(BuildContext context, AsyncSnapshot snapshot) _futureBuilder =
-      (BuildContext context, AsyncSnapshot snapshot) {
-    var rand = new Random();
-    List<ObjectItemDataHolder> _pharmacyItemDataHolder = [];
-    if (snapshot.hasData) {
-      Medicine medicineObj = snapshot.data['medicineData'];
-      List<Pharmacy> pharmacies = snapshot.data['pharmacies'];
-      pharmacies.forEach((Pharmacy pharmacy) {
-        ObjectItemDataHolder pharmaData = ObjectItemDataHolder(
-            name: pharmacy.name,
-            description: pharmacy.address,
-            object: pharmacy);
-        _pharmacyItemDataHolder.add(pharmaData);
-      });
-
-      return ListView.separated(
-        shrinkWrap: true,
-        itemBuilder: (BuildContext context, int index) {
-          return ItemContainer(
-            title: _pharmacyItemDataHolder[index].name,
-            description: _pharmacyItemDataHolder[index].description,
-            onPressed: () {
-              // reroute to pharmacy information page
-              Map<String, Object> args = {
-                'from': medicineInfoPage,
-                'pharmacy': _pharmacyItemDataHolder[index].object,
-                'medicine': medicineObj,
-              };
-              Navigator.pushNamed(
-                context,
-                pharmacyInfoPage,
-                arguments: args,
-              );
-            },
-          );
-        },
-        separatorBuilder: (BuildContext context, int index) => const Divider(),
-        itemCount: pharmacies.length,
-      );
-    } else if (snapshot.hasError) {}
-
-    // display skeleton animation while waiting for the data
-    return ListView.separated(
-      shrinkWrap: true,
-      itemBuilder: (BuildContext context, int index) {
-        double titleWidth = rand.nextInt(200).clamp(50, 200).floorToDouble();
-        double descHeight = rand.nextInt(100).clamp(20, 100).floorToDouble();
-        return ItemContainerSkeleton(
-          titleWidth: titleWidth,
-          descHeight: descHeight,
-        );
-      },
-      separatorBuilder: (BuildContext context, int index) => const Divider(),
-      itemCount: 7,
+  Future _future() async {
+    List<MedicinePharmacy> result = await RequestMedicine().getPharmacies(
+      id: drugInfo.id,
     );
-  };
+    return result;
+  }
 
-  Future<Map<String, Object>> _future(var medicineObj) async {
-    Map<String, Object> data = {
-      'medicineData': medicineObj,
-    };
+  Future getAveragePrice() async {
+    double avgPrice = await RequestMedicine().getAveragePrice(
+      id: drugInfo.id,
+    );
 
-    List<Pharmacy> pharmacies = [
-      // new Pharmacy("1", "21312", "xx", "qwe", "qw3e123"),
-      // new Pharmacy("2", "213qwe12", "xx", "qwqqqe", "qw3e123"),
-    ];
+    setState(() {
+      averagePrice = avgPrice;
+    });
 
-    data['pharmacies'] = pharmacies;
-    return data;
+    await Future.delayed(Duration(seconds: 3));
+  }
+
+  Future addDataToMedicineTrend() async {
+    print("adding to trend");
+    await RequestMedicine().addToTrend(id: drugInfo.id);
   }
 
   @override
@@ -105,7 +60,10 @@ class _MedicineInfoState extends State<MedicineInfo> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
     setState(() {
       args = widget.arguments;
       if (args is Medicine) {
@@ -124,6 +82,12 @@ class _MedicineInfoState extends State<MedicineInfo> {
         // print(drugInfo);
       }
     });
+    getAveragePrice();
+    addDataToMedicineTrend();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         leading: CustomWidget.outlinedButton(
@@ -229,13 +193,13 @@ class _MedicineInfoState extends State<MedicineInfo> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            "XXX,XXX.XX",
+                            "P$averagePrice",
                             style: TextStyle(
                               fontSize: 24.0,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          Text("PHP"),
+                          Text("Average Price"),
                         ],
                       )),
                 ],
@@ -243,8 +207,83 @@ class _MedicineInfoState extends State<MedicineInfo> {
               Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: FutureBuilder(
-                  future: _future(drugInfo),
-                  builder: _futureBuilder,
+                  future: _future(),
+                  builder: (BuildContext context, AsyncSnapshot snapshot) {
+                    var rand = new Random();
+                    List<PharmacyMedicineDataHolder> _pharmacyItemDataHolder =
+                        [];
+                    if (snapshot.hasData) {
+                      List<MedicinePharmacy> pharmacies = snapshot.data;
+                      pharmacies.forEach((item) {
+                        PharmacyMedicineDataHolder holder =
+                            PharmacyMedicineDataHolder(
+                          pharmacyName: item.pharmacy.name,
+                          pharmacyAddress: item.pharmacy.address,
+                          price: item.price,
+                          isStock: item.isStock,
+                          pharmacyObj: item.pharmacy,
+                        );
+
+                        _pharmacyItemDataHolder.add(holder);
+                      });
+
+                      return ListView.separated(
+                        shrinkWrap: true,
+                        itemBuilder: (BuildContext context, int index) {
+                          return PharmaMedicineItemContainer(
+                              pharmacyName:
+                                  _pharmacyItemDataHolder[index].pharmacyName,
+                              pharmacyAddress: _pharmacyItemDataHolder[index]
+                                  .pharmacyAddress,
+                              price: _pharmacyItemDataHolder[index].price,
+                              isStock: _pharmacyItemDataHolder[index].isStock,
+                              onPressed: () {
+                                Map<String, Object> args = {
+                                  'pharmacy': _pharmacyItemDataHolder[index]
+                                      .pharmacyObj,
+                                };
+                                // reroute to pharmacyinfo
+
+                                Navigator.pushNamed(
+                                  context,
+                                  pharmacyInfoPage,
+                                  arguments: args,
+                                );
+                              });
+                        },
+                        separatorBuilder: (BuildContext context, int index) =>
+                            const Divider(),
+                        itemCount: _pharmacyItemDataHolder.length,
+                      );
+                    } else if (snapshot.hasError) {
+                      return Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: CustomWidget.errorContainer(
+                              errorMessage: snapshot.error.toString()),
+                        ),
+                      );
+                    }
+
+                    // display skeleton animation while waiting for the data
+                    return ListView.separated(
+                      shrinkWrap: true,
+                      itemBuilder: (BuildContext context, int index) {
+                        double titleWidth =
+                            rand.nextInt(200).clamp(50, 200).floorToDouble();
+                        double descHeight =
+                            rand.nextInt(100).clamp(20, 100).floorToDouble();
+                        return ItemContainerSkeleton(
+                          titleWidth: titleWidth,
+                          descHeight: descHeight,
+                        );
+                      },
+                      separatorBuilder: (BuildContext context, int index) =>
+                          const Divider(),
+                      itemCount: 7,
+                    );
+                  },
                 ),
               ),
             ]),
