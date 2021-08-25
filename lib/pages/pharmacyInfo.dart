@@ -255,7 +255,14 @@ class _PharmacyInformationState extends State<PharmacyInformation> {
                       );
                     } else if (snapshot.hasError) {
                       // error encountered.
-                      return Text("Error: ${snapshot.error}");
+                      return Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: CustomWidget.errorContainer(
+                              errorMessage: snapshot.error.toString()),
+                        ),
+                      );
                     }
                     // display skeleton animation while waiting for the data
                     return ListView.separated(
