@@ -26,7 +26,6 @@ class _FilterDrawerState extends State<FilterDrawer> {
     return IntrinsicHeight(
       child: Container(
         padding: EdgeInsets.all(10.0),
-        color: Colors.orange,
         child: Flex(
           direction: Axis.vertical,
           mainAxisAlignment: MainAxisAlignment.start,
