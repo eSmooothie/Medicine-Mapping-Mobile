@@ -15,10 +15,18 @@ class _LandingPageState extends State<LandingPage> {
   late Gmap map;
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     map = Gmap(context: context);
+
     return Scaffold(
       appBar: AppBar(
+        leading: Container(),
         title: Text(
           widget.title,
           style: TextStyle(color: Colors.blue),
@@ -32,27 +40,14 @@ class _LandingPageState extends State<LandingPage> {
         future: map.initMap(),
         builder: (BuildContext context, AsyncSnapshot<Widget> snapshot) {
           List<Widget> children;
+
           if (snapshot.hasData) {
             // done waiting
             return snapshot.data!;
           } else if (snapshot.hasError) {
             // error
-            children = <Widget>[
-              const Icon(
-                Icons.error_outline,
-                color: Colors.red,
-                size: 60,
-              ),
-              Center(
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 16),
-                  child: Text(
-                    'Error: ${snapshot.error}',
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              )
-            ];
+            children = CustomWidget.errorContainer(
+                errorMessage: snapshot.error.toString());
           } else {
             // waiting
             children =
