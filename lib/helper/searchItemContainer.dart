@@ -214,14 +214,18 @@ Widget InventoryItemContainer({
   return IntrinsicHeight(
     child: OutlinedButton(
       style: OutlinedButton.styleFrom(
-        backgroundColor: Colors.blue.shade100,
+        backgroundColor: (isStock) ? Colors.blue.shade100 : Colors.blue.shade50,
         textStyle: TextStyle(color: Colors.white),
         padding: EdgeInsets.all(18.0),
         shape: RoundedRectangleBorder(
             side: BorderSide(color: Colors.blue.shade100),
             borderRadius: BorderRadius.all(Radius.circular(10.0))),
       ),
-      onPressed: onPressed,
+      onPressed: (isStock)
+          ? onPressed
+          : () {
+              print("Out of stock.");
+            },
       child: Row(
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.start,
@@ -243,7 +247,9 @@ Widget InventoryItemContainer({
                         child: Text(
                           "$medicineName",
                           style: TextStyle(
-                            color: Colors.blue.shade800,
+                            color: (isStock)
+                                ? Colors.blue.shade800
+                                : Colors.blue.shade300,
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                           ),
@@ -255,7 +261,9 @@ Widget InventoryItemContainer({
                         child: Text(
                           "$medicineDescription",
                           style: TextStyle(
-                            color: Colors.blue.shade800,
+                            color: (isStock)
+                                ? Colors.blue.shade800
+                                : Colors.blue.shade300,
                           ),
                         ),
                       ),
@@ -269,20 +277,25 @@ Widget InventoryItemContainer({
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        "P$price",
+                        (isStock) ? "P$price" : "Out of\nStock",
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 20.0,
                           fontWeight: FontWeight.bold,
+                          color: (isStock)
+                              ? Colors.blue.shade800
+                              : Colors.blue.shade300,
                         ),
                       ),
                       Text(
-                        "Price",
+                        (isStock) ? "Price" : "",
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                          fontSize: 14.0,
-                          fontWeight: FontWeight.normal,
-                        ),
+                            fontSize: 14.0,
+                            fontWeight: FontWeight.normal,
+                            color: (isStock)
+                                ? Colors.blue.shade800
+                                : Colors.blue.shade300),
                       ),
                     ],
                   ),
@@ -307,14 +320,18 @@ Widget PharmaMedicineItemContainer({
   return IntrinsicHeight(
     child: OutlinedButton(
       style: OutlinedButton.styleFrom(
-        backgroundColor: Colors.blue.shade100,
+        backgroundColor: (isStock) ? Colors.blue.shade100 : Colors.blue.shade50,
         textStyle: TextStyle(color: Colors.white),
         padding: EdgeInsets.all(18.0),
         shape: RoundedRectangleBorder(
             side: BorderSide(color: Colors.blue.shade100),
             borderRadius: BorderRadius.all(Radius.circular(10.0))),
       ),
-      onPressed: onPressed,
+      onPressed: (isStock)
+          ? onPressed
+          : () {
+              print("Out of Stock");
+            },
       child: Row(
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.start,
@@ -336,7 +353,9 @@ Widget PharmaMedicineItemContainer({
                         child: Text(
                           "$pharmacyName",
                           style: TextStyle(
-                            color: Colors.blue.shade800,
+                            color: (isStock)
+                                ? Colors.blue.shade800
+                                : Colors.blue.shade300,
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                           ),
@@ -348,7 +367,9 @@ Widget PharmaMedicineItemContainer({
                         child: Text(
                           "$pharmacyAddress",
                           style: TextStyle(
-                            color: Colors.blue.shade800,
+                            color: (isStock)
+                                ? Colors.blue.shade800
+                                : Colors.blue.shade300,
                           ),
                         ),
                       ),
@@ -362,15 +383,18 @@ Widget PharmaMedicineItemContainer({
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        "P$price",
+                        (isStock) ? "P$price" : "Out of\nStock",
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 20.0,
                           fontWeight: FontWeight.bold,
+                          color: (isStock)
+                              ? Colors.blue.shade800
+                              : Colors.blue.shade300,
                         ),
                       ),
                       Text(
-                        "Price",
+                        (isStock) ? "Price" : "",
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 14.0,
