@@ -174,7 +174,9 @@ class _SearchState extends State<Search> {
                         onChanged: onSearchTextChange,
                       ),
                     ),
-                    _showDrawer(context),
+                    (searchBy == "medicine")
+                        ? _showDrawer(context)
+                        : Container(),
                   ],
                 ),
               ),
@@ -308,7 +310,14 @@ class _SearchState extends State<Search> {
                       );
                     } else if (snapshot.hasError) {
                       // error encountered.
-                      return Text("Error: ${snapshot.error}");
+                      return Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: CustomWidget.errorContainer(
+                              errorMessage: snapshot.error.toString()),
+                        ),
+                      );
                     }
 
                     // display skeleton animation while waiting for the data
