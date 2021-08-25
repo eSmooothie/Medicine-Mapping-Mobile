@@ -19,10 +19,15 @@ class _SignUpState extends State<SignUp> {
   TextEditingController _firstNameController = TextEditingController();
   TextEditingController _lastNameController = TextEditingController();
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    super.initState();
     setState(() {
       pharmacyInfo = widget.arguments;
     });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
