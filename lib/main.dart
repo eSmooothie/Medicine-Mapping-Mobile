@@ -10,12 +10,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Medicine Mapping',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
       onGenerateRoute: appRoutes,
-      initialRoute: landingPage,
+      initialRoute: noticePage,
     );
   }
 }

@@ -6,3 +6,4 @@ export '/models/medicineClassification.dart';
 export '/models/medicineForm.dart';
 export '/models/generalClassification.dart';
 export '/models/pharmaInventory.dart';
+export '/models/medicinePharmacy.dart';
