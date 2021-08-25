@@ -23,6 +23,12 @@ class _GetDirectionState extends State<GetDirection> {
   void initState() {
     // TODO: implement initState
     super.initState();
+
+    setState(() {
+      args = widget.arguments;
+      destinationLoc = args[0];
+      destinationAddress = args[1];
+    });
   }
 
   Future _routeFuture() async {
@@ -57,12 +63,6 @@ class _GetDirectionState extends State<GetDirection> {
 
   @override
   Widget build(BuildContext context) {
-    setState(() {
-      args = widget.arguments;
-      destinationLoc = args[0];
-      destinationAddress = args[1];
-    });
-
     return Scaffold(
       appBar: AppBar(
         leading: CustomWidget.outlinedButton(
@@ -310,8 +310,11 @@ class _GetDirectionState extends State<GetDirection> {
                         );
                       } else if (snapshot.hasError) {
                         return Center(
-                          child: Text(
-                            "Error: ${snapshot.error}",
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: CustomWidget.errorContainer(
+                                errorMessage: snapshot.error.toString()),
                           ),
                         );
                       }
