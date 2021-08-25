@@ -31,32 +31,7 @@ class _LandingPageState extends State<LandingPage> {
         foregroundColor: Colors.transparent,
         shadowColor: Colors.transparent,
       ),
-      body: FutureBuilder(
-        future: Future.delayed(Duration(seconds: 1), () => " "),
-        builder: (BuildContext context, AsyncSnapshot snapshot) {
-          List<Widget> children;
-
-          if (snapshot.hasData) {
-            // done waiting
-            return Gmap();
-          } else if (snapshot.hasError) {
-            // error
-            children = CustomWidget.errorContainer(
-                errorMessage: snapshot.error.toString());
-          } else {
-            // waiting
-            children =
-                Utility.loadingCircular(loadingLabel: "Loading google map...");
-          }
-          return Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: children,
-            ),
-          );
-        },
-      ),
+      body: Gmap(),
       floatingActionButton: SpeedDial(
         animatedIcon: AnimatedIcons.search_ellipsis,
         overlayColor: Colors.blue.shade100,

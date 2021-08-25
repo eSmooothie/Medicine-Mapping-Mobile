@@ -40,7 +40,6 @@ class _GmapState extends State<Gmap> {
       _mapStyle = string;
     });
     _permissionLocation();
-    _initPharmacy();
   }
 
   @override
@@ -56,27 +55,53 @@ class _GmapState extends State<Gmap> {
 
   @override
   Widget build(BuildContext context) {
-    return GoogleMap(
-      onMapCreated: (GoogleMapController controller) async {
-        mapController = controller;
-        mapController.setMapStyle(_mapStyle);
-        _userPos = await _userLocationTracker.getLocation();
-        mapController
-            .animateCamera(CameraUpdate.newCameraPosition(new CameraPosition(
-          bearing: 0,
-          target: LatLng(_userPos.latitude!, _userPos.longitude!),
-          tilt: 0,
-          zoom: 15.00,
-        )));
-      },
-      myLocationEnabled: _isPermitted,
-      myLocationButtonEnabled: false,
-      initialCameraPosition: CameraPosition(target: _center, zoom: _zoom),
-      zoomControlsEnabled: false,
-      mapToolbarEnabled: false,
-      markers: Set<Marker>.of(_markers.values),
-      circles: Set<Circle>.of(_circles.values),
-    );
+    return FutureBuilder(
+        future: _initPharmacy(),
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          if (snapshot.hasData) {
+            return GoogleMap(
+              onMapCreated: (GoogleMapController controller) async {
+                mapController = controller;
+
+                mapController.setMapStyle(_mapStyle);
+
+                mapController.animateCamera(
+                    CameraUpdate.newCameraPosition(new CameraPosition(
+                  bearing: 0,
+                  target: LatLng(_userPos.latitude!, _userPos.longitude!),
+                  tilt: 0,
+                  zoom: 15.00,
+                )));
+              },
+              myLocationEnabled: _isPermitted,
+              myLocationButtonEnabled: false,
+              initialCameraPosition:
+                  CameraPosition(target: _center, zoom: _zoom),
+              zoomControlsEnabled: false,
+              mapToolbarEnabled: false,
+              markers: Set<Marker>.of(_markers.values),
+              circles: Set<Circle>.of(_circles.values),
+            );
+          } else if (snapshot.hasError) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: CustomWidget.errorContainer(
+                    errorMessage: snapshot.error.toString()),
+              ),
+            );
+          }
+
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: Utility.loadingCircular(
+                  loadingLabel: "Loading google map..."),
+            ),
+          );
+        });
   }
 
   void _permissionLocation() async {
@@ -112,7 +137,7 @@ class _GmapState extends State<Gmap> {
     return true;
   }
 
-  Future<void> _initPharmacy() async {
+  Future _initPharmacy() async {
     print("initializing pharmacy marker in the google map.");
     List<Pharmacy> pharmacies = await RequestPharmacy().QueryAll();
 
@@ -137,6 +162,9 @@ class _GmapState extends State<Gmap> {
             );
           });
     });
+
+    _userPos = await _userLocationTracker.getLocation();
+    return pharmacies;
   }
 
   void _addMarker({

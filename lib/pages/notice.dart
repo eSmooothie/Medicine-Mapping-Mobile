@@ -17,7 +17,6 @@ class _NoticeState extends State<Notice> {
   @override
   void initState() {
     super.initState();
-    checkReadStorage();
   }
 
   @override
@@ -34,7 +33,7 @@ class _NoticeState extends State<Notice> {
 
   // check if the user done reading this page
   // and click the understand button
-  void checkReadStorage() async {
+  Future<bool> checkReadStorage() async {
     bool doneReading = await storage.containsKey(key: "doneReadingNotice");
     // print(doneReading);
     if (doneReading) {
@@ -45,108 +44,125 @@ class _NoticeState extends State<Notice> {
         );
       });
     }
+
+    return doneReading;
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: CustomWidget.outlinedButton(
-          onPressed: () {
-            Navigator.popAndPushNamed(
-              context,
-              landingPage,
-            );
-          },
-          child: Icon(
-            Icons.close,
-            color: Colors.white,
-          ),
-          side: BorderSide.none,
-        ),
-        title: Text("Read Me"),
-        centerTitle: true,
-      ),
-      body: Stack(
-        children: [
-          ListView(
-            children: [
-              Text("X"),
-              Text("X"),
-              Text("X"),
-              Text("X"),
-              Text("X"),
-              Text("X"),
-              Text("X"),
-              Text("X"),
-              Text("X"),
-              Text("X"),
-              Text("X"),
-              Text("X"),
-              Text("X"),
-              Text("X"),
-              Text("X"),
-              Text("X"),
-              Text("X"),
-              Text("X"),
-              Text("X"),
-              Text("X"),
-              Text("X"),
-              Text("X"),
-              Text("X"),
-              Text("X"),
-              Text("X"),
-              Text("X"),
-              Text("X"),
-              Text("X"),
-              Text("X"),
-              Text("X"),
-              Text("X"),
-              Text("X"),
-              Text("X"),
-              Text("X"),
-              Text("X"),
-              Text("X"),
-              Text("X"),
-              Text("X"),
-              Text("X"),
-              Text("X"),
-              Text("X"),
-              Text("X"),
-              Text("X"),
-              Text("X"),
-              Text("X"),
-              Text("X"),
-              Text("X"),
-              Text("y"),
-              SizedBox(
-                height: 150,
-              )
-            ],
-          ),
-          Container(
-            alignment: Alignment.bottomCenter,
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-              ),
-              padding: EdgeInsets.all(10.0),
-              width: MediaQuery.of(context).size.width,
-              child: CustomWidget.outlinedButton(
+    return FutureBuilder(
+        future: checkReadStorage(),
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          if (snapshot.hasData) {
+            if (snapshot.data) {
+              return Scaffold();
+            }
+            return Scaffold(
+              appBar: AppBar(
+                leading: CustomWidget.outlinedButton(
                   onPressed: () {
-                    print("Writing key `doneReadingNotice` in storage");
-                    storage.write(key: "doneReadingNotice", value: "1");
+                    Navigator.popAndPushNamed(
+                      context,
+                      landingPage,
+                    );
                   },
-                  child: Text(
-                    "I understand",
-                    style: TextStyle(
-                      color: Colors.white,
+                  child: Icon(
+                    Icons.close,
+                    color: Colors.white,
+                  ),
+                  side: BorderSide.none,
+                ),
+                title: Text("Read Me"),
+                centerTitle: true,
+              ),
+              body: Stack(
+                children: [
+                  ListView(
+                    children: [
+                      Text("X"),
+                      Text("X"),
+                      Text("X"),
+                      Text("X"),
+                      Text("X"),
+                      Text("X"),
+                      Text("X"),
+                      Text("X"),
+                      Text("X"),
+                      Text("X"),
+                      Text("X"),
+                      Text("X"),
+                      Text("X"),
+                      Text("X"),
+                      Text("X"),
+                      Text("X"),
+                      Text("X"),
+                      Text("X"),
+                      Text("X"),
+                      Text("X"),
+                      Text("X"),
+                      Text("X"),
+                      Text("X"),
+                      Text("X"),
+                      Text("X"),
+                      Text("X"),
+                      Text("X"),
+                      Text("X"),
+                      Text("X"),
+                      Text("X"),
+                      Text("X"),
+                      Text("X"),
+                      Text("X"),
+                      Text("X"),
+                      Text("X"),
+                      Text("X"),
+                      Text("X"),
+                      Text("X"),
+                      Text("X"),
+                      Text("X"),
+                      Text("X"),
+                      Text("X"),
+                      Text("X"),
+                      Text("X"),
+                      Text("X"),
+                      Text("X"),
+                      Text("X"),
+                      Text("y"),
+                      SizedBox(
+                        height: 150,
+                      )
+                    ],
+                  ),
+                  Container(
+                    alignment: Alignment.bottomCenter,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                      ),
+                      padding: EdgeInsets.all(10.0),
+                      width: MediaQuery.of(context).size.width,
+                      child: CustomWidget.outlinedButton(
+                          onPressed: () {
+                            print("Writing key `doneReadingNotice` in storage");
+                            storage.write(key: "doneReadingNotice", value: "1");
+                            Navigator.popAndPushNamed(
+                              context,
+                              landingPage,
+                            );
+                          },
+                          child: Text(
+                            "I understand",
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          )),
                     ),
-                  )),
-            ),
-          ),
-        ],
-      ),
-    );
+                  ),
+                ],
+              ),
+            );
+          } else if (snapshot.hasError) {}
+
+          return Container();
+        });
   }
 }
