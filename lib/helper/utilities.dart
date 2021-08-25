@@ -80,6 +80,33 @@ class Utility {
             ));
   }
 
+  Future showModal({
+    required BuildContext context,
+    String title = "Title",
+    String content = "Message.",
+  }) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) => _alertDialog(
+              context: context,
+              title: title,
+              content: content,
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text(
+                    "Close",
+                    style: TextStyle(
+                      color: Colors.red,
+                    ),
+                  ),
+                ),
+              ],
+            ));
+  }
+
   Widget _alertDialog({
     required BuildContext context,
     String title = "Title",
