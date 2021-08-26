@@ -7,6 +7,7 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:location/location.dart';
 import 'package:research_mobile_app/exportHelper.dart';
 import 'package:research_mobile_app/exportModel.dart';
+import 'package:research_mobile_app/helper/newLoading.dart';
 import 'package:research_mobile_app/request/requestPharmacy.dart';
 
 class Gmap extends StatefulWidget {
@@ -98,13 +99,8 @@ class _GmapState extends State<Gmap> {
             );
           }
 
-          return Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: Utility.loadingCircular(
-                  loadingLabel: "Loading google map..."),
-            ),
+          return NewLoading(
+            loadingIcon: Icons.map,
           );
         });
   }
