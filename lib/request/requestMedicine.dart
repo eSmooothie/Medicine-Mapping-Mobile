@@ -103,7 +103,12 @@ class RequestMedicine extends MyHttpRequest {
 
     if (response.statusCode == 200) {
       var decode = jsonDecode(response.body);
-      avgPrice = decode["AvgPrice"];
+      if (decode["AvgPrice"] is int) {
+        int price = decode["AvgPrice"];
+        avgPrice = price.toDouble();
+      } else {
+        avgPrice = decode["AvgPrice"].toDouble();
+      }
     } else {
       throwException(response: response);
     }

@@ -38,13 +38,11 @@ class _FilterDrawerState extends State<FilterDrawer> {
                 fontWeight: FontWeight.bold,
               ),
             )),
-            Expanded(
-              child: Wrap(
-                spacing: 10.0,
-                children: _filterItems(
-                  filterLabel: filterItems,
-                  filterHeader: filterHeader,
-                ),
+            Wrap(
+              spacing: 10.0,
+              children: _filterItems(
+                filterLabel: filterItems,
+                filterHeader: filterHeader,
               ),
             ),
           ],

@@ -403,7 +403,7 @@ class _SearchState extends State<Search> {
         item.genericNames.forEach((element) {
           medicineGenericNames.add(element.name);
         });
-        String genericNames = medicineGenericNames.join(", ").toUpperCase();
+        String genericNames = medicineGenericNames.join(", ").toLowerCase();
         if (item.brandName.toLowerCase().contains(text) ||
             genericNames.toLowerCase().contains(text)) {
           _searchResults.add(item);
