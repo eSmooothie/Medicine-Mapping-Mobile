@@ -31,8 +31,8 @@ Widget ItemContainer({
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                FittedBox(
-                  fit: BoxFit.fitWidth,
+                Expanded(
+                  // fit: BoxFit.fitWidth,
                   child: Text(
                     "$title",
                     style: TextStyle(

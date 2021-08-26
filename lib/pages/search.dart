@@ -215,8 +215,9 @@ class _SearchState extends State<Search> {
                             });
                             String description =
                                 medicineGenericNames.join(", ");
-                            description =
-                                description + "\n${item.dosage} ${item.form}";
+                            String dosage =
+                                (item.dosage != "") ? item.dosage + " " : "";
+                            description = description + "\n$dosage${item.form}";
                             ObjectItemDataHolder drugData =
                                 ObjectItemDataHolder(
                               name: item.brandName,
@@ -244,8 +245,9 @@ class _SearchState extends State<Search> {
                             });
                             String description =
                                 medicineGenericNames.join(", ");
-                            description =
-                                description + "\n${item.dosage} ${item.form}";
+                            String dosage =
+                                (item.dosage != "") ? item.dosage + " " : "";
+                            description = description + "\n$dosage${item.form}";
                             ObjectItemDataHolder drugData =
                                 ObjectItemDataHolder(
                               name: item.brandName,

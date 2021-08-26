@@ -49,7 +49,12 @@ class _GmapState extends State<Gmap> {
 
   @override
   void dispose() {
-    mapController.dispose();
+    try {
+      mapController.dispose();
+    } catch (e) {
+      print(e.toString());
+    }
+
     super.dispose();
   }
 

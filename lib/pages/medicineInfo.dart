@@ -221,34 +221,58 @@ class _MedicineInfoState extends State<MedicineInfo> {
                         _pharmacyItemDataHolder.add(holder);
                       });
 
-                      return ListView.separated(
-                        shrinkWrap: true,
-                        itemBuilder: (BuildContext context, int index) {
-                          return PharmaMedicineItemContainer(
-                              pharmacyName:
-                                  _pharmacyItemDataHolder[index].pharmacyName,
-                              pharmacyAddress: _pharmacyItemDataHolder[index]
-                                  .pharmacyAddress,
-                              price: _pharmacyItemDataHolder[index].price,
-                              isStock: _pharmacyItemDataHolder[index].isStock,
-                              onPressed: () {
-                                Map<String, Object> args = {
-                                  'pharmacy': _pharmacyItemDataHolder[index]
-                                      .pharmacyObj,
-                                };
-                                // reroute to pharmacyinfo
+                      if (pharmacies.isNotEmpty) {
+                        return ListView.separated(
+                          shrinkWrap: true,
+                          itemBuilder: (BuildContext context, int index) {
+                            return PharmaMedicineItemContainer(
+                                pharmacyName:
+                                    _pharmacyItemDataHolder[index].pharmacyName,
+                                pharmacyAddress: _pharmacyItemDataHolder[index]
+                                    .pharmacyAddress,
+                                price: _pharmacyItemDataHolder[index].price,
+                                isStock: _pharmacyItemDataHolder[index].isStock,
+                                onPressed: () {
+                                  Map<String, Object> args = {
+                                    'pharmacy': _pharmacyItemDataHolder[index]
+                                        .pharmacyObj,
+                                  };
+                                  // reroute to pharmacyinfo
 
-                                Navigator.pushNamed(
-                                  context,
-                                  pharmacyInfoPage,
-                                  arguments: args,
-                                );
-                              });
-                        },
-                        separatorBuilder: (BuildContext context, int index) =>
-                            const Divider(),
-                        itemCount: _pharmacyItemDataHolder.length,
-                      );
+                                  Navigator.pushNamed(
+                                    context,
+                                    pharmacyInfoPage,
+                                    arguments: args,
+                                  );
+                                });
+                          },
+                          separatorBuilder: (BuildContext context, int index) =>
+                              const Divider(),
+                          itemCount: _pharmacyItemDataHolder.length,
+                        );
+                      } else {
+                        return Center(
+                          child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: <Widget>[
+                                const Icon(
+                                  Icons.sentiment_dissatisfied,
+                                  color: Colors.red,
+                                  size: 60,
+                                ),
+                                Center(
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(top: 16),
+                                    child: Text(
+                                      'No pharmacy offer this medicine.',
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                )
+                              ]),
+                        );
+                      }
                     } else if (snapshot.hasError) {
                       return Center(
                         child: Column(

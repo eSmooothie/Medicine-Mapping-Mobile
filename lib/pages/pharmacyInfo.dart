@@ -211,8 +211,11 @@ class _PharmacyInformationState extends State<PharmacyInformation> {
                           medicineGenericNames.add(element.name);
                         });
                         String description = medicineGenericNames.join(", ");
-                        description = description +
-                            "\n${item.medicine.dosage} ${item.medicine.form}";
+                        String dosage = (item.medicine.dosage != "")
+                            ? item.medicine.dosage + " "
+                            : "";
+                        description =
+                            description + "\n$dosage${item.medicine.form}";
 
                         InventoryItemDataHolder holder =
                             InventoryItemDataHolder(
@@ -226,29 +229,53 @@ class _PharmacyInformationState extends State<PharmacyInformation> {
                         _items.add(holder);
                       });
 
-                      return ListView.separated(
-                        shrinkWrap: true,
-                        itemBuilder: (BuildContext context, int index) {
-                          return InventoryItemContainer(
-                            medicineName: _items[index].medicineName,
-                            medicineDescription:
-                                _items[index].medicineDescription,
-                            price: _items[index].price,
-                            isStock: _items[index].isStock,
-                            onPressed: () {
-                              // reroute to medicine information page
-                              Navigator.pushNamed(
-                                context,
-                                medicineInfoPage,
-                                arguments: _items[index].medicineObj,
-                              );
-                            },
-                          );
-                        },
-                        separatorBuilder: (BuildContext context, int index) =>
-                            const Divider(),
-                        itemCount: _items.length,
-                      );
+                      if (_items.isNotEmpty) {
+                        return ListView.separated(
+                          shrinkWrap: true,
+                          itemBuilder: (BuildContext context, int index) {
+                            return InventoryItemContainer(
+                              medicineName: _items[index].medicineName,
+                              medicineDescription:
+                                  _items[index].medicineDescription,
+                              price: _items[index].price,
+                              isStock: _items[index].isStock,
+                              onPressed: () {
+                                // reroute to medicine information page
+                                Navigator.pushNamed(
+                                  context,
+                                  medicineInfoPage,
+                                  arguments: _items[index].medicineObj,
+                                );
+                              },
+                            );
+                          },
+                          separatorBuilder: (BuildContext context, int index) =>
+                              const Divider(),
+                          itemCount: _items.length,
+                        );
+                      } else {
+                        return Center(
+                          child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: <Widget>[
+                                const Icon(
+                                  Icons.sentiment_dissatisfied,
+                                  color: Colors.red,
+                                  size: 60,
+                                ),
+                                Center(
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(top: 16),
+                                    child: Text(
+                                      'No medicine listed in their inventory.',
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                )
+                              ]),
+                        );
+                      }
                     } else if (snapshot.hasError) {
                       // error encountered.
                       return Center(
