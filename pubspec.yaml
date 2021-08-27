@@ -80,7 +80,7 @@ flutter:
     - assets/icons/user-profile-holder.svg
   # images
     - assets/images/userLocationMarker.png
-    - "assets/launcher_icon/logo_2_wout_bg.png"
+    
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
 

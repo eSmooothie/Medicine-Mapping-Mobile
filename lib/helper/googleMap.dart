@@ -17,13 +17,12 @@ class Gmap extends StatefulWidget {
   _GmapState createState() => _GmapState();
 }
 
-class _GmapState extends State<Gmap> {
+class _GmapState extends State<Gmap> with SingleTickerProviderStateMixin {
   late GoogleMapController mapController;
   late String _mapStyle;
   late bool _serviceEnabled;
 
   late PermissionStatus _permissionGranted;
-  late LocationData _userPos;
   final LatLng _center = const LatLng(8.2280, 124.2452);
 
   Map<MarkerId, Marker> _markers = <MarkerId, Marker>{};
@@ -32,8 +31,18 @@ class _GmapState extends State<Gmap> {
   bool darkMode = false;
   bool _isPermitted = false;
   double _zoom = 12.0;
+
+  late AnimationController _animationController;
+  late Animation _animation;
   @override
   void initState() {
+    _animationController =
+        AnimationController(vsync: this, duration: Duration(seconds: 2));
+    _animationController.repeat(reverse: true);
+    _animation = Tween(begin: 2.0, end: 30.0).animate(_animationController)
+      ..addListener(() {
+        setState(() {});
+      });
     super.initState();
     String loadMapStyle =
         darkMode ? 'assets/dark_mapStyle.txt' : 'assets/default_mapStyle.txt';
@@ -55,6 +64,7 @@ class _GmapState extends State<Gmap> {
     } catch (e) {
       print(e.toString());
     }
+    _animationController.dispose();
 
     super.dispose();
   }
@@ -74,7 +84,8 @@ class _GmapState extends State<Gmap> {
                 mapController.animateCamera(
                     CameraUpdate.newCameraPosition(new CameraPosition(
                   bearing: 0,
-                  target: LatLng(_userPos.latitude!, _userPos.longitude!),
+                  target:
+                      LatLng(snapshot.data.latitude!, snapshot.data.longitude!),
                   tilt: 0,
                   zoom: 15.00,
                 )));
@@ -99,8 +110,25 @@ class _GmapState extends State<Gmap> {
             );
           }
 
-          return NewLoading(
-            loadingIcon: Icons.map,
+          return Center(
+            child: Container(
+              width: 100,
+              height: 100,
+              child: Icon(
+                Icons.map,
+                size: 50,
+                color: Colors.white,
+              ),
+              decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Color.fromARGB(255, 27, 28, 30),
+                  boxShadow: [
+                    BoxShadow(
+                        color: Colors.blue.shade200,
+                        blurRadius: _animation.value,
+                        spreadRadius: _animation.value)
+                  ]),
+            ),
           );
         });
   }
@@ -143,29 +171,30 @@ class _GmapState extends State<Gmap> {
     List<Pharmacy> pharmacies = await RequestPharmacy().QueryAll();
 
     // loop
-    pharmacies.forEach((Pharmacy pharmacy) {
-      double lat = double.parse(pharmacy.lat);
-      double lng = double.parse(pharmacy.lng);
-      LatLng pos = LatLng(lat, lng);
-      Map<String, Object> args = {
-        'from': landingPage,
-        'pharmacy': pharmacy,
-      };
-      _addMarker(
-          id: pharmacy.id,
-          name: pharmacy.name,
-          position: pos,
-          onPressed: () {
-            Navigator.popAndPushNamed(
-              context,
-              pharmacyInfoPage,
-              arguments: args,
-            );
-          });
-    });
-
-    _userPos = await _userLocationTracker.getLocation();
-    return pharmacies;
+    if (pharmacies.isNotEmpty) {
+      pharmacies.forEach((Pharmacy pharmacy) {
+        double lat = double.parse(pharmacy.lat);
+        double lng = double.parse(pharmacy.lng);
+        LatLng pos = LatLng(lat, lng);
+        Map<String, Object> args = {
+          'from': landingPage,
+          'pharmacy': pharmacy,
+        };
+        _addMarker(
+            id: pharmacy.id,
+            name: pharmacy.name,
+            position: pos,
+            onPressed: () {
+              Navigator.popAndPushNamed(
+                context,
+                pharmacyInfoPage,
+                arguments: args,
+              );
+            });
+      });
+    }
+    LocationData _userPos = await _userLocationTracker.getLocation();
+    return _userPos;
   }
 
   void _addMarker({

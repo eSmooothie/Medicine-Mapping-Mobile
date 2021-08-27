@@ -376,8 +376,22 @@ class ChatLineHolder extends StatelessWidget {
     // evaluate if a message is link.
     List<String> splitImage = message.split(":");
     bool isImage = false;
-    if (splitImage[0] == "http") {
-      isImage = true;
+    if (splitImage[0] == "http" || splitImage[0] == "https") {
+      bool _validUrl = Uri.parse(message).isAbsolute;
+      if (_validUrl) {
+        Uri uri = Uri.parse(message);
+        print(uri.path.length);
+        print("${uri.path.length}: $message ");
+        if (uri.path.length > 0) {
+          String typeString =
+              uri.path.substring(uri.path.length - 3).toLowerCase();
+          if (typeString == "jpg" ||
+              typeString == "png" ||
+              typeString == "jpeg") {
+            isImage = true;
+          }
+        }
+      }
     }
     return [
       Flexible(
@@ -404,7 +418,17 @@ class ChatLineHolder extends StatelessWidget {
               ),
               (isImage)
                   ? Image.network(
-                      "$message",
+                      message,
+                      scale: 0.5,
+                      errorBuilder: (BuildContext context, Object obj,
+                          StackTrace? stackTrace) {
+                        return Column(
+                          children: [
+                            Icon(Icons.broken_image),
+                            Text("Broken Image ($message)")
+                          ],
+                        );
+                      },
                     )
                   : Text("$message"),
               SizedBox(

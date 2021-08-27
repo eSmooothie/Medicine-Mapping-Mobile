@@ -22,6 +22,7 @@ class _NewLoadingState extends State<NewLoading>
       ..addListener(() {
         setState(() {});
       });
+    _animationController.forward();
     super.initState();
   }
 
