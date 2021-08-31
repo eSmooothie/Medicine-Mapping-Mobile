@@ -138,6 +138,16 @@ class _MedicineInfoState extends State<MedicineInfo> {
                           ),
                         ),
                         Container(
+                          padding: EdgeInsets.fromLTRB(10, 0, 0, 10),
+                          child: Text(
+                            "${drugInfo.category}",
+                            style: TextStyle(
+                              fontSize: 14.0,
+                              fontWeight: FontWeight.normal,
+                            ),
+                          ),
+                        ),
+                        Container(
                           padding: EdgeInsets.only(left: 10),
                           child: Text(
                             "Classification:",
