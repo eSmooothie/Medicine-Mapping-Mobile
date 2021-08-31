@@ -1,5 +1,5 @@
 name: research_mobile_app
-description: Desrcription
+description: Mapping pharmacies in Iligan City using google technologies.
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `pub publish`. This is preferred for private packages.
