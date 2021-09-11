@@ -334,6 +334,26 @@ class ChatLineHolder extends StatelessWidget {
     required String message,
     required String time,
   }) {
+    // evaluate if a message is link.
+    List<String> splitImage = message.split(":");
+    bool isImage = false;
+    if (splitImage[0] == "http" || splitImage[0] == "https") {
+      bool _validUrl = Uri.parse(message).isAbsolute;
+      if (_validUrl) {
+        Uri uri = Uri.parse(message);
+        // print(uri.path.length);
+        // print("${uri.path.length}: $message ");
+        if (uri.path.length > 0) {
+          String typeString =
+              uri.path.substring(uri.path.length - 3).toLowerCase();
+          if (typeString == "jpg" ||
+              typeString == "png" ||
+              typeString == "jpeg") {
+            isImage = true;
+          }
+        }
+      }
+    }
     return [
       Flexible(flex: 1, child: SvgIcons.userProfileHolder),
       Flexible(
@@ -357,7 +377,21 @@ class ChatLineHolder extends StatelessWidget {
               SizedBox(
                 height: 10.0,
               ),
-              Text("$message"),
+              (isImage)
+                  ? Image.network(
+                      message,
+                      scale: 0.5,
+                      errorBuilder: (BuildContext context, Object obj,
+                          StackTrace? stackTrace) {
+                        return Column(
+                          children: [
+                            Icon(Icons.broken_image),
+                            Text("Broken Image ($message)")
+                          ],
+                        );
+                      },
+                    )
+                  : Text("$message"),
               SizedBox(
                 height: 20.0,
               ),
@@ -380,8 +414,8 @@ class ChatLineHolder extends StatelessWidget {
       bool _validUrl = Uri.parse(message).isAbsolute;
       if (_validUrl) {
         Uri uri = Uri.parse(message);
-        print(uri.path.length);
-        print("${uri.path.length}: $message ");
+        // print(uri.path.length);
+        // print("${uri.path.length}: $message ");
         if (uri.path.length > 0) {
           String typeString =
               uri.path.substring(uri.path.length - 3).toLowerCase();
