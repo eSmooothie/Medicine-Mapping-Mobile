@@ -167,7 +167,7 @@ class _SearchState extends State<Search> {
                         keyboardType: TextInputType.name,
                         radius: 50.0,
                         hintText: "",
-                        labelText: "Label",
+                        labelText: "Search",
                         onChanged: onSearchTextChange,
                       ),
                     ),

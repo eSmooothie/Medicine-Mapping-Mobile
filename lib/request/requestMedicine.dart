@@ -125,8 +125,10 @@ class RequestMedicine extends MyHttpRequest {
       requestPath: _getPharmacies,
       data: data,
     );
+
     if (response.statusCode == 200) {
       var decode = jsonDecode(response.body);
+
       decode.forEach((json) {
         MedicinePharmacy data = MedicinePharmacy.fromJson(json);
         listPharmacies.add(data);
