@@ -241,7 +241,8 @@ class _ChatBoxState extends State<ChatBox> with WidgetsBindingObserver {
                     flex: 5,
                     child: CustomWidget.textField(
                       controller: _chatMessageController,
-                      labelText: "write a message",
+                      labelText: "Message",
+                      hintText: "",
                     ),
                   ),
                   Expanded(
