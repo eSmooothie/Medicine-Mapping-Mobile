@@ -7,7 +7,6 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:location/location.dart';
 import 'package:research_mobile_app/exportHelper.dart';
 import 'package:research_mobile_app/exportModel.dart';
-import 'package:research_mobile_app/helper/newLoading.dart';
 import 'package:research_mobile_app/request/requestPharmacy.dart';
 
 class Gmap extends StatefulWidget {
