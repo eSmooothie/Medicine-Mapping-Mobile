@@ -72,21 +72,33 @@ class _ChatBoxState extends State<ChatBox> with WidgetsBindingObserver {
   void setTimer(bool isBackground) async {
     int delaySeconds = isBackground ? 3 : 1;
     print("Set timer.");
-    var x = await post();
-    _streamController.sink.add(x);
+    var data = await post();
+    _streamController.sink.add(data);
 
     // Cancelling previous timer, if there was one, and creating a new one
     timer?.cancel();
+
     timer = Timer.periodic(Duration(seconds: delaySeconds), (t) async {
       // Not sending a request, if waiting for response
-      if (!waitingForResponse) {
+      if (!waitingForResponse && _scrollController.hasClients) {
         waitingForResponse = true;
-        var x = await post();
-        _streamController.sink.add(x);
+        var newData = await post();
+
+        var offset = _scrollController.position.maxScrollExtent;
+        _scrollController.animateTo(
+          offset,
+          duration: Duration(milliseconds: 900),
+          curve: Curves.easeInOut,
+        );
+        await Future.delayed(Duration(milliseconds: 500), () {
+          _streamController.sink.add(newData);
+        });
+
         waitingForResponse = false;
       }
     });
 
+    // scroll to the latest message
     SchedulerBinding.instance!.addPostFrameCallback((timeStamp) {
       _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
     });
