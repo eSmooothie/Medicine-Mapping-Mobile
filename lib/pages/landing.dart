@@ -30,12 +30,15 @@ class _LandingPageState extends State<LandingPage>
   Location _userLocationTracker = new Location();
   bool darkMode = false;
   bool _isPermitted = false;
-  double _zoom = 12.0;
+  double _zoom = 13.0;
 
   late AnimationController _animationController;
   late Animation _animation;
   @override
   void initState() {
+    _permissionLocation();
+    _initPharmacy();
+    // inistialize loading animation controller
     _animationController =
         AnimationController(vsync: this, duration: Duration(seconds: 2));
     _animationController.repeat(reverse: true);
@@ -43,6 +46,7 @@ class _LandingPageState extends State<LandingPage>
       ..addListener(() {
         setState(() {});
       });
+    // load google map style
     String loadMapStyle =
         darkMode ? 'assets/dark_mapStyle.txt' : 'assets/default_mapStyle.txt';
     rootBundle.loadString(loadMapStyle).then((string) {
@@ -52,10 +56,12 @@ class _LandingPageState extends State<LandingPage>
     super.initState();
   }
 
-  void _permissionLocation() async {
+  // ask permission to access the location of the user
+  Future _permissionLocation() async {
     bool isPermitted = await _checkLocationService();
 
     if (!isPermitted) {
+      // if not permitted throw error
       throw Exception(
           "Enable to load the map please do allow the application to access your location. Thank you.");
     }
@@ -85,20 +91,23 @@ class _LandingPageState extends State<LandingPage>
     return true;
   }
 
-  Future _initPharmacy() async {
-    print("initializing pharmacy marker in the google map.");
+  // initialize pharmacy
+  void _initPharmacy() async {
+    print("Request Pharmacy location");
     List<Pharmacy> pharmacies = await RequestPharmacy().QueryAll();
 
-    // loop
+    // set up pharmacy markers
     if (pharmacies.isNotEmpty && _markers.isEmpty) {
       pharmacies.forEach((Pharmacy pharmacy) {
         double lat = double.parse(pharmacy.lat);
         double lng = double.parse(pharmacy.lng);
         LatLng pos = LatLng(lat, lng);
+
         Map<String, Object> args = {
           'from': landingPage,
           'pharmacy': pharmacy,
         };
+
         _addMarker(
             id: pharmacy.id,
             name: pharmacy.name,
@@ -113,10 +122,8 @@ class _LandingPageState extends State<LandingPage>
       });
       // print(_markers);
     }
-    _permissionLocation();
-    LocationData _userPos = await _userLocationTracker.getLocation();
-    print("user pos: $_userPos");
-    return _userPos;
+
+    // wait for permission to be granted
   }
 
   void _addMarker({
@@ -188,71 +195,31 @@ class _LandingPageState extends State<LandingPage>
         foregroundColor: Colors.transparent,
         shadowColor: Colors.transparent,
       ),
-      body: FutureBuilder(
-          future: (_markers.isEmpty)
-              ? _initPharmacy()
-              : _userLocationTracker.getLocation(),
-          builder: (BuildContext context, AsyncSnapshot snapshot) {
-            if (snapshot.hasData) {
-              return GoogleMap(
-                onMapCreated: (GoogleMapController controller) async {
-                  mapController = controller;
+      body: GoogleMap(
+        onMapCreated: (GoogleMapController controller) async {
+          mapController = controller;
 
-                  mapController.setMapStyle(_mapStyle);
+          mapController.setMapStyle(_mapStyle);
 
-                  mapController.animateCamera(
-                      CameraUpdate.newCameraPosition(new CameraPosition(
-                    bearing: 0,
-                    target: LatLng(
-                        snapshot.data.latitude!, snapshot.data.longitude!),
-                    tilt: 0,
-                    zoom: 15.00,
-                  )));
-                },
-                myLocationEnabled: _isPermitted,
-                myLocationButtonEnabled: false,
-                initialCameraPosition:
-                    CameraPosition(target: _center, zoom: _zoom),
-                zoomControlsEnabled: false,
-                mapToolbarEnabled: false,
-                markers: Set<Marker>.of(_markers.values),
-                circles: Set<Circle>.of(_circles.values),
-              );
-            } else if (snapshot.hasError) {
-              return Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: CustomWidget.errorContainer(
-                      errorMessage: snapshot.error.toString()),
-                ),
-              );
-            }
-            // return Column(
-            //   children: Utility.loadingCircular(),
-            // );
-
-            return Center(
-              child: Container(
-                width: 100,
-                height: 100,
-                child: Icon(
-                  Icons.map,
-                  size: 50,
-                  color: Colors.white,
-                ),
-                decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Color.fromARGB(255, 27, 28, 30),
-                    boxShadow: [
-                      BoxShadow(
-                          color: Colors.blue.shade200,
-                          blurRadius: _animation.value,
-                          spreadRadius: _animation.value)
-                    ]),
-              ),
-            );
-          }),
+          if (_isPermitted) {
+            LocationData loc = await _userLocationTracker.getLocation();
+            mapController.animateCamera(
+                CameraUpdate.newCameraPosition(new CameraPosition(
+              bearing: 0,
+              target: LatLng(loc.latitude!, loc.longitude!),
+              tilt: 0,
+              zoom: 15.00,
+            )));
+          }
+        },
+        myLocationEnabled: _isPermitted,
+        myLocationButtonEnabled: false,
+        initialCameraPosition: CameraPosition(target: _center, zoom: _zoom),
+        zoomControlsEnabled: false,
+        mapToolbarEnabled: false,
+        markers: Set<Marker>.of(_markers.values),
+        circles: Set<Circle>.of(_circles.values),
+      ),
       floatingActionButton: SpeedDial(
         animatedIcon: AnimatedIcons.search_ellipsis,
         overlayColor: Colors.blue.shade100,

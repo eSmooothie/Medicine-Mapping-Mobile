@@ -14,6 +14,7 @@ class MyApp extends StatelessWidget {
       title: 'Medicine Mapping',
       theme: ThemeData(
         primarySwatch: Colors.blue,
+        primaryColor: Colors.blue,
       ),
       onGenerateRoute: appRoutes,
       initialRoute: noticePage,
