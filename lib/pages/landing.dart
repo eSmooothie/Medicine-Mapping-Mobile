@@ -16,8 +16,7 @@ class LandingPage extends StatefulWidget {
   _LandingPageState createState() => _LandingPageState();
 }
 
-class _LandingPageState extends State<LandingPage>
-    with SingleTickerProviderStateMixin {
+class _LandingPageState extends State<LandingPage> {
   late GoogleMapController mapController;
   late String _mapStyle;
   late bool _serviceEnabled;
@@ -32,20 +31,10 @@ class _LandingPageState extends State<LandingPage>
   bool _isPermitted = false;
   double _zoom = 13.0;
 
-  late AnimationController _animationController;
-  late Animation _animation;
   @override
   void initState() {
     _permissionLocation();
-    _initPharmacy();
-    // inistialize loading animation controller
-    _animationController =
-        AnimationController(vsync: this, duration: Duration(seconds: 2));
-    _animationController.repeat(reverse: true);
-    _animation = Tween(begin: 2.0, end: 30.0).animate(_animationController)
-      ..addListener(() {
-        setState(() {});
-      });
+    _initPharmacy(); // init pharmacy
     // load google map style
     String loadMapStyle =
         darkMode ? 'assets/dark_mapStyle.txt' : 'assets/default_mapStyle.txt';
@@ -92,12 +81,9 @@ class _LandingPageState extends State<LandingPage>
   }
 
   // initialize pharmacy
-  void _initPharmacy() async {
+  void _initPharmacy() {
     print("Request Pharmacy location");
-    List<Pharmacy> pharmacies = await RequestPharmacy().QueryAll();
-
-    // set up pharmacy markers
-    if (pharmacies.isNotEmpty && _markers.isEmpty) {
+    RequestPharmacy().QueryAll().then((pharmacies) {
       pharmacies.forEach((Pharmacy pharmacy) {
         double lat = double.parse(pharmacy.lat);
         double lng = double.parse(pharmacy.lng);
@@ -120,9 +106,8 @@ class _LandingPageState extends State<LandingPage>
               );
             });
       });
-      // print(_markers);
-    }
-
+      setState(() {});
+    });
     // wait for permission to be granted
   }
 
@@ -272,7 +257,7 @@ class _LandingPageState extends State<LandingPage>
   @override
   void dispose() {
     print("Dispose landing page");
-    _animationController.dispose();
+
     try {
       mapController.dispose();
     } catch (e) {}
