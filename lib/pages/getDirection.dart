@@ -303,7 +303,8 @@ class _GetDirectionState extends State<GetDirection> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: CustomWidget.errorContainer(
-                                errorMessage: snapshot.error.toString()),
+                              errorMessage: snapshot.error.toString(),
+                            ),
                           ),
                         );
                       }
