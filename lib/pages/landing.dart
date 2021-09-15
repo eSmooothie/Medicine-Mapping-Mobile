@@ -16,8 +16,7 @@ class LandingPage extends StatefulWidget {
   _LandingPageState createState() => _LandingPageState();
 }
 
-class _LandingPageState extends State<LandingPage>
-    with SingleTickerProviderStateMixin {
+class _LandingPageState extends State<LandingPage> {
   late GoogleMapController mapController;
   late String _mapStyle;
   late bool _serviceEnabled;
@@ -31,8 +30,6 @@ class _LandingPageState extends State<LandingPage>
   bool darkMode = false;
   bool _isPermitted = false;
   double _zoom = 13.0;
-
-  late AnimationController _animationController;
 
   @override
   void initState() {
@@ -260,7 +257,7 @@ class _LandingPageState extends State<LandingPage>
   @override
   void dispose() {
     print("Dispose landing page");
-    _animationController.dispose();
+
     try {
       mapController.dispose();
     } catch (e) {}

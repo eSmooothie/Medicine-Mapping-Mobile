@@ -71,10 +71,11 @@ class _ChatBoxState extends State<ChatBox> with WidgetsBindingObserver {
 
   void setTimer(bool isBackground) async {
     int delaySeconds = isBackground ? 3 : 1;
+    int numberOfLines = 0;
     print("Set timer.");
     var data = await post();
     _streamController.sink.add(data);
-
+    numberOfLines = data.length;
     // Cancelling previous timer, if there was one, and creating a new one
     timer?.cancel();
 
@@ -83,13 +84,17 @@ class _ChatBoxState extends State<ChatBox> with WidgetsBindingObserver {
       if (!waitingForResponse && _scrollController.hasClients) {
         waitingForResponse = true;
         var newData = await post();
+        // check if their is a new message
+        if (numberOfLines != newData.length) {
+          numberOfLines = newData.length; // update
+          var offset = _scrollController.position.maxScrollExtent;
+          _scrollController.animateTo(
+            offset,
+            duration: Duration(milliseconds: 900),
+            curve: Curves.easeInOut,
+          );
+        }
 
-        var offset = _scrollController.position.maxScrollExtent;
-        _scrollController.animateTo(
-          offset,
-          duration: Duration(milliseconds: 900),
-          curve: Curves.easeInOut,
-        );
         await Future.delayed(Duration(milliseconds: 500), () {
           _streamController.sink.add(newData);
         });
@@ -105,7 +110,7 @@ class _ChatBoxState extends State<ChatBox> with WidgetsBindingObserver {
   }
 
   // Async method returns Future<> object
-  Future<dynamic> post() async {
+  Future<List<ChatLine>> post() async {
     // get chat
     String? phoneNumber = await storage.read(key: "phoneNumber");
     Map<String, dynamic> convoInformation = {
