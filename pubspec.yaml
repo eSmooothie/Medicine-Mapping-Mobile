@@ -25,18 +25,18 @@ dependencies:
     sdk: flutter
 
   page_transition: ^2.0.2
-  google_maps_flutter: ^2.0.1
+  google_maps_flutter: ^2.0.9
   http: ^0.13.3
-  json_serializable: any
+  json_serializable: ^5.0.1
   flutter_speed_dial: ^4.2.0
   flutter_svg: ^0.22.0
   location: ^4.2.0
   skeleton_text: ^3.0.0
   flutter_secure_storage: ^4.2.1
-  geolocator: ^7.0.3
+  geolocator: ^7.6.1
   geocoding: ^2.0.0
   flutter_polyline_points: ^1.0.0
-  image_picker: ^0.8.3+2
+  image_picker: ^0.8.4+1
   intl: ^0.17.0
   # firebase
   firebase_core: ^1.6.0
