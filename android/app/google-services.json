@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "117471612374",
+    "firebase_url": "https://fir-project-33932-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "fir-project-33932",
+    "storage_bucket": "fir-project-33932.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:117471612374:android:66786e056eeae47f9ee877",
+        "android_client_info": {
+          "package_name": "com.ejotrio.research_mobile_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "117471612374-jog8dvn6bhbhig15tjcavfhajvevccun.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyANfpoeESICck4KDi3iZeTvrIrBw-liPNM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "117471612374-jog8dvn6bhbhig15tjcavfhajvevccun.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

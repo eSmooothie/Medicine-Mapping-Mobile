@@ -1,4 +1,4 @@
-package com.example.research_mobile_app
+package com.ejotrio.research_mobile_app
 
 import io.flutter.embedding.android.FlutterActivity
 
