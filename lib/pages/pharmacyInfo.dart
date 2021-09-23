@@ -22,6 +22,9 @@ class _PharmacyInformationState extends State<PharmacyInformation> {
   late var _arguments;
   TextEditingController _searchDrugController = TextEditingController();
 
+  /**
+   * get inventory of the pharmacy
+   */
   Future _future() async {
     List<PharmaInventory> pharmaInventory = await RequestPharmacy().getMedicine(
       pharmacyId: _pharmaInfo.id,
@@ -98,21 +101,36 @@ class _PharmacyInformationState extends State<PharmacyInformation> {
           children: [
             // pharmacy information
             IntrinsicHeight(
-              child: Flex(
-                direction: Axis.horizontal,
-                children: [
-                  // pharmacy information
-                  Expanded(
-                    flex: 5,
-                    child: Padding(
-                      padding: const EdgeInsets.all(10.0),
+              child: Container(
+                margin: EdgeInsets.all(10.0),
+                padding: EdgeInsets.all(15.0),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  border: Border.all(
+                    color: Colors.blue,
+                    width: 1,
+                  ),
+                  boxShadow: <BoxShadow>[
+                    BoxShadow(
+                      color: Colors.blue.shade100,
+                      blurRadius: 10.0,
+                      spreadRadius: 1.0,
+                    ),
+                  ],
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Flex(
+                  direction: Axis.horizontal,
+                  children: [
+                    // pharmacy information
+                    Expanded(
+                      flex: 5,
                       child: Flex(
                         direction: Axis.vertical,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Container(
-                            margin: EdgeInsets.only(top: 20.0),
                             child: Text(
                               "${_pharmaInfo.name}",
                               style: TextStyle(
@@ -144,48 +162,44 @@ class _PharmacyInformationState extends State<PharmacyInformation> {
                         ],
                       ),
                     ),
-                  ),
-                  // get direction button
-                  Expanded(
-                    flex: 2,
-                    child: CustomWidget.outlinedButton(
-                      backgroundColor: Colors.transparent,
-                      side: BorderSide(
-                        color: Colors.transparent,
-                      ),
-                      onPressed: () {
-                        List<Object> args = [
-                          LatLng(
-                            double.parse(_pharmaInfo.lat),
-                            double.parse(_pharmaInfo.lng),
-                          ),
-                          _pharmaInfo.address,
-                        ];
-                        Navigator.pushNamed(
-                          context,
-                          getDirectionPage,
-                          arguments: args,
-                        );
-                      },
-                      child: SizedBox(
-                        child: SvgIcons.getDirection,
+                    // get direction button
+                    Expanded(
+                      flex: 2,
+                      child: CustomWidget.outlinedButton(
+                        backgroundColor: Colors.transparent,
+                        side: BorderSide(
+                          color: Colors.transparent,
+                        ),
+                        onPressed: () {
+                          List<Object> args = [
+                            LatLng(
+                              double.parse(_pharmaInfo.lat),
+                              double.parse(_pharmaInfo.lng),
+                            ),
+                            _pharmaInfo.address,
+                          ];
+                          Navigator.pushNamed(
+                            context,
+                            getDirectionPage,
+                            arguments: args,
+                          );
+                        },
+                        child: SizedBox(
+                          child: SvgIcons.getDirection,
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
             // search and filter drugs
             IntrinsicHeight(
               child: Container(
-                width: MediaQuery.of(context).size.width - 21,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                margin: EdgeInsets.fromLTRB(5, 15, 5, 15),
-                alignment: Alignment.centerLeft,
+                margin: EdgeInsets.only(top: 15.0),
                 child: Text(
-                  "List of medicine available",
+                  "Available Medicines",
+                  textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 18.0,
                     color: Colors.blue,
@@ -225,8 +239,10 @@ class _PharmacyInformationState extends State<PharmacyInformation> {
                           isStock: (item.isStock == 1) ? true : false,
                           medicineObj: item.medicine,
                         );
-
-                        _items.add(holder);
+                        // display only in stock medicine
+                        if (item.isStock == 1) {
+                          _items.add(holder);
+                        }
                       });
 
                       if (_items.isNotEmpty) {
@@ -283,7 +299,8 @@ class _PharmacyInformationState extends State<PharmacyInformation> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: CustomWidget.errorContainer(
-                              errorMessage: snapshot.error.toString()),
+                            errorMessage: snapshot.error.toString(),
+                          ),
                         ),
                       );
                     }

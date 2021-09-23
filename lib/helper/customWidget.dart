@@ -117,10 +117,11 @@ class CustomWidget {
 
   static List<Widget> errorContainer({
     required String errorMessage,
+    IconData errorIcon = Icons.error_outline,
   }) {
     return <Widget>[
-      const Icon(
-        Icons.error_outline,
+      Icon(
+        errorIcon,
         color: Colors.red,
         size: 60,
       ),

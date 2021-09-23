@@ -25,6 +25,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
         primaryColor: Colors.blue,
+        fontFamily: "Roboto",
       ),
       onGenerateRoute: appRoutes,
       initialRoute: noticePage,

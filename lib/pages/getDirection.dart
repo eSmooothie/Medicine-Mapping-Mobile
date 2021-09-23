@@ -199,7 +199,15 @@ class _GetDirectionState extends State<GetDirection> {
                                             print("mode:$travelMode");
                                           });
                                         },
-                                        child: Text("WALK"),
+                                        child: Flex(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          direction: Axis.horizontal,
+                                          children: [
+                                            Icon(Icons.directions_walk_rounded),
+                                            Text("WALK"),
+                                          ],
+                                        ),
                                         backgroundColor: Colors.white,
                                         side: BorderSide(color: Colors.blue),
                                         shape: RoundedRectangleBorder(
@@ -211,7 +219,7 @@ class _GetDirectionState extends State<GetDirection> {
                                   ),
                                   Expanded(
                                     child: Container(
-                                      padding: EdgeInsets.all(15.0),
+                                      padding: EdgeInsets.all(5.0),
                                       child: CustomWidget.outlinedButton(
                                         onPressed: () {
                                           setState(() {
@@ -220,8 +228,14 @@ class _GetDirectionState extends State<GetDirection> {
                                             print("mode:$travelMode");
                                           });
                                         },
-                                        child: Text(
-                                          "BICYCLE",
+                                        child: Flex(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          direction: Axis.horizontal,
+                                          children: [
+                                            Icon(Icons.directions_bike_rounded),
+                                            Text("  BICYCLE"),
+                                          ],
                                         ),
                                         backgroundColor: Colors.white,
                                         side: BorderSide(color: Colors.blue),
@@ -243,8 +257,14 @@ class _GetDirectionState extends State<GetDirection> {
                                             print("mode:$travelMode ");
                                           });
                                         },
-                                        child: Text(
-                                          "CAR",
+                                        child: Flex(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          direction: Axis.horizontal,
+                                          children: [
+                                            Icon(Icons.directions_car_rounded),
+                                            Text(" CAR"),
+                                          ],
                                         ),
                                         backgroundColor: Colors.white,
                                         side: BorderSide(color: Colors.blue),
