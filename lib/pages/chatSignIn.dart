@@ -106,6 +106,7 @@ class _SignInState extends State<SignIn> {
                           )),
                       Flexible(
                         flex: 2,
+                        fit: FlexFit.loose,
                         child: CustomWidget.textField(
                           controller: _phoneNumberController,
                           keyboardType: TextInputType.phone,
@@ -119,29 +120,6 @@ class _SignInState extends State<SignIn> {
                       Flexible(
                         flex: 2,
                         fit: FlexFit.loose,
-                        child: Container(
-                          margin: EdgeInsets.only(top: 20.0),
-                          child: CustomWidget.textButton(
-                              onPressed: () {
-                                setState(() {
-                                  _phoneNumberErr = null;
-                                });
-                                Navigator.pushNamed(
-                                  context,
-                                  signUpPage,
-                                  arguments: pharmacyInfo,
-                                );
-                              },
-                              child: Text(
-                                "Sign up",
-                                style: TextStyle(
-                                  fontSize: 18.0,
-                                ),
-                              )),
-                        ),
-                      ),
-                      Flexible(
-                        flex: 5,
                         child: Container(
                           margin: EdgeInsets.only(top: 50.0),
                           child: CustomWidget.outlinedButton(
@@ -210,7 +188,32 @@ class _SignInState extends State<SignIn> {
                             ),
                           ),
                         ),
-                      )
+                      ),
+                      Flexible(
+                        flex: 5,
+                        fit: FlexFit.tight,
+                        child: Container(
+                          margin: EdgeInsets.only(top: 20.0),
+                          child: CustomWidget.textButton(
+                              onPressed: () {
+                                setState(() {
+                                  _phoneNumberErr = null;
+                                });
+                                Navigator.pushNamed(
+                                  context,
+                                  signUpPage,
+                                  arguments: pharmacyInfo,
+                                );
+                              },
+                              child: Text(
+                                "Sign up",
+                                style: TextStyle(
+                                  fontSize: 18.0,
+                                  decoration: TextDecoration.underline,
+                                ),
+                              )),
+                        ),
+                      ),
                     ],
                   ),
                 );

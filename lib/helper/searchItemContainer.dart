@@ -271,7 +271,7 @@ Widget InventoryItemContainer({
                   ),
                 ),
                 Expanded(
-                  flex: 1,
+                  flex: 2,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -377,7 +377,7 @@ Widget PharmaMedicineItemContainer({
                   ),
                 ),
                 Expanded(
-                  flex: 1,
+                  flex: 2,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,

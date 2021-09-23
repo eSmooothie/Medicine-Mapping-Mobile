@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:research_mobile_app/exportHelper.dart';
 import 'package:research_mobile_app/exportModel.dart';
@@ -21,6 +22,9 @@ class _MedicineInfoState extends State<MedicineInfo> {
   late String classification;
   double averagePrice = 0.0;
 
+  /**
+   * get list of pharmacy offer the medicine
+   */
   Future _future() async {
     List<MedicinePharmacy> result = await RequestMedicine().getPharmacies(
       id: drugInfo.id,
@@ -107,106 +111,131 @@ class _MedicineInfoState extends State<MedicineInfo> {
         slivers: [
           SliverList(
             delegate: SliverChildListDelegate([
-              Flex(
-                direction: Axis.horizontal,
-                children: [
-                  Expanded(
-                    flex: 5,
-                    child: Flex(
-                      direction: Axis.vertical,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
-                          child: Text(
-                            "${drugInfo.brandName}",
-                            style: TextStyle(
-                              fontSize: 24.0,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                        Container(
-                          padding: EdgeInsets.fromLTRB(10, 0, 0, 10),
-                          child: Text(
-                            "$genericNames",
-                            style: TextStyle(
-                              fontSize: 14.0,
-                              fontWeight: FontWeight.normal,
-                            ),
-                          ),
-                        ),
-                        Container(
-                          padding: EdgeInsets.fromLTRB(10, 0, 0, 10),
-                          child: Text(
-                            "${drugInfo.category}",
-                            style: TextStyle(
-                              fontSize: 14.0,
-                              fontWeight: FontWeight.normal,
-                            ),
-                          ),
-                        ),
-                        Container(
-                          padding: EdgeInsets.only(left: 10),
-                          child: Text(
-                            "Classification:",
-                            style: TextStyle(
-                              fontSize: 14.0,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                        Container(
-                          padding: EdgeInsets.fromLTRB(10, 0, 0, 10),
-                          child: Text(
-                            "$classification",
-                            style: TextStyle(
-                              fontSize: 14.0,
-                              fontWeight: FontWeight.normal,
-                            ),
-                          ),
-                        ),
-                        Container(
-                          padding: EdgeInsets.only(left: 10.0),
-                          child: Text(
-                            "Packaging:",
-                            style: TextStyle(
-                              fontSize: 14.0,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                        Container(
-                          padding: EdgeInsets.only(left: 10.0),
-                          child: Text(
-                            "${drugInfo.dosage}\t${drugInfo.form}",
-                            style: TextStyle(
-                              fontSize: 14.0,
-                              fontWeight: FontWeight.normal,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+              Container(
+                margin: EdgeInsets.all(10),
+                padding: EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  border: Border.all(
+                    color: Colors.blue,
                   ),
-                  Expanded(
-                      flex: 2,
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: <BoxShadow>[
+                    BoxShadow(
+                      color: Colors.blue.shade400,
+                      blurRadius: 3.0,
+                      spreadRadius: 1.0,
+                    ),
+                  ],
+                ),
+                child: Flex(
+                  direction: Axis.horizontal,
+                  children: [
+                    Expanded(
+                      flex: 5,
                       child: Flex(
                         direction: Axis.vertical,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(
-                            "P$averagePrice",
-                            style: TextStyle(
-                              fontSize: 24.0,
-                              fontWeight: FontWeight.bold,
+                          Container(
+                            child: Text(
+                              "${drugInfo.brandName}",
+                              style: TextStyle(
+                                fontSize: 24.0,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
-                          Text("Average Price"),
+                          Container(
+                            child: Text(
+                              "$genericNames",
+                              style: TextStyle(
+                                fontSize: 14.0,
+                                fontWeight: FontWeight.normal,
+                              ),
+                            ),
+                          ),
+                          Container(
+                            child: Text(
+                              "${drugInfo.category}",
+                              style: TextStyle(
+                                fontSize: 14.0,
+                                fontWeight: FontWeight.normal,
+                              ),
+                            ),
+                          ),
+                          Container(
+                            margin: EdgeInsets.only(top: 10.0),
+                            child: Text(
+                              "Classification:",
+                              style: TextStyle(
+                                fontSize: 14.0,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                          Container(
+                            child: Text(
+                              "$classification",
+                              style: TextStyle(
+                                fontSize: 14.0,
+                                fontWeight: FontWeight.normal,
+                              ),
+                            ),
+                          ),
+                          Container(
+                            margin: EdgeInsets.only(top: 10.0),
+                            child: Text(
+                              "Packaging:",
+                              style: TextStyle(
+                                fontSize: 14.0,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                          Container(
+                            child: Text(
+                              "${drugInfo.dosage}\t${drugInfo.form}",
+                              style: TextStyle(
+                                fontSize: 14.0,
+                                fontWeight: FontWeight.normal,
+                              ),
+                            ),
+                          ),
                         ],
-                      )),
-                ],
+                      ),
+                    ),
+                    Expanded(
+                        flex: 2,
+                        child: Flex(
+                          direction: Axis.vertical,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "P$averagePrice",
+                              style: TextStyle(
+                                fontSize: 24.0,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text("Average Price"),
+                          ],
+                        )),
+                  ],
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.only(top: 15.0),
+                child: Text(
+                  "Pharmacies",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 18.0,
+                    color: Colors.blue,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.all(10.0),
@@ -233,6 +262,7 @@ class _MedicineInfoState extends State<MedicineInfo> {
 
                       if (pharmacies.isNotEmpty) {
                         return ListView.separated(
+                          physics: NeverScrollableScrollPhysics(),
                           shrinkWrap: true,
                           itemBuilder: (BuildContext context, int index) {
                             return PharmaMedicineItemContainer(
@@ -289,7 +319,8 @@ class _MedicineInfoState extends State<MedicineInfo> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: CustomWidget.errorContainer(
-                              errorMessage: snapshot.error.toString()),
+                            errorMessage: snapshot.error.toString(),
+                          ),
                         ),
                       );
                     }
