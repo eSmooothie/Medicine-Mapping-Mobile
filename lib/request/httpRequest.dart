@@ -23,7 +23,7 @@ class MyHttpRequest {
       );
       return response;
     } catch (e) {
-      throw ErrorDescription("Failed to establish connection.");
+      throw ErrorHint("Failed to establish connection.");
     }
   }
 
@@ -39,7 +39,7 @@ class MyHttpRequest {
       );
       return response;
     } catch (e) {
-      throw ErrorDescription("Failed to establish connection.");
+      throw ErrorHint("Failed to establish connection.");
     }
   }
 
