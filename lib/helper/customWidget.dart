@@ -129,7 +129,7 @@ class CustomWidget {
         child: Padding(
           padding: const EdgeInsets.only(top: 16),
           child: Text(
-            'Error: $errorMessage',
+            '$errorMessage',
             textAlign: TextAlign.center,
           ),
         ),

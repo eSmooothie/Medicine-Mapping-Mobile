@@ -13,7 +13,7 @@ class MyHttpRequest {
   }
 
   @protected
-  Future<http.Response> getRequest({required String requestPath}) async {
+  Future getRequest({required String requestPath}) async {
     try {
       http.Response response = await http.get(
         Uri.parse(_url + requestPath),
@@ -23,12 +23,12 @@ class MyHttpRequest {
       );
       return response;
     } catch (e) {
-      throw ErrorHint("Failed to establish connection.");
+      return null;
     }
   }
 
   @protected
-  Future<http.Response> postRequest({
+  Future postRequest({
     required String requestPath,
     required Object? data,
   }) async {
@@ -39,7 +39,7 @@ class MyHttpRequest {
       );
       return response;
     } catch (e) {
-      throw ErrorHint("Failed to establish connection.");
+      return null;
     }
   }
 
@@ -49,22 +49,25 @@ class MyHttpRequest {
     required Map<String, dynamic> params,
   }) async {
     Uri destPath = Uri.parse(_url + requestPath);
+    try {
+      if (method == "GET") {
+        final Uri newUri = destPath.replace(queryParameters: params);
+        var request = await http.get(newUri, headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        });
 
-    if (method == "GET") {
-      final Uri newUri = destPath.replace(queryParameters: params);
-      var request = await http.get(newUri, headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      });
-
-      return request;
-    } else {
-      // Post
+        return request;
+      } else {
+        // Post
+      }
+    } catch (e) {
+      return null;
     }
   }
 
   void throwException({
     required http.Response response,
   }) {
-    throw ErrorHint("${response.statusCode}: ${response.reasonPhrase}");
+    throw Exception("${response.statusCode}: ${response.reasonPhrase}");
   }
 }

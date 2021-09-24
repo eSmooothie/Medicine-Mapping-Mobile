@@ -8,7 +8,7 @@ class RequestPatient extends MyHttpRequest {
   String addNewUserPath = "api/new/user";
   String getUserInfoPath = "api/get/user";
   Future<Map<String, dynamic>> getUserInfo({required Object? data}) async {
-    Response response = await postRequest(
+    final response = await postRequest(
       requestPath: getUserInfoPath,
       data: data,
     );
@@ -16,6 +16,9 @@ class RequestPatient extends MyHttpRequest {
       "reasonPhrase": response.reasonPhrase,
       "statusCode": response.statusCode,
     };
+    if (response == null) {
+      throw Exception("Failed to establish connection.");
+    }
     if (response.body.isNotEmpty) {
       var decode = jsonDecode(response.body);
       result["firstName"] = decode["FIRST_NAME"];
@@ -27,7 +30,7 @@ class RequestPatient extends MyHttpRequest {
   }
 
   Future<Map<String, dynamic>> addNewUser({required Object? data}) async {
-    Response response = await postRequest(
+    final response = await postRequest(
       requestPath: addNewUserPath,
       data: data,
     );
@@ -36,7 +39,9 @@ class RequestPatient extends MyHttpRequest {
       "reasonPhrase": decodedJson['reasonPhrase'],
       "statusCode": decodedJson['statusCode'],
     };
-
+    if (response == null) {
+      throw Exception("Failed to establish connection.");
+    }
     return result;
   }
 }
