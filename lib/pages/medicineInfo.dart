@@ -313,9 +313,10 @@ class _MedicineInfoState extends State<MedicineInfo> {
                         );
                       }
                     } else if (snapshot.hasError) {
-                      return Center(
+                      return Padding(
+                        padding: const EdgeInsets.only(top: 10.0),
                         child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: CustomWidget.errorContainer(
                             errorMessage: snapshot.error.toString(),

@@ -294,9 +294,10 @@ class _PharmacyInformationState extends State<PharmacyInformation> {
                       }
                     } else if (snapshot.hasError) {
                       // error encountered.
-                      return Center(
+                      return Padding(
+                        padding: const EdgeInsets.only(top: 10.0),
                         child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: CustomWidget.errorContainer(
                             errorMessage: snapshot.error.toString(),

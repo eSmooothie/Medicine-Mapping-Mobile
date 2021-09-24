@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "1038717492494",
-    "project_id": "med-mapping",
-    "storage_bucket": "med-mapping.appspot.com"
+    "project_number": "597234356553",
+    "project_id": "medicine-mapping-c5b1d",
+    "storage_bucket": "medicine-mapping-c5b1d.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1038717492494:android:ce282d6c98bf8ea6138b5f",
+        "mobilesdk_app_id": "1:597234356553:android:5b140acda08dd8ba12ca98",
         "android_client_info": {
           "package_name": "com.ejotrio.research_mobile_app"
         }
       },
       "oauth_client": [
         {
-          "client_id": "1038717492494-j267l8iadc42a1iht7jt91aj0i6li95j.apps.googleusercontent.com",
+          "client_id": "597234356553-sq1oqrac29inl45tf04ojgqilp0mnq3q.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyD11NEd8hgdKH2gpXyXWp_grXT2SNxgfo0"
+          "current_key": "AIzaSyBDnn2FkkNTh9fJOJ91dQDXgvyUitAWqkw"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "1038717492494-j267l8iadc42a1iht7jt91aj0i6li95j.apps.googleusercontent.com",
+              "client_id": "597234356553-sq1oqrac29inl45tf04ojgqilp0mnq3q.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
