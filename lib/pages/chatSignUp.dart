@@ -31,6 +31,7 @@ class _SignUpState extends State<SignUp> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
+        backgroundColor: Color.fromARGB(255, 41, 171, 226),
         title: Text("Sign Up"),
         centerTitle: true,
       ),

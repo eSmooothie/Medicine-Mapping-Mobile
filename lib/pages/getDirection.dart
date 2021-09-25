@@ -204,12 +204,30 @@ class _GetDirectionState extends State<GetDirection> {
                                               MainAxisAlignment.center,
                                           direction: Axis.horizontal,
                                           children: [
-                                            Icon(Icons.directions_walk_rounded),
-                                            Text("WALK"),
+                                            Icon(
+                                              Icons.directions_walk_rounded,
+                                              color: (travelMode == 0)
+                                                  ? Colors.greenAccent.shade700
+                                                  : Colors.blue,
+                                            ),
+                                            Text(
+                                              "WALK",
+                                              style: TextStyle(
+                                                color: (travelMode == 0)
+                                                    ? Colors
+                                                        .greenAccent.shade700
+                                                    : Colors.blue,
+                                              ),
+                                            ),
                                           ],
                                         ),
                                         backgroundColor: Colors.white,
-                                        side: BorderSide(color: Colors.blue),
+                                        side: BorderSide(
+                                          color: (travelMode == 0)
+                                              ? Colors.greenAccent.shade700
+                                              : Colors.blue,
+                                          width: 2.0,
+                                        ),
                                         shape: RoundedRectangleBorder(
                                           borderRadius:
                                               BorderRadius.circular(50.0),
@@ -233,12 +251,28 @@ class _GetDirectionState extends State<GetDirection> {
                                               MainAxisAlignment.center,
                                           direction: Axis.horizontal,
                                           children: [
-                                            Icon(Icons.directions_bike_rounded),
-                                            Text("  BICYCLE"),
+                                            Icon(
+                                              Icons.directions_bike_rounded,
+                                              color: (travelMode == 1)
+                                                  ? Colors.greenAccent.shade700
+                                                  : Colors.blue,
+                                            ),
+                                            Text("  BICYCLE",
+                                                style: TextStyle(
+                                                  color: (travelMode == 1)
+                                                      ? Colors
+                                                          .greenAccent.shade700
+                                                      : Colors.blue,
+                                                )),
                                           ],
                                         ),
                                         backgroundColor: Colors.white,
-                                        side: BorderSide(color: Colors.blue),
+                                        side: BorderSide(
+                                          color: (travelMode == 1)
+                                              ? Colors.greenAccent.shade700
+                                              : Colors.blue,
+                                          width: 2.0,
+                                        ),
                                         shape: RoundedRectangleBorder(
                                           borderRadius:
                                               BorderRadius.circular(50.0),
@@ -262,12 +296,30 @@ class _GetDirectionState extends State<GetDirection> {
                                               MainAxisAlignment.center,
                                           direction: Axis.horizontal,
                                           children: [
-                                            Icon(Icons.directions_car_rounded),
-                                            Text(" CAR"),
+                                            Icon(
+                                              Icons.directions_car_rounded,
+                                              color: (travelMode == 2)
+                                                  ? Colors.greenAccent.shade700
+                                                  : Colors.blue,
+                                            ),
+                                            Text(
+                                              " CAR",
+                                              style: TextStyle(
+                                                color: (travelMode == 2)
+                                                    ? Colors
+                                                        .greenAccent.shade700
+                                                    : Colors.blue,
+                                              ),
+                                            ),
                                           ],
                                         ),
                                         backgroundColor: Colors.white,
-                                        side: BorderSide(color: Colors.blue),
+                                        side: BorderSide(
+                                          color: (travelMode == 2)
+                                              ? Colors.greenAccent.shade700
+                                              : Colors.blue,
+                                          width: 2.0,
+                                        ),
                                         shape: RoundedRectangleBorder(
                                           borderRadius:
                                               BorderRadius.circular(50.0),

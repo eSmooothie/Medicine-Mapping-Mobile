@@ -173,7 +173,9 @@ class _LandingPageState extends State<LandingPage> {
         leading: Container(),
         title: Text(
           widget.title,
-          style: TextStyle(color: Colors.blue),
+          style: TextStyle(
+            color: Color.fromARGB(255, 41, 171, 226),
+          ),
         ),
         centerTitle: true,
         backgroundColor: Colors.transparent,
@@ -207,7 +209,8 @@ class _LandingPageState extends State<LandingPage> {
       ),
       floatingActionButton: SpeedDial(
         animatedIcon: AnimatedIcons.search_ellipsis,
-        overlayColor: Colors.blue.shade100,
+        overlayColor: Color.fromARGB(255, 41, 171, 226),
+        backgroundColor: Color.fromARGB(255, 255, 108, 85),
         animationSpeed: 50,
         spacing: 10.0,
         spaceBetweenChildren: 10.0,

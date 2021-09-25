@@ -13,6 +13,7 @@ class CustomWidget {
     double padding = 20.0,
     bool isPassword = false,
     Color borderColor = Colors.blueAccent,
+    Widget? prefixIcon,
     Function(String)? onSubmit,
     Function(String)? onChanged,
     Function()? onEditingComplete,
@@ -26,13 +27,18 @@ class CustomWidget {
         onSubmitted: onSubmit,
         keyboardType: keyboardType,
         decoration: InputDecoration(
+          prefixIcon: prefixIcon,
           contentPadding: EdgeInsets.only(left: padding),
           floatingLabelBehavior: FloatingLabelBehavior.never,
           labelText: labelText,
           hintText: hintText,
           errorText: errorText,
-          border: new OutlineInputBorder(
+          enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(radius)),
+            borderSide: BorderSide(color: Colors.blue, width: 2.0),
+          ),
+          border: new OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.blue),
           ),
         ),
         style: TextStyle(

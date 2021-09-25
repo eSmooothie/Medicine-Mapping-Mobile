@@ -87,6 +87,7 @@ class _MedicineInfoState extends State<MedicineInfo> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey.shade100,
       appBar: AppBar(
         leading: CustomWidget.outlinedButton(
           onPressed: () {
@@ -114,7 +115,7 @@ class _MedicineInfoState extends State<MedicineInfo> {
                 decoration: BoxDecoration(
                   color: Colors.white,
                   border: Border.all(
-                    color: Colors.blue,
+                    color: Color.fromARGB(255, 41, 171, 226),
                   ),
                   borderRadius: BorderRadius.circular(10),
                   boxShadow: <BoxShadow>[

@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
         fontFamily: "Roboto",
       ),
       onGenerateRoute: appRoutes,
-      initialRoute: noticePage,
+      initialRoute: landingPage,
     );
   }
 }

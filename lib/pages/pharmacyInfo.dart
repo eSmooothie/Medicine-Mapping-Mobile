@@ -76,6 +76,7 @@ class _PharmacyInformationState extends State<PharmacyInformation> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
+      backgroundColor: Colors.grey.shade100,
       appBar: AppBar(
         leading: CustomWidget.outlinedButton(
           onPressed: () {
@@ -342,7 +343,7 @@ class _PharmacyInformationState extends State<PharmacyInformation> {
           Icons.sms,
           color: Colors.white,
         ),
-        backgroundColor: Colors.blue,
+        backgroundColor: Color.fromARGB(255, 255, 108, 85),
         elevation: 10.0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(50.0),
