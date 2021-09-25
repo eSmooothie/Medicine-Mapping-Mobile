@@ -1,6 +1,5 @@
 import 'dart:ui';
 
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:research_mobile_app/exportHelper.dart';
 import 'package:research_mobile_app/exportModel.dart';
@@ -22,9 +21,7 @@ class _MedicineInfoState extends State<MedicineInfo> {
   late String classification;
   double averagePrice = 0.0;
 
-  /**
-   * get list of pharmacy offer the medicine
-   */
+  /// get list of pharmacy offer the medicine
   Future _future() async {
     List<MedicinePharmacy> result = await RequestMedicine().getPharmacies(
       id: drugInfo.id,
@@ -314,9 +311,10 @@ class _MedicineInfoState extends State<MedicineInfo> {
                         );
                       }
                     } else if (snapshot.hasError) {
-                      return Center(
+                      return Padding(
+                        padding: const EdgeInsets.only(top: 10.0),
                         child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: CustomWidget.errorContainer(
                             errorMessage: snapshot.error.toString(),

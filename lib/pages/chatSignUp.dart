@@ -31,7 +31,7 @@ class _SignUpState extends State<SignUp> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: Text("Chat"),
+        title: Text("Sign Up"),
         centerTitle: true,
       ),
       body: SafeArea(

@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:http/http.dart';
 import 'package:research_mobile_app/exportModel.dart';
 import 'package:research_mobile_app/request/httpRequest.dart';
 
@@ -15,7 +14,7 @@ class RequestMedicine extends MyHttpRequest {
   // ignore: non_constant_identifier_names
   Future<List<Medicine>> QueryAll() async {
     final response = await getRequest(requestPath: _getAll);
-    if (response.statusCode == 201) {
+    if (response != null && response.statusCode == 201) {
       List<Medicine> _allMedicine = [];
       var data = jsonDecode(response.body);
       data.forEach((element) {
@@ -25,6 +24,9 @@ class RequestMedicine extends MyHttpRequest {
 
       return _allMedicine;
     } else {
+      if (response == null) {
+        throw Exception("Failed to establish connection.");
+      }
       throw Exception(
           "Failed to get response \nError Code: ${response.statusCode}");
     }
@@ -40,19 +42,22 @@ class RequestMedicine extends MyHttpRequest {
       String newKey = key + "[]";
       params[newKey] = value;
     });
-    Response response = await customRequest(
+    final response = await customRequest(
       requestPath: _filterMedicine,
       method: "GET",
       params: params,
     );
     List<Medicine> result = [];
-    if (response.statusCode == 200) {
+    if (response != null && response.statusCode == 200) {
       var decode = jsonDecode(response.body);
       decode.forEach((json) {
         Medicine med = Medicine.fromJson(json);
         result.add(med);
       });
     } else {
+      if (response == null) {
+        throw Exception("Failed to establish connection.");
+      }
       throw Exception("Error ${response.statusCode}: ${response.reasonPhrase}");
     }
 
@@ -61,16 +66,18 @@ class RequestMedicine extends MyHttpRequest {
 
   Future<List<GeneralClassification>> getGeneralClassification() async {
     List<GeneralClassification> listData = [];
-    Response response =
-        await getRequest(requestPath: _getGeneralClassification);
+    final response = await getRequest(requestPath: _getGeneralClassification);
 
-    if (response.statusCode == 200) {
+    if (response != null && response.statusCode == 200) {
       var decode = jsonDecode(response.body);
       decode.forEach((json) {
         GeneralClassification data = GeneralClassification.fromJson(json);
         listData.add(data);
       });
     } else {
+      if (response == null) {
+        throw Exception("Failed to establish connection.");
+      }
       throw Exception("Error ${response.statusCode}: ${response.reasonPhrase}");
     }
     return listData;
@@ -78,14 +85,17 @@ class RequestMedicine extends MyHttpRequest {
 
   Future<List<MedicineForm>> getMedicineForm() async {
     List<MedicineForm> listData = [];
-    Response response = await getRequest(requestPath: _getMedicineForm);
-    if (response.statusCode == 200) {
+    final response = await getRequest(requestPath: _getMedicineForm);
+    if (response != null && response.statusCode == 200) {
       var decode = jsonDecode(response.body);
       decode.forEach((json) {
         MedicineForm data = MedicineForm.fromJson(json);
         listData.add(data);
       });
     } else {
+      if (response == null) {
+        throw Exception("Failed to establish connection.");
+      }
       throw Exception("Error ${response.statusCode}: ${response.reasonPhrase}");
     }
     return listData;
@@ -96,12 +106,12 @@ class RequestMedicine extends MyHttpRequest {
     Map<String, dynamic> data = {
       "medicineId": id,
     };
-    Response response = await postRequest(
+    final response = await postRequest(
       requestPath: _getAveragePrice,
       data: data,
     );
 
-    if (response.statusCode == 200) {
+    if (response != null && response.statusCode == 200) {
       var decode = jsonDecode(response.body);
       if (decode["AvgPrice"] is int) {
         int price = decode["AvgPrice"];
@@ -110,6 +120,9 @@ class RequestMedicine extends MyHttpRequest {
         avgPrice = decode["AvgPrice"].toDouble();
       }
     } else {
+      if (response == null) {
+        throw Exception("Failed to establish connection.");
+      }
       throwException(response: response);
     }
 
@@ -121,12 +134,12 @@ class RequestMedicine extends MyHttpRequest {
     Map<String, dynamic> data = {
       "medicineId": id,
     };
-    Response response = await postRequest(
+    final response = await postRequest(
       requestPath: _getPharmacies,
       data: data,
     );
 
-    if (response.statusCode == 200) {
+    if (response != null && response.statusCode == 200) {
       var decode = jsonDecode(response.body);
 
       decode.forEach((json) {
@@ -134,6 +147,9 @@ class RequestMedicine extends MyHttpRequest {
         listPharmacies.add(data);
       });
     } else {
+      if (response == null) {
+        throw Exception("Failed to establish connection.");
+      }
       throwException(response: response);
     }
 
@@ -145,11 +161,13 @@ class RequestMedicine extends MyHttpRequest {
       "medicineId": id,
     };
 
-    Response response = await postRequest(
+    final response = await postRequest(
       requestPath: _addToTrend,
       data: data,
     );
-
+    if (response == null) {
+      throw Exception("Failed to establish connection.");
+    }
     if (response.statusCode != 200) {
       throwException(response: response);
     }

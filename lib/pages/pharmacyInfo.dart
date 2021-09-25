@@ -22,9 +22,7 @@ class _PharmacyInformationState extends State<PharmacyInformation> {
   late var _arguments;
   TextEditingController _searchDrugController = TextEditingController();
 
-  /**
-   * get inventory of the pharmacy
-   */
+  /// get inventory of the pharmacy
   Future _future() async {
     List<PharmaInventory> pharmaInventory = await RequestPharmacy().getMedicine(
       pharmacyId: _pharmaInfo.id,
@@ -294,9 +292,10 @@ class _PharmacyInformationState extends State<PharmacyInformation> {
                       }
                     } else if (snapshot.hasError) {
                       // error encountered.
-                      return Center(
+                      return Padding(
+                        padding: const EdgeInsets.only(top: 10.0),
                         child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: CustomWidget.errorContainer(
                             errorMessage: snapshot.error.toString(),
