@@ -1,6 +1,4 @@
 import 'dart:convert';
-import 'package:flutter/cupertino.dart';
-import 'package:http/http.dart';
 import 'package:research_mobile_app/exportModel.dart';
 import 'package:research_mobile_app/request/httpRequest.dart';
 

@@ -80,7 +80,8 @@ class RequestChat extends MyHttpRequest {
 
     // send
     var response = await request.send();
-    print(response.statusCode);
+
+    // ignore: unnecessary_null_comparison
     if (response == null) {
       throw Exception("Failed to establish connection.");
     }

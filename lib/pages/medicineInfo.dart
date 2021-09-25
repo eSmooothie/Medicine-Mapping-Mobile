@@ -21,9 +21,7 @@ class _MedicineInfoState extends State<MedicineInfo> {
   late String classification;
   double averagePrice = 0.0;
 
-  /**
-   * get list of pharmacy offer the medicine
-   */
+  /// get list of pharmacy offer the medicine
   Future _future() async {
     List<MedicinePharmacy> result = await RequestMedicine().getPharmacies(
       id: drugInfo.id,

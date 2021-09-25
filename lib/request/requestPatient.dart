@@ -1,7 +1,5 @@
 import 'dart:convert';
 
-import 'package:http/http.dart';
-
 import 'httpRequest.dart';
 
 class RequestPatient extends MyHttpRequest {

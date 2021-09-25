@@ -22,9 +22,7 @@ class _PharmacyInformationState extends State<PharmacyInformation> {
   late var _arguments;
   TextEditingController _searchDrugController = TextEditingController();
 
-  /**
-   * get inventory of the pharmacy
-   */
+  /// get inventory of the pharmacy
   Future _future() async {
     List<PharmaInventory> pharmaInventory = await RequestPharmacy().getMedicine(
       pharmacyId: _pharmaInfo.id,

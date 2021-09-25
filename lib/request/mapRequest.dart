@@ -13,12 +13,14 @@ class MapRequest extends MyHttpRequest {
     Uri url = Uri.parse(_apiUri);
     final response = await http.get(url);
 
+    // ignore: unnecessary_null_comparison
     if (response != null && response.statusCode == 200) {
       var rawData = jsonDecode(response.body);
       var result = rawData["results"][0];
       String formattedAddress = result["formatted_address"];
       return formattedAddress;
     } else {
+      // ignore: unnecessary_null_comparison
       if (response == null) {
         throw Exception("Failed to establish connection.");
       }
@@ -40,6 +42,7 @@ class MapRequest extends MyHttpRequest {
     Uri url = Uri.parse(_apiUri);
     final response = await http.get(url);
     Map<String, dynamic> allPossibleRoute = {};
+    // ignore: unnecessary_null_comparison
     if (response != null && response.statusCode == 200) {
       var rawData = jsonDecode(response.body);
       var routes = rawData["routes"];
@@ -61,6 +64,7 @@ class MapRequest extends MyHttpRequest {
 
       return allPossibleRoute;
     } else {
+      // ignore: unnecessary_null_comparison
       if (response == null) {
         throw Exception("Failed to establish connection.");
       }
