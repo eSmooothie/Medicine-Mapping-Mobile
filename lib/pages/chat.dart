@@ -470,7 +470,7 @@ class ChatLineHolder extends StatelessWidget {
         fit: FlexFit.tight,
         child: Container(
           decoration: BoxDecoration(
-            color: Colors.blue.shade300,
+            color: Colors.blue.shade600,
             borderRadius: BorderRadius.circular(10),
           ),
           margin: EdgeInsets.fromLTRB(10.0, 0, 5.0, 10.0),
