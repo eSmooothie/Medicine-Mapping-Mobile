@@ -185,9 +185,8 @@ class _LandingPageState extends State<LandingPage> {
       body: GoogleMap(
         onMapCreated: (GoogleMapController controller) async {
           mapController = controller;
-
+          _permissionLocation();
           mapController.setMapStyle(_mapStyle);
-
           if (_isPermitted) {
             LocationData loc = await _userLocationTracker.getLocation();
             mapController.animateCamera(
@@ -240,7 +239,6 @@ class _LandingPageState extends State<LandingPage> {
               List<Object> args = [
                 "pharmacy",
               ];
-
               Navigator.popAndPushNamed(context, searchPage, arguments: args);
             },
           ),
