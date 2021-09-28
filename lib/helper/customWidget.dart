@@ -142,4 +142,28 @@ class CustomWidget {
       )
     ];
   }
+
+  static void mySnackBar({
+    required BuildContext context,
+    required String message,
+    DismissDirection dismissDirection = DismissDirection.up,
+    double position = 200,
+    Color backgroundColor: Colors.blueAccent,
+    int duration = 4,
+  }) {
+    double screenHeight = MediaQuery.of(context).size.height;
+    SnackBar snackBar = SnackBar(
+      behavior: SnackBarBehavior.floating,
+      margin: EdgeInsets.fromLTRB(20, 0, 20, screenHeight - position),
+      dismissDirection: dismissDirection,
+      backgroundColor: backgroundColor,
+      duration: Duration(seconds: duration),
+      content: Container(
+        child: Text(
+          message,
+        ),
+      ),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
 }

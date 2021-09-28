@@ -187,6 +187,7 @@ class _LandingPageState extends State<LandingPage> {
           mapController = controller;
           _permissionLocation();
           mapController.setMapStyle(_mapStyle);
+
           if (_isPermitted) {
             LocationData loc = await _userLocationTracker.getLocation();
             mapController.animateCamera(
