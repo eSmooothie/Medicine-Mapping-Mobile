@@ -35,7 +35,7 @@ class _LandingPageState extends State<LandingPage> {
 
   List<Pharmacy> _allPharmacies = [];
 
-  double _currentDistanceValue = 10000; // display within 10km
+  double _currentDistanceValue = 500; // display within 10km
 
   Map<int, List<Pharmacy>> _myDistanceToPharmacy = {
     500: [],
