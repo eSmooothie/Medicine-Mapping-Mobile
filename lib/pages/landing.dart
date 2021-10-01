@@ -35,9 +35,10 @@ class _LandingPageState extends State<LandingPage> {
 
   List<Pharmacy> _allPharmacies = [];
 
-  double _currentDistanceValue = 500; // display within 10km
+  double _currentDistanceValue = 0; // display within 10km
 
   Map<int, List<Pharmacy>> _myDistanceToPharmacy = {
+    0: [],
     500: [],
     1000: [],
     5000: [],
@@ -119,6 +120,7 @@ class _LandingPageState extends State<LandingPage> {
                 arguments: args,
               );
             });
+        _myDistanceToPharmacy[0]!.add(pharmacy);
       });
       setState(() {});
     });
@@ -330,7 +332,27 @@ class _LandingPageState extends State<LandingPage> {
                                   ),
                                   onPressed: () {
                                     _currentDistanceValue = 500;
-                                    displayPharmacy();
+                                    if (_myDistanceToPharmacy[
+                                            _currentDistanceValue]!
+                                        .isNotEmpty) {
+                                      CustomWidget.mySnackBar(
+                                          context: context,
+                                          message:
+                                              "${_myDistanceToPharmacy[_currentDistanceValue]!.length} nearby pharmacy within 0.5km range.");
+                                      displayPharmacy();
+                                    } else if (_myDistanceToPharmacy[0]!
+                                        .isNotEmpty) {
+                                      CustomWidget.mySnackBar(
+                                          context: context,
+                                          message:
+                                              "No pharmacy within 0.5km range.");
+                                    } else {
+                                      CustomWidget.mySnackBar(
+                                          context: context,
+                                          backgroundColor: Colors.redAccent,
+                                          message: "Failed to load pharmacy.");
+                                    }
+
                                     Navigator.pop(context);
                                   },
                                   child: Text(
@@ -351,7 +373,27 @@ class _LandingPageState extends State<LandingPage> {
                                   ),
                                   onPressed: () {
                                     _currentDistanceValue = 1000;
-                                    displayPharmacy();
+                                    if (_myDistanceToPharmacy[
+                                            _currentDistanceValue]!
+                                        .isNotEmpty) {
+                                      CustomWidget.mySnackBar(
+                                          context: context,
+                                          message:
+                                              "${_myDistanceToPharmacy[_currentDistanceValue]!.length} nearby pharmacy within 1km range.");
+                                      displayPharmacy();
+                                    } else if (_myDistanceToPharmacy[0]!
+                                        .isNotEmpty) {
+                                      CustomWidget.mySnackBar(
+                                          context: context,
+                                          message:
+                                              "No pharmacy within 1km range");
+                                    } else {
+                                      CustomWidget.mySnackBar(
+                                          context: context,
+                                          backgroundColor: Colors.redAccent,
+                                          message: "Failed to load pharmacy");
+                                    }
+
                                     Navigator.pop(context);
                                   },
                                   child: Text(
@@ -372,7 +414,26 @@ class _LandingPageState extends State<LandingPage> {
                                   ),
                                   onPressed: () {
                                     _currentDistanceValue = 5000;
-                                    displayPharmacy();
+                                    if (_myDistanceToPharmacy[
+                                            _currentDistanceValue]!
+                                        .isNotEmpty) {
+                                      CustomWidget.mySnackBar(
+                                          context: context,
+                                          message:
+                                              "${_myDistanceToPharmacy[_currentDistanceValue]!.length} nearby pharmacy within 5km range.");
+                                      displayPharmacy();
+                                    } else if (_myDistanceToPharmacy[0]!
+                                        .isNotEmpty) {
+                                      CustomWidget.mySnackBar(
+                                          context: context,
+                                          message:
+                                              "No pharmacy within 5km range.");
+                                    } else {
+                                      CustomWidget.mySnackBar(
+                                          context: context,
+                                          backgroundColor: Colors.redAccent,
+                                          message: "Failed to load pharmacy.");
+                                    }
                                     Navigator.pop(context);
                                   },
                                   child: Text(
@@ -393,7 +454,27 @@ class _LandingPageState extends State<LandingPage> {
                                   ),
                                   onPressed: () {
                                     _currentDistanceValue = 100000;
-                                    displayPharmacy();
+
+                                    if (_myDistanceToPharmacy[
+                                            _currentDistanceValue]!
+                                        .isNotEmpty) {
+                                      CustomWidget.mySnackBar(
+                                          context: context,
+                                          message:
+                                              "${_myDistanceToPharmacy[_currentDistanceValue]!.length} nearby pharmacy within 100km range.");
+                                      displayPharmacy();
+                                    } else if (_myDistanceToPharmacy[0]!
+                                        .isNotEmpty) {
+                                      CustomWidget.mySnackBar(
+                                          context: context,
+                                          message:
+                                              "No pharmacy within 100km range.");
+                                    } else {
+                                      CustomWidget.mySnackBar(
+                                          context: context,
+                                          backgroundColor: Colors.redAccent,
+                                          message: "Failed to load pharmacy.");
+                                    }
                                     Navigator.pop(context);
                                   },
                                   child: Text(

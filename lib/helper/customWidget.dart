@@ -149,7 +149,7 @@ class CustomWidget {
     DismissDirection dismissDirection = DismissDirection.up,
     double position = 200,
     Color backgroundColor: Colors.blueAccent,
-    int duration = 4,
+    int duration = 2,
   }) {
     double screenHeight = MediaQuery.of(context).size.height;
     SnackBar snackBar = SnackBar(
