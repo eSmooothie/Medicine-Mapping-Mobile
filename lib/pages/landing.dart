@@ -337,7 +337,7 @@ class _LandingPageState extends State<LandingPage> {
                                       CustomWidget.mySnackBar(
                                           context: context,
                                           message:
-                                              "${_myDistanceToPharmacy[_currentDistanceValue]!.length} nearby pharmacy within 0.5km range.");
+                                              "${_myDistanceToPharmacy[_currentDistanceValue]!.length} pharmacy within 0.5km range.");
                                       displayPharmacy();
                                     } else if (_myDistanceToPharmacy[0]!
                                         .isNotEmpty) {
@@ -378,7 +378,7 @@ class _LandingPageState extends State<LandingPage> {
                                       CustomWidget.mySnackBar(
                                           context: context,
                                           message:
-                                              "${_myDistanceToPharmacy[_currentDistanceValue]!.length} nearby pharmacy within 1km range.");
+                                              "${_myDistanceToPharmacy[_currentDistanceValue]!.length} pharmacy within 1km range.");
                                       displayPharmacy();
                                     } else if (_myDistanceToPharmacy[0]!
                                         .isNotEmpty) {
@@ -419,7 +419,7 @@ class _LandingPageState extends State<LandingPage> {
                                       CustomWidget.mySnackBar(
                                           context: context,
                                           message:
-                                              "${_myDistanceToPharmacy[_currentDistanceValue]!.length} nearby pharmacy within 5km range.");
+                                              "${_myDistanceToPharmacy[_currentDistanceValue]!.length} pharmacy within 5km range.");
                                       displayPharmacy();
                                     } else if (_myDistanceToPharmacy[0]!
                                         .isNotEmpty) {
@@ -460,7 +460,7 @@ class _LandingPageState extends State<LandingPage> {
                                       CustomWidget.mySnackBar(
                                           context: context,
                                           message:
-                                              "${_myDistanceToPharmacy[_currentDistanceValue]!.length} nearby pharmacy within 100km range.");
+                                              "${_myDistanceToPharmacy[_currentDistanceValue]!.length} pharmacy within 100km range.");
                                       displayPharmacy();
                                     } else if (_myDistanceToPharmacy[0]!
                                         .isNotEmpty) {
