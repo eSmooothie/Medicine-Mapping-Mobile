@@ -211,7 +211,7 @@ class _MedicineInfoState extends State<MedicineInfo> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              "P$averagePrice",
+                              "P${averagePrice.roundToDouble()}",
                               style: TextStyle(
                                 fontSize: 24.0,
                                 fontWeight: FontWeight.bold,
