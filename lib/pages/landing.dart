@@ -120,7 +120,6 @@ class _LandingPageState extends State<LandingPage> {
                 arguments: args,
               );
             });
-        _myDistanceToPharmacy[0]!.add(pharmacy);
       });
       setState(() {});
     });
@@ -203,7 +202,7 @@ class _LandingPageState extends State<LandingPage> {
           GoogleMap(
             onMapCreated: (GoogleMapController controller) async {
               mapController = controller;
-              _permissionLocation();
+              await _permissionLocation();
               mapController.setMapStyle(_mapStyle);
 
               if (_isPermitted) {
@@ -224,7 +223,7 @@ class _LandingPageState extends State<LandingPage> {
                     start: myDistance,
                     end: pharmacyDistance,
                   );
-
+                  _myDistanceToPharmacy[0]!.add(item);
                   // within 500m
                   if (d <= 500) {
                     _myDistanceToPharmacy[500]!.add(item);
