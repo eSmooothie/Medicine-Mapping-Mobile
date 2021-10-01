@@ -117,6 +117,7 @@ class _SearchState extends State<Search> {
     // setState(() {});
 
     return Scaffold(
+      backgroundColor: Colors.grey.shade100,
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         leading: CustomWidget.outlinedButton(
@@ -169,6 +170,7 @@ class _SearchState extends State<Search> {
                         hintText: "",
                         labelText: "Search",
                         onChanged: onSearchTextChange,
+                        prefixIcon: Icon(Icons.search),
                       ),
                     ),
                     (searchBy == "medicine")
@@ -349,7 +351,8 @@ class _SearchState extends State<Search> {
       ),
       floatingActionButton: SpeedDial(
         animatedIcon: AnimatedIcons.search_ellipsis,
-        overlayColor: Colors.blue.shade100,
+        overlayColor: Color.fromARGB(255, 41, 171, 226),
+        backgroundColor: Color.fromARGB(255, 255, 108, 85),
         animationSpeed: 50,
         spacing: 10.0,
         spaceBetweenChildren: 10.0,

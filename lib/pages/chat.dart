@@ -161,6 +161,7 @@ class _ChatBoxState extends State<ChatBox> with WidgetsBindingObserver {
     // go to latest message execute only once
 
     return Scaffold(
+      backgroundColor: Colors.grey.shade200,
       appBar: AppBar(
         leading: CustomWidget.outlinedButton(
           onPressed: () {
@@ -211,7 +212,7 @@ class _ChatBoxState extends State<ChatBox> with WidgetsBindingObserver {
                   }
                 }
 
-                return Center(child: Text("No Message"));
+                return Center(child: Text("Send a message."));
               },
             ),
           ),
@@ -323,9 +324,6 @@ class ChatLineHolder extends StatelessWidget {
     String time = dateFormat.format(dt);
     // print(time);
     return Container(
-      decoration: BoxDecoration(
-        color: (chatLine.from == "me") ? Colors.blue.shade100 : Colors.white,
-      ),
       child: Flex(
         direction: Axis.horizontal,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -373,11 +371,26 @@ class ChatLineHolder extends StatelessWidget {
       }
     }
     return [
-      Flexible(flex: 1, child: SvgIcons.userProfileHolder),
+      // Icon
+      Flexible(
+          flex: 1,
+          child: Container(
+            child: Icon(
+              Icons.account_circle,
+              size: 50,
+              color: Colors.blue,
+            ),
+          )),
+      // message
       Flexible(
         flex: 5,
         fit: FlexFit.tight,
-        child: Padding(
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.grey[350],
+            borderRadius: BorderRadius.circular(10),
+          ),
+          margin: EdgeInsets.fromLTRB(5.0, 0, 10.0, 10.0),
           padding: const EdgeInsets.all(8.0),
           child: Flex(
             direction: Axis.vertical,
@@ -391,7 +404,12 @@ class ChatLineHolder extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              Text("${time.toUpperCase()}"),
+              Text(
+                "${time.toUpperCase()}",
+                style: TextStyle(
+                  fontSize: 13.0,
+                ),
+              ),
               SizedBox(
                 height: 10.0,
               ),
@@ -446,10 +464,16 @@ class ChatLineHolder extends StatelessWidget {
       }
     }
     return [
+      // message
       Flexible(
         flex: 5,
         fit: FlexFit.tight,
         child: Container(
+          decoration: BoxDecoration(
+            color: Colors.blue.shade600,
+            borderRadius: BorderRadius.circular(10),
+          ),
+          margin: EdgeInsets.fromLTRB(10.0, 0, 5.0, 10.0),
           alignment: Alignment.topRight,
           padding: const EdgeInsets.all(8.0),
           child: Flex(
@@ -462,9 +486,16 @@ class ChatLineHolder extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 18.0,
                   fontWeight: FontWeight.bold,
+                  color: Colors.white,
                 ),
               ),
-              Text("${time.toUpperCase()}"),
+              Text(
+                "${time.toUpperCase()}",
+                style: TextStyle(
+                  fontSize: 13.0,
+                  color: Colors.white,
+                ),
+              ),
               SizedBox(
                 height: 10.0,
               ),
@@ -477,12 +508,22 @@ class ChatLineHolder extends StatelessWidget {
                         return Column(
                           children: [
                             Icon(Icons.broken_image),
-                            Text("Broken Image ($message)")
+                            Text(
+                              "Broken Image ($message)",
+                              style: TextStyle(
+                                color: Colors.white,
+                              ),
+                            )
                           ],
                         );
                       },
                     )
-                  : Text("$message"),
+                  : Text(
+                      "$message",
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
               SizedBox(
                 height: 20.0,
               ),
@@ -490,7 +531,16 @@ class ChatLineHolder extends StatelessWidget {
           ),
         ),
       ),
-      Flexible(flex: 1, child: SvgIcons.userProfileHolder),
+      // Icon
+      Flexible(
+          flex: 1,
+          child: Container(
+            child: Icon(
+              Icons.account_circle,
+              size: 50,
+              color: Colors.blue,
+            ),
+          )),
     ];
   }
 }

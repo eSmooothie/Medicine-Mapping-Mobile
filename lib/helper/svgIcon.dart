@@ -2,6 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class SvgIcons {
+  static final Widget streetView = SvgPicture.asset(
+    'assets/icons/street-view-solid.svg',
+    semanticsLabel: 'Street View',
+  );
+
   static final Widget searchPharmacy = SvgPicture.asset(
     'assets/icons/search_pharmacy.svg',
     semanticsLabel: 'Search Pharmacy',

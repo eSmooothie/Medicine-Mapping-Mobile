@@ -263,6 +263,7 @@ class _DisplayDirectionState extends State<DisplayDirection>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: Text("Map"),
       ),
       body: Stack(
