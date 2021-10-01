@@ -237,7 +237,7 @@ class _LandingPageState extends State<LandingPage> {
                   }
                   // within 100km
                   if (d <= 100000) {
-                    _myDistanceToPharmacy[10000]!.add(item);
+                    _myDistanceToPharmacy[100000]!.add(item);
                   }
                 });
                 displayPharmacy();
