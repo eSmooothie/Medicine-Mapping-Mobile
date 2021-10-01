@@ -41,7 +41,7 @@ class _LandingPageState extends State<LandingPage> {
     500: [],
     1000: [],
     5000: [],
-    10000: [],
+    100000: [],
   };
 
   @override
@@ -222,6 +222,7 @@ class _LandingPageState extends State<LandingPage> {
                     start: myDistance,
                     end: pharmacyDistance,
                   );
+
                   // within 500m
                   if (d <= 500) {
                     _myDistanceToPharmacy[500]!.add(item);
@@ -234,8 +235,8 @@ class _LandingPageState extends State<LandingPage> {
                   if (d <= 5000) {
                     _myDistanceToPharmacy[5000]!.add(item);
                   }
-                  // within 10km
-                  if (d <= 10000) {
+                  // within 100km
+                  if (d <= 100000) {
                     _myDistanceToPharmacy[10000]!.add(item);
                   }
                 });
@@ -319,6 +320,7 @@ class _LandingPageState extends State<LandingPage> {
                               spacing: 10.0,
                               runSpacing: 10.0,
                               children: [
+                                // .5km
                                 OutlinedButton(
                                   style: OutlinedButton.styleFrom(
                                     side: BorderSide(
@@ -339,6 +341,7 @@ class _LandingPageState extends State<LandingPage> {
                                     ),
                                   ),
                                 ),
+                                // 1km
                                 OutlinedButton(
                                   style: OutlinedButton.styleFrom(
                                     side: BorderSide(
@@ -359,6 +362,7 @@ class _LandingPageState extends State<LandingPage> {
                                     ),
                                   ),
                                 ),
+                                // 5km
                                 OutlinedButton(
                                   style: OutlinedButton.styleFrom(
                                     side: BorderSide(
@@ -379,6 +383,7 @@ class _LandingPageState extends State<LandingPage> {
                                     ),
                                   ),
                                 ),
+                                // 100km
                                 OutlinedButton(
                                   style: OutlinedButton.styleFrom(
                                     side: BorderSide(
@@ -387,12 +392,12 @@ class _LandingPageState extends State<LandingPage> {
                                     fixedSize: Size(150, 50),
                                   ),
                                   onPressed: () {
-                                    _currentDistanceValue = 10000;
+                                    _currentDistanceValue = 100000;
                                     displayPharmacy();
                                     Navigator.pop(context);
                                   },
                                   child: Text(
-                                    "≤ 10 km",
+                                    "≤ 100 km",
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontSize: 18.0,
