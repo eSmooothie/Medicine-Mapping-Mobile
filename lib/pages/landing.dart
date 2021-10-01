@@ -6,6 +6,7 @@ import 'package:location/location.dart';
 // import '../helper/googleMap.dart';
 import 'package:research_mobile_app/exportHelper.dart';
 import 'package:research_mobile_app/exportRequest.dart';
+import 'package:research_mobile_app/helper/distance.dart';
 import 'package:research_mobile_app/models/pharmacy.dart';
 
 class LandingPage extends StatefulWidget {
@@ -27,9 +28,21 @@ class _LandingPageState extends State<LandingPage> {
   Map<MarkerId, Marker> _markers = <MarkerId, Marker>{};
   Map<CircleId, Circle> _circles = <CircleId, Circle>{};
   Location _userLocationTracker = new Location();
+
   bool darkMode = false;
   bool _isPermitted = false;
   double _zoom = 13.0;
+
+  List<Pharmacy> _allPharmacies = [];
+
+  double _currentDistanceValue = 10000;
+
+  Map<int, List<Pharmacy>> _myDistanceToPharmacy = {
+    500: [],
+    1000: [],
+    5000: [],
+    10000: [],
+  };
 
   @override
   void initState() {
@@ -85,6 +98,7 @@ class _LandingPageState extends State<LandingPage> {
     print("Request Pharmacy location");
     RequestPharmacy().QueryAll().then((pharmacies) {
       pharmacies.forEach((Pharmacy pharmacy) {
+        _allPharmacies.add(pharmacy);
         double lat = double.parse(pharmacy.lat);
         double lng = double.parse(pharmacy.lng);
         LatLng pos = LatLng(lat, lng);
@@ -182,30 +196,58 @@ class _LandingPageState extends State<LandingPage> {
         foregroundColor: Colors.transparent,
         shadowColor: Colors.transparent,
       ),
-      body: GoogleMap(
-        onMapCreated: (GoogleMapController controller) async {
-          mapController = controller;
-          _permissionLocation();
-          mapController.setMapStyle(_mapStyle);
+      body: Stack(
+        children: [
+          GoogleMap(
+            onMapCreated: (GoogleMapController controller) async {
+              mapController = controller;
+              _permissionLocation();
+              mapController.setMapStyle(_mapStyle);
 
-          if (_isPermitted) {
-            LocationData loc = await _userLocationTracker.getLocation();
-            mapController.animateCamera(
-                CameraUpdate.newCameraPosition(new CameraPosition(
-              bearing: 0,
-              target: LatLng(loc.latitude!, loc.longitude!),
-              tilt: 0,
-              zoom: 15.00,
-            )));
-          }
-        },
-        myLocationEnabled: _isPermitted,
-        myLocationButtonEnabled: false,
-        initialCameraPosition: CameraPosition(target: _center, zoom: _zoom),
-        zoomControlsEnabled: false,
-        mapToolbarEnabled: false,
-        markers: Set<Marker>.of(_markers.values),
-        circles: Set<Circle>.of(_circles.values),
+              if (_isPermitted) {
+                LocationData loc = await _userLocationTracker.getLocation();
+                mapController.animateCamera(
+                    CameraUpdate.newCameraPosition(new CameraPosition(
+                  bearing: 0,
+                  target: LatLng(loc.latitude!, loc.longitude!),
+                  tilt: 0,
+                  zoom: 15.00,
+                )));
+                LatLng myDistance = LatLng(loc.latitude!, loc.longitude!);
+                _allPharmacies.forEach((item) {
+                  double pharmacyLat = double.parse(item.lat);
+                  double pharmacyLng = double.parse(item.lng);
+                  LatLng pharmacyDistance = LatLng(pharmacyLat, pharmacyLng);
+                  double d = Haversine.getDistanceInM(
+                    start: myDistance,
+                    end: pharmacyDistance,
+                  );
+
+                  if (d <= 500) {
+                    _myDistanceToPharmacy[500]!.add(item);
+                  }
+                  if (d <= 1000) {
+                    _myDistanceToPharmacy[1000]!.add(item);
+                  }
+                  if (d <= 5000) {
+                    _myDistanceToPharmacy[5000]!.add(item);
+                  }
+                  if (d <= 10000) {
+                    _myDistanceToPharmacy[10000]!.add(item);
+                  }
+                });
+                displayPharmacy();
+              }
+            },
+            myLocationEnabled: _isPermitted,
+            myLocationButtonEnabled: false,
+            initialCameraPosition: CameraPosition(target: _center, zoom: _zoom),
+            zoomControlsEnabled: false,
+            mapToolbarEnabled: false,
+            markers: Set<Marker>.of(_markers.values),
+            circles: Set<Circle>.of(_circles.values),
+          ),
+        ],
       ),
       floatingActionButton: SpeedDial(
         animatedIcon: AnimatedIcons.search_ellipsis,
@@ -243,11 +285,156 @@ class _LandingPageState extends State<LandingPage> {
               Navigator.popAndPushNamed(context, searchPage, arguments: args);
             },
           ),
+          SpeedDialChild(
+            child: SizedBox(
+              height: 25,
+              width: 25,
+              child: SvgIcons.streetView,
+            ),
+            label: "Near me",
+            onTap: () {
+              showModalBottomSheet(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return Container(
+                      height: 200,
+                      color: Colors.blue,
+                      child: Flex(
+                        direction: Axis.vertical,
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Text(
+                            "Select distance",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 18.0,
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                            child: Wrap(
+                              spacing: 10.0,
+                              runSpacing: 10.0,
+                              children: [
+                                OutlinedButton(
+                                  style: OutlinedButton.styleFrom(
+                                    side: BorderSide(
+                                      color: Colors.white,
+                                    ),
+                                    fixedSize: Size(150, 50),
+                                  ),
+                                  onPressed: () {
+                                    _currentDistanceValue = 500;
+                                    displayPharmacy();
+                                    Navigator.pop(context);
+                                  },
+                                  child: Text(
+                                    "≤ 0.5 km",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 18.0,
+                                    ),
+                                  ),
+                                ),
+                                OutlinedButton(
+                                  style: OutlinedButton.styleFrom(
+                                    side: BorderSide(
+                                      color: Colors.white,
+                                    ),
+                                    fixedSize: Size(150, 50),
+                                  ),
+                                  onPressed: () {
+                                    _currentDistanceValue = 1000;
+                                    displayPharmacy();
+                                    Navigator.pop(context);
+                                  },
+                                  child: Text(
+                                    "≤ 1 km",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 18.0,
+                                    ),
+                                  ),
+                                ),
+                                OutlinedButton(
+                                  style: OutlinedButton.styleFrom(
+                                    side: BorderSide(
+                                      color: Colors.white,
+                                    ),
+                                    fixedSize: Size(150, 50),
+                                  ),
+                                  onPressed: () {
+                                    _currentDistanceValue = 5000;
+                                    displayPharmacy();
+                                    Navigator.pop(context);
+                                  },
+                                  child: Text(
+                                    "≤ 5 km",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 18.0,
+                                    ),
+                                  ),
+                                ),
+                                OutlinedButton(
+                                  style: OutlinedButton.styleFrom(
+                                    side: BorderSide(
+                                      color: Colors.white,
+                                    ),
+                                    fixedSize: Size(150, 50),
+                                  ),
+                                  onPressed: () {
+                                    _currentDistanceValue = 1000;
+                                    displayPharmacy();
+                                    Navigator.pop(context);
+                                  },
+                                  child: Text(
+                                    "≤ 10 km",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 18.0,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  });
+            },
+          ),
         ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       extendBodyBehindAppBar: true,
     );
+  }
+
+  void displayPharmacy() {
+    _markers.clear();
+    _myDistanceToPharmacy[_currentDistanceValue]!.forEach((Pharmacy pharmacy) {
+      double lat = double.parse(pharmacy.lat);
+      double lng = double.parse(pharmacy.lng);
+      LatLng pos = LatLng(lat, lng);
+      Map<String, Object> args = {
+        'from': landingPage,
+        'pharmacy': pharmacy,
+      };
+      _addMarker(
+          id: pharmacy.id,
+          name: pharmacy.name,
+          position: pos,
+          onPressed: () {
+            Navigator.popAndPushNamed(
+              context,
+              pharmacyInfoPage,
+              arguments: args,
+            );
+          });
+    });
+    setState(() {});
   }
 
   @override
