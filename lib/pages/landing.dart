@@ -35,7 +35,7 @@ class _LandingPageState extends State<LandingPage> {
 
   List<Pharmacy> _allPharmacies = [];
 
-  double _currentDistanceValue = 10000;
+  double _currentDistanceValue = 10000; // display within 10km
 
   Map<int, List<Pharmacy>> _myDistanceToPharmacy = {
     500: [],
@@ -222,16 +222,19 @@ class _LandingPageState extends State<LandingPage> {
                     start: myDistance,
                     end: pharmacyDistance,
                   );
-
+                  // within 500m
                   if (d <= 500) {
                     _myDistanceToPharmacy[500]!.add(item);
                   }
+                  // within 1km
                   if (d <= 1000) {
                     _myDistanceToPharmacy[1000]!.add(item);
                   }
+                  // within 5km
                   if (d <= 5000) {
                     _myDistanceToPharmacy[5000]!.add(item);
                   }
+                  // within 10km
                   if (d <= 10000) {
                     _myDistanceToPharmacy[10000]!.add(item);
                   }
@@ -384,7 +387,7 @@ class _LandingPageState extends State<LandingPage> {
                                     fixedSize: Size(150, 50),
                                   ),
                                   onPressed: () {
-                                    _currentDistanceValue = 1000;
+                                    _currentDistanceValue = 10000;
                                     displayPharmacy();
                                     Navigator.pop(context);
                                   },
