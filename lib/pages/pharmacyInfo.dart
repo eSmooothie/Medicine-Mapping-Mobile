@@ -61,8 +61,15 @@ class _PharmacyInformationState extends State<PharmacyInformation> {
         child: Flex(
           direction: Axis.horizontal,
           children: [
-            Text("${detail.TYPE}: "),
-            Text("${detail.DETAIL}"),
+            Text(
+              "${detail.TYPE}: ",
+            ),
+            Expanded(
+              child: Text(
+                "${detail.DETAIL}",
+                softWrap: true,
+              ),
+            ),
           ],
         ),
       );
