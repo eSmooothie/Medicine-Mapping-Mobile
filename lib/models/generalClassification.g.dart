@@ -7,12 +7,11 @@ part of 'generalClassification.dart';
 // **************************************************************************
 
 GeneralClassification _$GeneralClassificationFromJson(
-    Map<String, dynamic> json) {
-  return GeneralClassification(
-    json['ID'] as String,
-    json['NAME'] as String,
-  );
-}
+        Map<String, dynamic> json) =>
+    GeneralClassification(
+      json['ID'] as String,
+      json['NAME'] as String,
+    );
 
 Map<String, dynamic> _$GeneralClassificationToJson(
         GeneralClassification instance) =>

@@ -252,6 +252,22 @@ class _LandingPageState extends State<LandingPage> {
             markers: Set<Marker>.of(_markers.values),
             circles: Set<Circle>.of(_circles.values),
           ),
+          Align(
+            alignment: Alignment.centerRight,
+            child: OutlinedButton(
+              onPressed: () {
+                Navigator.pushNamed(context, notifPage);
+              },
+              child: Icon(
+                Icons.notifications,
+                color: Colors.white,
+              ),
+              style: OutlinedButton.styleFrom(
+                shape: CircleBorder(),
+                backgroundColor: Colors.redAccent,
+              ),
+            ),
+          ),
         ],
       ),
       floatingActionButton: SpeedDial(

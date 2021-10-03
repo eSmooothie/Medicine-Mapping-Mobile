@@ -7,7 +7,7 @@ import 'package:research_mobile_app/pages/chatSignUp.dart';
 import 'package:research_mobile_app/pages/displayDirection.dart';
 import 'package:research_mobile_app/pages/inbox.dart';
 import 'package:research_mobile_app/pages/landing.dart';
-import 'package:research_mobile_app/pages/notice.dart';
+import 'package:research_mobile_app/pages/notif.dart';
 import 'package:research_mobile_app/pages/search.dart';
 import 'package:research_mobile_app/pages/medicineInfo.dart';
 import 'package:research_mobile_app/pages/pharmacyInfo.dart';
@@ -25,7 +25,7 @@ const String inboxPage = "/inbox";
 const String chatBoxPage = "/chatBox";
 const String getDirectionPage = "/getDirection";
 const String displayDirectionPage = "/displayDirection";
-const String noticePage = "/notice";
+const String notifPage = "/notif";
 const String testPage = "/test";
 
 // set route
@@ -84,8 +84,8 @@ Route<dynamic> appRoutes(RouteSettings route) {
         arguments: route.arguments,
       ));
 
-    case noticePage:
-      return Transition().page(Notice());
+    case notifPage:
+      return Transition().page(Notif());
 
     case testPage:
       return Transition().page(Test());
