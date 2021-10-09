@@ -283,7 +283,7 @@ class _LandingPageState extends State<LandingPage> {
                       ),
                     ),
                     child: Text(
-                      "1",
+                      "!",
                       style: TextStyle(
                         color: Colors.white,
                       ),
