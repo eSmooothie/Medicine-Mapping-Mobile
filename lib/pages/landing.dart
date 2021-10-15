@@ -94,12 +94,20 @@ class _LandingPageState extends State<LandingPage> {
     return true;
   }
 
+  Future _reinitPharmacy() async {
+    await RequestPharmacy().QueryAll().then((pharmacies) {
+      pharmacies.forEach((Pharmacy pharmacy) {
+        _allPharmacies.add(pharmacy);
+      });
+      setState(() {});
+    });
+  }
+
   // initialize pharmacy
   void _initPharmacy() {
     print("Request Pharmacy location");
     RequestPharmacy().QueryAll().then((pharmacies) {
       pharmacies.forEach((Pharmacy pharmacy) {
-        _allPharmacies.add(pharmacy);
         double lat = double.parse(pharmacy.lat);
         double lng = double.parse(pharmacy.lng);
         LatLng pos = LatLng(lat, lng);
@@ -120,6 +128,8 @@ class _LandingPageState extends State<LandingPage> {
                 arguments: args,
               );
             });
+
+        // _allPharmacies.add(pharmacy);
       });
       setState(() {});
     });
@@ -215,6 +225,9 @@ class _LandingPageState extends State<LandingPage> {
                   zoom: 15.00,
                 )));
                 LatLng myDistance = LatLng(loc.latitude!, loc.longitude!);
+                if (_allPharmacies.isEmpty) {
+                  await _reinitPharmacy();
+                }
                 _allPharmacies.forEach((item) {
                   double pharmacyLat = double.parse(item.lat);
                   double pharmacyLng = double.parse(item.lng);
@@ -241,6 +254,7 @@ class _LandingPageState extends State<LandingPage> {
                     _myDistanceToPharmacy[100000]!.add(item);
                   }
                 });
+
                 displayPharmacy();
               }
             },
