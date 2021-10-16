@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
@@ -8,6 +9,8 @@ import 'package:research_mobile_app/exportHelper.dart';
 import 'package:research_mobile_app/exportRequest.dart';
 import 'package:research_mobile_app/helper/distance.dart';
 import 'package:research_mobile_app/models/pharmacy.dart';
+import 'package:research_mobile_app/request/requestNotif.dart';
+import 'dart:convert';
 
 class LandingPage extends StatefulWidget {
   final String title;
@@ -191,6 +194,29 @@ class _LandingPageState extends State<LandingPage> {
     _markers[markerId] = newMarker;
   }
 
+  Future<int> newNotif() async {
+    final storage = new FlutterSecureStorage();
+    final bool isExist;
+    final notif = await RequestNotification().getNotifications();
+    int _ttlNotif = 0;
+    int _notifCounter = 0;
+    if (notif is List) {
+      _ttlNotif = notif.length;
+    }
+    isExist = await storage.containsKey(key: "notifCounter");
+    if (isExist) {
+      String? _xnotifCounter = await storage.read(key: "notifCounter");
+      int _counter = int.parse(_xnotifCounter!);
+      if (_ttlNotif > _counter) {
+        _notifCounter = _ttlNotif - _counter;
+      }
+    } else {
+      await storage.write(key: "notifCounter", value: _ttlNotif.toString());
+    }
+
+    return _notifCounter;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -214,7 +240,6 @@ class _LandingPageState extends State<LandingPage> {
               mapController = controller;
               await _permissionLocation();
               mapController.setMapStyle(_mapStyle);
-
               if (_isPermitted) {
                 LocationData loc = await _userLocationTracker.getLocation();
                 mapController.animateCamera(
@@ -266,15 +291,58 @@ class _LandingPageState extends State<LandingPage> {
             markers: Set<Marker>.of(_markers.values),
             circles: Set<Circle>.of(_circles.values),
           ),
-          Align(
-            alignment: Alignment.centerRight,
-            child: Stack(
-                alignment: AlignmentDirectional.bottomStart,
-                fit: StackFit.loose,
-                children: [
-                  OutlinedButton(
+          FutureBuilder(
+              future: newNotif(),
+              builder: (BuildContext context, AsyncSnapshot snapshot) {
+                if (snapshot.hasData) {
+                  int newNotif = snapshot.data;
+                  if (newNotif > 0) {
+                    return Align(
+                      alignment: Alignment.centerRight,
+                      child: Stack(
+                          alignment: AlignmentDirectional.bottomStart,
+                          fit: StackFit.loose,
+                          children: [
+                            OutlinedButton(
+                              onPressed: () {
+                                Navigator.popAndPushNamed(context, notifPage);
+                              },
+                              child: Icon(
+                                Icons.notifications,
+                                color: Colors.white,
+                              ),
+                              style: OutlinedButton.styleFrom(
+                                shape: CircleBorder(),
+                                backgroundColor: Colors.redAccent,
+                              ),
+                            ),
+                            Container(
+                              margin: EdgeInsets.fromLTRB(2, 0, 0, 0),
+                              padding: EdgeInsets.all(5.0),
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.blue,
+                                border: Border.all(
+                                  color: Colors.white,
+                                  width: 2.0,
+                                ),
+                              ),
+                              child: Text(
+                                "$newNotif",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ]),
+                    );
+                  }
+                } else if (snapshot.hasError) {}
+                return Align(
+                  alignment: Alignment.centerRight,
+                  child: OutlinedButton(
                     onPressed: () {
-                      Navigator.pushNamed(context, notifPage);
+                      Navigator.popAndPushNamed(context, notifPage);
                     },
                     child: Icon(
                       Icons.notifications,
@@ -285,26 +353,8 @@ class _LandingPageState extends State<LandingPage> {
                       backgroundColor: Colors.redAccent,
                     ),
                   ),
-                  Container(
-                    margin: EdgeInsets.fromLTRB(2, 0, 0, 0),
-                    padding: EdgeInsets.all(5.0),
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.blue,
-                      border: Border.all(
-                        color: Colors.white,
-                        width: 2.0,
-                      ),
-                    ),
-                    child: Text(
-                      "!",
-                      style: TextStyle(
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ]),
-          ),
+                );
+              }),
         ],
       ),
       floatingActionButton: SpeedDial(

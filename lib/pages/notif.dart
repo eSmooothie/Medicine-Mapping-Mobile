@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:research_mobile_app/models/notificationModel.dart';
 import 'package:research_mobile_app/request/httpRequest.dart';
 import 'package:research_mobile_app/request/requestNotif.dart';
@@ -36,6 +37,20 @@ class _NotifState extends State<Notif> {
 
   Future _getNotif() async {
     final result = await RequestNotification().getNotifications();
+
+    final storage = new FlutterSecureStorage();
+    final bool isExist;
+    int _ttlNotif = 0;
+    if (result is List) {
+      _ttlNotif = result.length;
+    }
+    isExist = await storage.containsKey(key: "notifCounter");
+    if (isExist) {
+      await storage.write(key: "notifCounter", value: _ttlNotif.toString());
+    } else {
+      await storage.write(key: "notifCounter", value: _ttlNotif.toString());
+    }
+
     return result;
   }
 
@@ -43,6 +58,14 @@ class _NotifState extends State<Notif> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: Ink(
+          child: InkWell(
+            onTap: () {
+              Navigator.popAndPushNamed(context, landingPage);
+            },
+            child: Icon(Icons.arrow_back),
+          ),
+        ),
         title: Text(
           "Notification",
         ),
