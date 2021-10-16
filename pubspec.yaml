@@ -16,9 +16,9 @@ dependencies:
   page_transition: ^2.0.2
   google_maps_flutter: ^2.0.9
   http: ^0.13.4
-  json_serializable: ^5.0.2
+  json_serializable: ^6.0.0
   flutter_speed_dial: ^4.2.0
-  flutter_svg: ^0.22.0
+  flutter_svg: ^0.23.0+1
   location: ^4.2.0
   skeleton_text: ^3.0.0
   flutter_secure_storage: ^4.2.1
