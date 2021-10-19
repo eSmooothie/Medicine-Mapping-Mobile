@@ -17,7 +17,7 @@ class RequestPatient extends MyHttpRequest {
     if (response == null) {
       throw Exception("Failed to establish connection.");
     }
-    if (response.body.isNotEmpty) {
+    if (response.statusCode != 205) {
       var decode = jsonDecode(response.body);
       result["firstName"] = decode["FIRST_NAME"];
       result["lastName"] = decode["LAST_NAME"];
