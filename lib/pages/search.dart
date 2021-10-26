@@ -410,13 +410,13 @@ class _SearchState extends State<Search> {
           medicineGenericNames.add(element.name);
         });
         String genericNames = medicineGenericNames.join(", ").toLowerCase();
-        if (item.brandName.toLowerCase().contains(text) ||
-            genericNames.toLowerCase().contains(text)) {
+        if (item.brandName.toLowerCase().contains(text.toLowerCase()) ||
+            genericNames.toLowerCase().contains(text.toLowerCase())) {
           _searchResults.add(item);
         }
       } else if (item is Pharmacy) {
         // print(item.name);
-        if (item.name.toLowerCase().contains(text)) {
+        if (item.name.toLowerCase().contains(text.toLowerCase())) {
           _searchResults.add(item);
         }
       }

@@ -4,7 +4,7 @@ description: Mapping pharmacies in Iligan City using google technologies.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # xx.yy.zz = Version Name
 # +n = Version Code
-version: 1.0.0-alpha+25
+version: 1.0.0-alpha+27
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
