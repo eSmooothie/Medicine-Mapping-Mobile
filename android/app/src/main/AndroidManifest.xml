@@ -5,7 +5,6 @@
    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
    
-<<<<<<< HEAD
    <queries>
       <intent>
         <action android:name="android.intent.action.VIEW" />
@@ -13,8 +12,6 @@
       </intent>
    </queries>
    
-=======
->>>>>>> parent of 1784318 (Merge pull request #8 from eSmooothie/dev)
    <application
         android:allowBackup="false"
         android:fullBackupContent="false"

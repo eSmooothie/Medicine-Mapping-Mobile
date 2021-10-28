@@ -6,12 +6,10 @@ part of 'genericName.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-GenericName _$GenericNameFromJson(Map<String, dynamic> json) {
-  return GenericName(
-    json['id'] as String,
-    json['name'] as String,
-  );
-}
+GenericName _$GenericNameFromJson(Map<String, dynamic> json) => GenericName(
+      json['id'] as String,
+      json['name'] as String,
+    );
 
 Map<String, dynamic> _$GenericNameToJson(GenericName instance) =>
     <String, dynamic>{

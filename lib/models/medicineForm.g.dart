@@ -6,12 +6,10 @@ part of 'medicineForm.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-MedicineForm _$MedicineFormFromJson(Map<String, dynamic> json) {
-  return MedicineForm(
-    json['ID'] as String,
-    json['NAME'] as String,
-  );
-}
+MedicineForm _$MedicineFormFromJson(Map<String, dynamic> json) => MedicineForm(
+      json['ID'] as String,
+      json['NAME'] as String,
+    );
 
 Map<String, dynamic> _$MedicineFormToJson(MedicineForm instance) =>
     <String, dynamic>{

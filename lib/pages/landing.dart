@@ -291,7 +291,6 @@ class _LandingPageState extends State<LandingPage> {
             markers: Set<Marker>.of(_markers.values),
             circles: Set<Circle>.of(_circles.values),
           ),
-<<<<<<< HEAD
           FutureBuilder(
               future: newNotif(),
               builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -356,8 +355,6 @@ class _LandingPageState extends State<LandingPage> {
                   ),
                 );
               }),
-=======
->>>>>>> parent of 1784318 (Merge pull request #8 from eSmooothie/dev)
         ],
       ),
       floatingActionButton: SpeedDial(

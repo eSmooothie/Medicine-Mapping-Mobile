@@ -7,12 +7,11 @@ part of 'medicineClassification.dart';
 // **************************************************************************
 
 MedicineClassification _$MedicineClassificationFromJson(
-    Map<String, dynamic> json) {
-  return MedicineClassification(
-    json['drugClassificationName'] as String,
-    json['generalClassificationName'] as String,
-  );
-}
+        Map<String, dynamic> json) =>
+    MedicineClassification(
+      json['drugClassificationName'] as String,
+      json['generalClassificationName'] as String,
+    );
 
 Map<String, dynamic> _$MedicineClassificationToJson(
         MedicineClassification instance) =>
