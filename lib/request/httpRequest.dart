@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 
 class MyHttpRequest {
   String _url = "https://med-mapping.com/"; // production
-  // String _url = "http://192.168.254.104:9093/"; // development
+  // String _url = "http://192.168.254.100:9093/"; // development
 
   String get serverUrl {
     return _url;

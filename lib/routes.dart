@@ -13,6 +13,7 @@ import 'package:research_mobile_app/pages/medicineInfo.dart';
 import 'package:research_mobile_app/pages/pharmacyInfo.dart';
 import 'package:research_mobile_app/pages/getDirection.dart';
 import 'package:research_mobile_app/pages/test.dart';
+import 'package:research_mobile_app/pages/userProfile.dart';
 
 // Routes of the app
 const String landingPage = "/";
@@ -26,6 +27,7 @@ const String chatBoxPage = "/chatBox";
 const String getDirectionPage = "/getDirection";
 const String displayDirectionPage = "/displayDirection";
 const String notifPage = "/notif";
+const String userProfilePage = "/userProfile";
 const String testPage = "/test";
 
 // set route
@@ -89,6 +91,11 @@ Route<dynamic> appRoutes(RouteSettings route) {
 
     case testPage:
       return Transition().page(Test());
+
+    case userProfilePage:
+      return Transition().page(
+        UserProfile(),
+      );
     default:
       return Transition().page(
         LandingPage(title: "Map"),

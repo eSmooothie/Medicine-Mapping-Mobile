@@ -81,18 +81,20 @@ class _ChatBoxState extends State<ChatBox> with WidgetsBindingObserver {
 
     timer = Timer.periodic(Duration(seconds: delaySeconds), (t) async {
       // Not sending a request, if waiting for response
-      if (!waitingForResponse && _scrollController.hasClients) {
+      if (!waitingForResponse) {
         waitingForResponse = true;
         var newData = await post();
         // check if their is a new message
         if (numberOfLines != newData.length) {
           numberOfLines = newData.length; // update
-          var offset = _scrollController.position.maxScrollExtent;
-          _scrollController.animateTo(
-            offset,
-            duration: Duration(milliseconds: 900),
-            curve: Curves.easeInOut,
-          );
+          if (_scrollController.hasClients) {
+            var offset = _scrollController.position.maxScrollExtent;
+            _scrollController.animateTo(
+              offset,
+              duration: Duration(milliseconds: 900),
+              curve: Curves.easeInOut,
+            );
+          }
         }
 
         await Future.delayed(Duration(milliseconds: 500), () {
@@ -105,7 +107,9 @@ class _ChatBoxState extends State<ChatBox> with WidgetsBindingObserver {
 
     // scroll to the latest message
     SchedulerBinding.instance!.addPostFrameCallback((timeStamp) {
-      _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+      if (_scrollController.hasClients) {
+        _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+      }
     });
   }
 
@@ -178,132 +182,150 @@ class _ChatBoxState extends State<ChatBox> with WidgetsBindingObserver {
         ),
         title: Text(pharmacy.name),
         centerTitle: true,
+        // actions: [
+        //   CustomWidget.outlinedButton(
+        //     onPressed: () {
+        //       Navigator.pushNamed(context, userProfilePage);
+        //     },
+        //     backgroundColor: Colors.transparent,
+        //     minHeight: 50.0,
+        //     minWidth: 50.0,
+        //     side: BorderSide(color: Colors.transparent),
+        //     child: Icon(
+        //       Icons.settings,
+        //       color: Colors.white,
+        //     ),
+        //   )
+        // ],
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: StreamBuilder(
-              stream: _streamController.stream,
-              builder: (BuildContext context, AsyncSnapshot snapshot) {
-                if (snapshot.hasData) {
-                  // print("${snapshot.data}");
-                  List<ChatLineHolder> _lines = [];
+      body: Padding(
+        padding: const EdgeInsets.only(top: 10.0),
+        child: Column(
+          children: [
+            Expanded(
+              child: StreamBuilder(
+                stream: _streamController.stream,
+                builder: (BuildContext context, AsyncSnapshot snapshot) {
+                  if (snapshot.hasData) {
+                    // print("${snapshot.data}");
+                    List<ChatLineHolder> _lines = [];
 
-                  snapshot.data.forEach((ChatLine line) {
-                    ChatLineHolder holder = new ChatLineHolder(
-                      chatLine: line,
-                    );
-                    _lines.add(holder);
-                  });
-                  // print(hasConvo);
-                  if (hasConvo) {
-                    return ListView.builder(
-                        shrinkWrap: true,
-                        controller: _scrollController,
-                        itemCount: _lines.length + 1,
-                        itemBuilder: (context, index) {
-                          if (index == _lines.length) {
-                            return Container(
-                              height: 70.0,
-                            );
-                          }
-                          return _lines[index];
-                        });
+                    snapshot.data.forEach((ChatLine line) {
+                      ChatLineHolder holder = new ChatLineHolder(
+                        chatLine: line,
+                      );
+                      _lines.add(holder);
+                    });
+                    // print(hasConvo);
+                    if (hasConvo) {
+                      return ListView.builder(
+                          shrinkWrap: true,
+                          controller: _scrollController,
+                          itemCount: _lines.length + 1,
+                          itemBuilder: (context, index) {
+                            if (index == _lines.length) {
+                              return Container(
+                                height: 70.0,
+                              );
+                            }
+                            return _lines[index];
+                          });
+                    }
                   }
-                }
 
-                return Center(child: Text("Send a message."));
-              },
-            ),
-          ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Container(
-              height: 70.0,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                border: Border(top: BorderSide(color: Colors.grey.shade300)),
+                  return Center(child: Text("Send a message."));
+                },
               ),
-              child: Flex(
-                direction: Axis.horizontal,
-                children: [
-                  Expanded(
-                    flex: 1,
-                    child: CustomWidget.outlinedButton(
-                      onPressed: () async {
-                        print("upload image..");
-                        // Pick an image from the gallery.
-                        final XFile? image = await _imagePicker.pickImage(
-                            source: ImageSource.gallery);
+            ),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Container(
+                height: 70.0,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  border: Border(top: BorderSide(color: Colors.grey.shade300)),
+                ),
+                child: Flex(
+                  direction: Axis.horizontal,
+                  children: [
+                    Expanded(
+                      flex: 1,
+                      child: CustomWidget.outlinedButton(
+                        onPressed: () async {
+                          print("upload image..");
+                          // Pick an image from the gallery.
+                          final XFile? image = await _imagePicker.pickImage(
+                              source: ImageSource.gallery);
 
-                        if (image != null) {
-                          File _file = File(image.path);
-                          String? phoneNumber =
-                              await storage.read(key: "phoneNumber");
-                          await RequestChat().sendImage(
-                            tmpFile: _file,
-                            chatId: chatId!,
-                            phoneNumber: phoneNumber!,
-                          );
-                          print(image);
-                        }
-                      },
-                      child: Icon(Icons.image),
-                      backgroundColor: Colors.transparent,
-                      side: BorderSide(
-                        color: Colors.white,
+                          if (image != null) {
+                            File _file = File(image.path);
+                            String? phoneNumber =
+                                await storage.read(key: "phoneNumber");
+                            await RequestChat().sendImage(
+                              tmpFile: _file,
+                              chatId: chatId!,
+                              phoneNumber: phoneNumber!,
+                            );
+                            print(image);
+                          }
+                        },
+                        child: Icon(Icons.image),
+                        backgroundColor: Colors.transparent,
+                        side: BorderSide(
+                          color: Colors.white,
+                        ),
                       ),
                     ),
-                  ),
-                  Expanded(
-                    flex: 5,
-                    child: CustomWidget.textField(
-                      controller: _chatMessageController,
-                      labelText: "Message",
-                      hintText: "",
+                    Expanded(
+                      flex: 5,
+                      child: CustomWidget.textField(
+                        controller: _chatMessageController,
+                        labelText: "Message",
+                        hintText: "",
+                      ),
                     ),
-                  ),
-                  Expanded(
-                    child: CustomWidget.outlinedButton(
-                      onPressed: () async {
-                        // print(chatId);
-                        String? phoneNumber =
-                            await storage.read(key: "phoneNumber");
-                        Map<String, dynamic> data = {
-                          'phoneNumber': phoneNumber,
-                          'message': _chatMessageController.text,
-                          'chatId': chatId,
-                        };
-                        var response = await RequestChat().sendMessage(
-                          data: data,
-                        );
-
-                        if (response.statusCode != 200) {
-                          Utility().errorDialog(
-                            context: context,
-                            errtitle: "Sent failed.",
-                            errContent: "${response.reasonPhrase}",
+                    Expanded(
+                      child: CustomWidget.outlinedButton(
+                        onPressed: () async {
+                          // print(chatId);
+                          String? phoneNumber =
+                              await storage.read(key: "phoneNumber");
+                          Map<String, dynamic> data = {
+                            'phoneNumber': phoneNumber,
+                            'message': _chatMessageController.text,
+                            'chatId': chatId,
+                          };
+                          var response = await RequestChat().sendMessage(
+                            data: data,
                           );
-                          setState(() {
-                            _chatMessageController.clear();
-                          });
-                        } else {
-                          print("${response.body}");
-                          setState(() {
-                            _chatMessageController.clear();
-                          });
-                        }
-                      },
-                      child: Icon(Icons.send),
-                      backgroundColor: Colors.white,
-                      side: BorderSide(color: Colors.white),
+
+                          if (response.statusCode != 200) {
+                            Utility().errorDialog(
+                              context: context,
+                              errtitle: "Sent failed.",
+                              errContent: "${response.reasonPhrase}",
+                            );
+                            setState(() {
+                              _chatMessageController.clear();
+                            });
+                          } else {
+                            print("${response.body}");
+                            setState(() {
+                              _chatMessageController.clear();
+                            });
+                          }
+                        },
+                        child: Icon(Icons.send),
+                        backgroundColor: Colors.white,
+                        side: BorderSide(color: Colors.white),
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
