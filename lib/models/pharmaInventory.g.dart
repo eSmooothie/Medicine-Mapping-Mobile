@@ -6,13 +6,14 @@ part of 'pharmaInventory.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-PharmaInventory _$PharmaInventoryFromJson(Map<String, dynamic> json) =>
-    PharmaInventory(
-      json['id'] as String,
-      Medicine.fromJson(json['medicine'] as Map<String, dynamic>),
-      json['isStock'] as int,
-      (json['price'] as num).toDouble(),
-    );
+PharmaInventory _$PharmaInventoryFromJson(Map<String, dynamic> json) {
+  return PharmaInventory(
+    json['id'] as String,
+    Medicine.fromJson(json['medicine'] as Map<String, dynamic>),
+    json['isStock'] as int,
+    (json['price'] as num).toDouble(),
+  );
+}
 
 Map<String, dynamic> _$PharmaInventoryToJson(PharmaInventory instance) =>
     <String, dynamic>{
