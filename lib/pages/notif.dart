@@ -3,7 +3,6 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:research_mobile_app/models/notificationModel.dart';
 import 'package:research_mobile_app/request/httpRequest.dart';
 import 'package:research_mobile_app/request/requestNotif.dart';
-import 'package:url_launcher/link.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../exportHelper.dart';
