@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:research_mobile_app/exportModel.dart';
 
 import 'package:research_mobile_app/helper/page_transition.dart';
 import 'package:research_mobile_app/pages/chat.dart';
 import 'package:research_mobile_app/pages/chatSignIn.dart';
 import 'package:research_mobile_app/pages/chatSignUp.dart';
 import 'package:research_mobile_app/pages/displayDirection.dart';
+import 'package:research_mobile_app/pages/get_direction.dart';
+import 'package:research_mobile_app/pages/google_map.dart';
 import 'package:research_mobile_app/pages/inbox.dart';
 import 'package:research_mobile_app/pages/landing.dart';
 import 'package:research_mobile_app/pages/notif.dart';
@@ -17,6 +21,9 @@ import 'package:research_mobile_app/pages/userProfile.dart';
 
 // Routes of the app
 const String landingPage = "/";
+const String mapPage = "/map";
+const String directionPage = "/direction";
+
 const String searchPage = "/search";
 const String medicineInfoPage = "/medicineInfo";
 const String pharmacyInfoPage = "/pharmacyInfo";
@@ -34,71 +41,20 @@ const String testPage = "/test";
 Route<dynamic> appRoutes(RouteSettings route) {
   switch (route.name) {
     case landingPage:
-      return Transition().page(LandingPage(
-        title: "Map",
+      return Transition().page(LandingPage());
+    case mapPage:
+      return Transition().page(MyMap(
+        medicine: route.arguments as Medicine?,
       ));
-    case searchPage:
-      return Transition().page(Search(
-        title: "Search",
-        arguments: route.arguments,
-      ));
-
-    case medicineInfoPage:
+    case directionPage:
       return Transition().page(
-        MedicineInfo(
-          title: "Medicine Information",
-          arguments: route.arguments,
+        GetDirection(
+          pharmacyLocation: route.arguments as LatLng,
         ),
-      );
-
-    case pharmacyInfoPage:
-      return Transition().page(PharmacyInformation(
-        title: "Pharmacy Information",
-        arguments: route.arguments,
-      ));
-
-    case signInPage:
-      return Transition().page(
-        SignIn(
-          arguments: route.arguments,
-        ),
-      );
-    case signUpPage:
-      return Transition().page(
-        SignUp(
-          arguments: route.arguments,
-        ),
-      );
-
-    case inboxPage:
-      return Transition().page(Inbox());
-
-    case getDirectionPage:
-      return Transition().page(GetDirection(
-        arguments: route.arguments,
-      ));
-    case chatBoxPage:
-      return Transition().page(ChatBox(
-        arguments: route.arguments,
-      ));
-    case displayDirectionPage:
-      return Transition().page(DisplayDirection(
-        arguments: route.arguments,
-      ));
-
-    case notifPage:
-      return Transition().page(Notif());
-
-    case testPage:
-      return Transition().page(Test());
-
-    case userProfilePage:
-      return Transition().page(
-        UserProfile(),
       );
     default:
       return Transition().page(
-        LandingPage(title: "Map"),
+        LandingPage(),
       );
   }
 }

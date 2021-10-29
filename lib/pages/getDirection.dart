@@ -4,14 +4,14 @@ import 'package:location/location.dart';
 import 'package:research_mobile_app/exportHelper.dart';
 import 'package:research_mobile_app/request/mapRequest.dart';
 
-class GetDirection extends StatefulWidget {
-  const GetDirection({Key? key, this.arguments}) : super(key: key);
+class GetDirectionX extends StatefulWidget {
+  const GetDirectionX({Key? key, this.arguments}) : super(key: key);
   final Object? arguments;
   @override
-  _GetDirectionState createState() => _GetDirectionState();
+  _GetDirectionXState createState() => _GetDirectionXState();
 }
 
-class _GetDirectionState extends State<GetDirection> {
+class _GetDirectionXState extends State<GetDirectionX> {
   Location location = new Location();
   late var args;
   late LatLng destinationLoc;

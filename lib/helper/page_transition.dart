@@ -18,6 +18,7 @@ class Transition {
         return PageTransitionType.rightToLeftWithFade;
       case "left to right with fade":
         return PageTransitionType.leftToRightWithFade;
+
       default:
         return PageTransitionType.fade;
     }
