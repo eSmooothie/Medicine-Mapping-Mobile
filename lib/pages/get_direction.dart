@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -39,8 +40,10 @@ class _GetDirectionState extends State<GetDirection> {
 
   @override
   void initState() {
-    // TODO: implement initState
     pharmacyLocation = widget.pharmacyLocation;
+    rootBundle.loadString('assets/default_mapStyle.txt').then((string) {
+      mapStyle = string;
+    });
     pharmacyMarker = Marker(
       markerId: MarkerId("destination"),
       position: pharmacyLocation,
@@ -50,14 +53,12 @@ class _GetDirectionState extends State<GetDirection> {
 
   @override
   void deactivate() {
-    // TODO: implement deactivate
     timer?.cancel();
     super.deactivate();
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
     timer?.cancel();
     super.dispose();
   }
@@ -178,7 +179,7 @@ class _GetDirectionState extends State<GetDirection> {
             ? Icon(FontAwesomeIcons.walking)
             : Icon(FontAwesomeIcons.car),
         title: Text("${path.name}"),
-        subtitle: Text("Duration:${path.time} Distance:${path.distance}"),
+        subtitle: Text("Duration: ${path.time} Distance: ${path.distance}"),
         onTap: () {
           updateDrawing(encodedPolyline: path.overviewPolyline);
           setState(() {
@@ -296,6 +297,7 @@ class _GetDirectionState extends State<GetDirection> {
             child: GoogleMap(
               onMapCreated: (GoogleMapController controller) async {
                 mapController = controller;
+                mapController.setMapStyle(mapStyle);
 
                 await possibleRoutes();
                 await drawRoute();

@@ -168,7 +168,7 @@ class _SearchWidgetState extends State<SearchWidget>
                         border: InputBorder.none,
                         hintText: 'Search Medicine...',
                         hintStyle: TextStyle(
-                          fontSize: 20,
+                          fontSize: 18,
                           color: Colors.black.withOpacity(0.4),
                         ),
                       ),
@@ -204,7 +204,7 @@ class _SearchWidgetState extends State<SearchWidget>
                       child: Icon(
                         FontAwesomeIcons.times,
                         color: Colors.black,
-                        size: 30,
+                        size: 15,
                       ),
                     ),
                   ),
