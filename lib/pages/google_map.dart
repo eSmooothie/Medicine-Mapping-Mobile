@@ -337,7 +337,13 @@ class _MyMapState extends State<MyMap> {
                           borderRadius: BorderRadius.circular(50.0),
                         ),
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.pushNamed(
+                          context,
+                          inquirePage,
+                          arguments: selectedPharmacy,
+                        );
+                      },
                       child: Text(
                         "Inquire",
                         style: TextStyle(

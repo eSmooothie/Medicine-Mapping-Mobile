@@ -10,6 +10,7 @@ import 'package:research_mobile_app/pages/displayDirection.dart';
 import 'package:research_mobile_app/pages/get_direction.dart';
 import 'package:research_mobile_app/pages/google_map.dart';
 import 'package:research_mobile_app/pages/inbox.dart';
+import 'package:research_mobile_app/pages/inquire.dart';
 import 'package:research_mobile_app/pages/landing.dart';
 import 'package:research_mobile_app/pages/notif.dart';
 import 'package:research_mobile_app/pages/search.dart';
@@ -23,6 +24,7 @@ import 'package:research_mobile_app/pages/userProfile.dart';
 const String landingPage = "/";
 const String mapPage = "/map";
 const String directionPage = "/direction";
+const String inquirePage = "/inquire";
 
 const String searchPage = "/search";
 const String medicineInfoPage = "/medicineInfo";
@@ -52,6 +54,8 @@ Route<dynamic> appRoutes(RouteSettings route) {
           pharmacyLocation: route.arguments as LatLng,
         ),
       );
+    case inquirePage:
+      return Transition().page(Inquire());
     default:
       return Transition().page(
         LandingPage(),

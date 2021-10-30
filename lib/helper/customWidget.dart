@@ -20,7 +20,6 @@ class CustomWidget {
   }) {
     return SizedBox(
       width: width,
-      height: height,
       child: TextField(
         controller: controller,
         obscureText: isPassword,

@@ -128,8 +128,7 @@ class _SearchWidgetState extends State<SearchWidget>
       alignment: Alignment.center,
       children: [
         AnimatedContainer(
-          duration: const Duration(milliseconds: 400),
-          // margin: EdgeInsets.symmetric(horizontal: 24),
+          duration: const Duration(milliseconds: 500),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(16),
             boxShadow: [

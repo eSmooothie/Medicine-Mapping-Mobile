@@ -137,49 +137,46 @@ class _LandingPageState extends State<LandingPage> {
                 child: Flex(
                   direction: Axis.vertical,
                   mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Center(
-                      child: Container(
-                        padding: EdgeInsets.all(10.0),
-                        child: Flex(direction: Axis.vertical, children: [
-                          SearchWidget(
-                            medicines: snapshot.data,
-                            controller: searchMedicineController,
+                    Container(
+                      padding: EdgeInsets.all(10.0),
+                      child: Flex(direction: Axis.vertical, children: [
+                        SearchWidget(
+                          medicines: snapshot.data,
+                          controller: searchMedicineController,
+                        ),
+                      ]),
+                    ),
+                    Container(
+                      padding: EdgeInsets.only(top: 50.0),
+                      child: OutlinedButton.icon(
+                        onPressed: () {
+                          Navigator.popAndPushNamed(
+                            context,
+                            mapPage,
+                          );
+                        },
+                        icon: Icon(
+                          FontAwesomeIcons.mapMarkedAlt,
+                          size: 35,
+                        ),
+                        label: Container(
+                          margin: EdgeInsets.only(
+                            left: 10.0,
                           ),
-                        ]),
+                          child: Text(
+                            "Map",
+                            style: TextStyle(
+                              fontSize: 18.0,
+                              letterSpacing: 0.5,
+                            ),
+                          ),
+                        ),
+                        style: OutlinedButton.styleFrom(
+                          side: BorderSide.none,
+                        ),
                       ),
                     ),
-                    Center(
-                        heightFactor: 2,
-                        child: OutlinedButton.icon(
-                          onPressed: () {
-                            // TODO: add redirect to map
-                            Navigator.popAndPushNamed(
-                              context,
-                              mapPage,
-                            );
-                          },
-                          icon: Icon(
-                            FontAwesomeIcons.mapMarkedAlt,
-                            size: 35,
-                          ),
-                          label: Container(
-                            margin: EdgeInsets.only(
-                              left: 10.0,
-                            ),
-                            child: Text(
-                              "Map",
-                              style: TextStyle(
-                                fontSize: 18.0,
-                                letterSpacing: 0.5,
-                              ),
-                            ),
-                          ),
-                          style: OutlinedButton.styleFrom(
-                            side: BorderSide.none,
-                          ),
-                        )),
                   ],
                 ),
               );
