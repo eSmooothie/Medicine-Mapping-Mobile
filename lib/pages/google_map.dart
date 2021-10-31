@@ -193,7 +193,7 @@ class _MyMapState extends State<MyMap> {
           padding: EdgeInsets.all(18),
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(50.0),
+            borderRadius: BorderRadius.circular(25.0),
           ),
           child: Column(
             children: [
