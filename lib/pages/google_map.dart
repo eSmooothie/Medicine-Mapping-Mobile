@@ -340,7 +340,7 @@ class _MyMapState extends State<MyMap> {
                       onPressed: () {
                         Navigator.pushNamed(
                           context,
-                          inquirePage,
+                          loginPage,
                           arguments: selectedPharmacy,
                         );
                       },

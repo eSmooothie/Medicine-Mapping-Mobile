@@ -12,39 +12,44 @@ import 'package:research_mobile_app/exportModel.dart';
 import 'package:research_mobile_app/request/requestChat.dart';
 
 class ChatBox extends StatefulWidget {
-  const ChatBox({Key? key, required this.arguments}) : super(key: key);
-  final Object? arguments;
+  const ChatBox({Key? key, required this.pharmacy}) : super(key: key);
+  final Pharmacy pharmacy;
   @override
   _ChatBoxState createState() => _ChatBoxState();
 }
 
 class _ChatBoxState extends State<ChatBox> with WidgetsBindingObserver {
-  TextEditingController _chatMessageController = TextEditingController();
-  var pharmacyInfo;
-  String? chatId;
-  bool hasConvo = false;
   late Pharmacy pharmacy;
+  late StreamController _streamController;
+  late ScrollController _scrollController;
+  late FlutterSecureStorage storage;
+  late ImagePicker _imagePicker;
+  late IOSOptions options;
+  late TextEditingController _chatMessageController;
+
+  String? chatId;
   Timer? timer;
+
+  bool hasConvo = false;
   bool waitingForResponse = false;
-  StreamController _streamController = new StreamController<dynamic>();
-  ScrollController _scrollController = new ScrollController();
   bool scrollToLatest = true;
-
-  final storage = new FlutterSecureStorage();
-  final options = IOSOptions(accessibility: IOSAccessibility.first_unlock);
-
-  final ImagePicker _imagePicker = ImagePicker();
 
   @override
   void initState() {
-    super.initState();
-    // get the pharamcy info
-    setState(() {
-      pharmacyInfo = widget.arguments;
-      pharmacy = pharmacyInfo;
-    });
+    // init
+    storage = FlutterSecureStorage();
+    _streamController = StreamController<dynamic>();
+    _scrollController = ScrollController();
+    _imagePicker = ImagePicker();
+    _chatMessageController = TextEditingController();
+    options = IOSOptions(accessibility: IOSAccessibility.first_unlock);
+
+    pharmacy = widget.pharmacy;
+
     WidgetsBinding.instance!.addObserver(this); // Adding an observer
     setTimer(true); // Setting a timer on init
+
+    super.initState();
   }
 
   @override
@@ -52,13 +57,13 @@ class _ChatBoxState extends State<ChatBox> with WidgetsBindingObserver {
     timer?.cancel(); // Cancelling a timer on dispose
     WidgetsBinding.instance!.removeObserver(this); // Removing an observer
     _scrollController.dispose();
+    _streamController.close();
     super.dispose();
   }
 
   @override
   void deactivate() {
     super.deactivate();
-    _streamController.close();
   }
 
   @override
@@ -70,53 +75,63 @@ class _ChatBoxState extends State<ChatBox> with WidgetsBindingObserver {
   }
 
   void setTimer(bool isBackground) async {
-    int delaySeconds = isBackground ? 3 : 1;
+    int duration = isBackground ? 1000 : 500;
     int numberOfLines = 0;
+    List<ChatLine> chatlines = [];
     print("Set timer.");
-    var data = await post();
-    _streamController.sink.add(data);
-    numberOfLines = data.length;
+    try {
+      chatlines = await _getMessages();
+    } finally {}
+
+    _streamController.sink.add(chatlines);
+    numberOfLines = chatlines.length;
+
+    // scroll to the latest message
+    SchedulerBinding.instance!.addPostFrameCallback((timeStamp) {
+      if (_scrollController.hasClients) {
+        double max = _scrollController.position.maxScrollExtent;
+        _scrollController.jumpTo(0.0);
+      }
+    });
     // Cancelling previous timer, if there was one, and creating a new one
     timer?.cancel();
 
-    timer = Timer.periodic(Duration(seconds: delaySeconds), (t) async {
+    timer = Timer.periodic(Duration(milliseconds: duration), (t) async {
       // Not sending a request, if waiting for response
       if (!waitingForResponse) {
         waitingForResponse = true;
-        var newData = await post();
+        List<ChatLine> newChatlines = [];
+        try {
+          newChatlines = await _getMessages();
+        } finally {}
+
         // check if their is a new message
-        if (numberOfLines != newData.length) {
-          numberOfLines = newData.length; // update
+        if (numberOfLines != newChatlines.length) {
           if (_scrollController.hasClients) {
-            var offset = _scrollController.position.maxScrollExtent;
             _scrollController.animateTo(
-              offset,
-              duration: Duration(milliseconds: 900),
-              curve: Curves.easeInOut,
+              0.0,
+              duration: Duration(milliseconds: 500),
+              curve: Curves.easeOut,
             );
           }
+          numberOfLines = newChatlines.length; // update
         }
 
         await Future.delayed(Duration(milliseconds: 500), () {
-          _streamController.sink.add(newData);
+          if (!_streamController.isClosed) {
+            _streamController.sink.add(newChatlines);
+          }
         });
 
         waitingForResponse = false;
       }
     });
-
-    // scroll to the latest message
-    SchedulerBinding.instance!.addPostFrameCallback((timeStamp) {
-      if (_scrollController.hasClients) {
-        _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
-      }
-    });
   }
 
   // Async method returns Future<> object
-  Future<List<ChatLine>> post() async {
+  Future<List<ChatLine>> _getMessages() async {
     // get chat
-    String? phoneNumber = await storage.read(key: "phoneNumber");
+    String? phoneNumber = await storage.read(key: "user_phoneNumber");
     Map<String, dynamic> convoInformation = {
       'phoneNumber': phoneNumber,
       'pharmacyId': pharmacy.id,
@@ -166,37 +181,17 @@ class _ChatBoxState extends State<ChatBox> with WidgetsBindingObserver {
 
     return Scaffold(
       backgroundColor: Colors.grey.shade200,
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
-        leading: CustomWidget.outlinedButton(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
           onPressed: () {
+            _streamController.close();
             Navigator.pop(context);
           },
-          child: Icon(
-            Icons.arrow_back,
-            color: Colors.white,
-          ),
-          backgroundColor: Colors.transparent,
-          minHeight: 50.0,
-          minWidth: 50.0,
-          side: BorderSide(color: Colors.transparent),
         ),
         title: Text(pharmacy.name),
         centerTitle: true,
-        // actions: [
-        //   CustomWidget.outlinedButton(
-        //     onPressed: () {
-        //       Navigator.pushNamed(context, userProfilePage);
-        //     },
-        //     backgroundColor: Colors.transparent,
-        //     minHeight: 50.0,
-        //     minWidth: 50.0,
-        //     side: BorderSide(color: Colors.transparent),
-        //     child: Icon(
-        //       Icons.settings,
-        //       color: Colors.white,
-        //     ),
-        //   )
-        // ],
       ),
       body: Padding(
         padding: const EdgeInsets.only(top: 10.0),
@@ -209,23 +204,26 @@ class _ChatBoxState extends State<ChatBox> with WidgetsBindingObserver {
                   if (snapshot.hasData) {
                     // print("${snapshot.data}");
                     List<ChatLineHolder> _lines = [];
-
-                    snapshot.data.forEach((ChatLine line) {
+                    List<ChatLine> _chatLines = snapshot.data;
+                    for (var i = _chatLines.length - 1; i >= 0; i--) {
+                      ChatLine line = _chatLines[i];
                       ChatLineHolder holder = new ChatLineHolder(
                         chatLine: line,
                       );
                       _lines.add(holder);
-                    });
+                    }
+
                     // print(hasConvo);
                     if (hasConvo) {
                       return ListView.builder(
                           shrinkWrap: true,
+                          reverse: true,
                           controller: _scrollController,
                           itemCount: _lines.length + 1,
                           itemBuilder: (context, index) {
                             if (index == _lines.length) {
                               return Container(
-                                height: 70.0,
+                                height: 80.0,
                               );
                             }
                             return _lines[index];
@@ -233,19 +231,25 @@ class _ChatBoxState extends State<ChatBox> with WidgetsBindingObserver {
                     }
                   }
 
-                  return Center(child: Text("Send a message."));
+                  return Center(
+                      child: Text("No Conversation.",
+                          style: TextStyle(
+                            fontSize: 18.0,
+                          )));
                 },
               ),
             ),
             Align(
               alignment: Alignment.bottomCenter,
               child: Container(
-                height: 70.0,
+                height: 100.0,
+                padding: EdgeInsets.only(top: 10.0),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   border: Border(top: BorderSide(color: Colors.grey.shade300)),
                 ),
                 child: Flex(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   direction: Axis.horizontal,
                   children: [
                     Expanded(
@@ -260,7 +264,7 @@ class _ChatBoxState extends State<ChatBox> with WidgetsBindingObserver {
                           if (image != null) {
                             File _file = File(image.path);
                             String? phoneNumber =
-                                await storage.read(key: "phoneNumber");
+                                await storage.read(key: "user_phoneNumber");
                             await RequestChat().sendImage(
                               tmpFile: _file,
                               chatId: chatId!,
@@ -277,7 +281,7 @@ class _ChatBoxState extends State<ChatBox> with WidgetsBindingObserver {
                       ),
                     ),
                     Expanded(
-                      flex: 5,
+                      flex: 4,
                       child: CustomWidget.textField(
                         controller: _chatMessageController,
                         labelText: "Message",
@@ -288,31 +292,33 @@ class _ChatBoxState extends State<ChatBox> with WidgetsBindingObserver {
                       child: CustomWidget.outlinedButton(
                         onPressed: () async {
                           // print(chatId);
-                          String? phoneNumber =
-                              await storage.read(key: "phoneNumber");
-                          Map<String, dynamic> data = {
-                            'phoneNumber': phoneNumber,
-                            'message': _chatMessageController.text,
-                            'chatId': chatId,
-                          };
-                          var response = await RequestChat().sendMessage(
-                            data: data,
-                          );
-
-                          if (response.statusCode != 200) {
-                            Utility().errorDialog(
-                              context: context,
-                              errtitle: "Sent failed.",
-                              errContent: "${response.reasonPhrase}",
+                          if (_chatMessageController.text != "") {
+                            String? phoneNumber =
+                                await storage.read(key: "user_phoneNumber");
+                            Map<String, dynamic> data = {
+                              'phoneNumber': phoneNumber,
+                              'message': _chatMessageController.text,
+                              'chatId': chatId,
+                            };
+                            var response = await RequestChat().sendMessage(
+                              data: data,
                             );
-                            setState(() {
-                              _chatMessageController.clear();
-                            });
-                          } else {
-                            print("${response.body}");
-                            setState(() {
-                              _chatMessageController.clear();
-                            });
+
+                            if (response.statusCode != 200) {
+                              Utility().errorDialog(
+                                context: context,
+                                errtitle: "Sent failed.",
+                                errContent: "${response.reasonPhrase}",
+                              );
+                              setState(() {
+                                _chatMessageController.clear();
+                              });
+                            } else {
+                              print("${response.body}");
+                              setState(() {
+                                _chatMessageController.clear();
+                              });
+                            }
                           }
                         },
                         child: Icon(Icons.send),

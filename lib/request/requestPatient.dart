@@ -19,8 +19,7 @@ class RequestPatient extends MyHttpRequest {
     }
     if (response.statusCode != 205) {
       var decode = jsonDecode(response.body);
-      result["firstName"] = decode["FIRST_NAME"];
-      result["lastName"] = decode["LAST_NAME"];
+      result["nickname"] = decode["NICKNAME"];
       result["phoneNumber"] = decode["CONTACT_NO"];
     }
 

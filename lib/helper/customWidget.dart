@@ -13,6 +13,8 @@ class CustomWidget {
     double padding = 20.0,
     bool isPassword = false,
     Color borderColor = Colors.blueAccent,
+    TextStyle? textStyle,
+    TextStyle? errorTextStyle,
     Widget? prefixIcon,
     Function(String)? onSubmit,
     Function(String)? onChanged,
@@ -32,17 +34,24 @@ class CustomWidget {
           labelText: labelText,
           hintText: hintText,
           errorText: errorText,
+          errorStyle: (errorTextStyle != null)
+              ? errorTextStyle
+              : TextStyle(
+                  fontSize: 14.0,
+                ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(radius)),
             borderSide: BorderSide(color: Colors.blue, width: 2.0),
           ),
           border: new OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.blue),
+            borderSide: BorderSide(color: borderColor),
           ),
         ),
-        style: TextStyle(
-          color: Colors.blue.shade700,
-        ),
+        style: (textStyle != null)
+            ? textStyle
+            : TextStyle(
+                color: Colors.blue.shade700,
+              ),
         onChanged: onChanged,
         onEditingComplete: onEditingComplete,
       ),
