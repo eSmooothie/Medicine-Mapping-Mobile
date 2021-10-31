@@ -5,6 +5,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:hexcolor/hexcolor.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:research_mobile_app/exportHelper.dart';
@@ -180,18 +182,25 @@ class _ChatBoxState extends State<ChatBox> with WidgetsBindingObserver {
     // go to latest message execute only once
 
     return Scaffold(
-      backgroundColor: Colors.grey.shade200,
+      backgroundColor: Colors.white,
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
+          color: Colors.black,
           onPressed: () {
             _streamController.close();
             Navigator.pop(context);
           },
         ),
-        title: Text(pharmacy.name),
+        title: Text(
+          pharmacy.name,
+          style: TextStyle(
+            color: Colors.black,
+          ),
+        ),
         centerTitle: true,
+        backgroundColor: HexColor("#A6DCEF"),
       ),
       body: Padding(
         padding: const EdgeInsets.only(top: 10.0),
@@ -242,14 +251,14 @@ class _ChatBoxState extends State<ChatBox> with WidgetsBindingObserver {
             Align(
               alignment: Alignment.bottomCenter,
               child: Container(
-                height: 100.0,
-                padding: EdgeInsets.only(top: 10.0),
+                height: 80.0,
+                padding: EdgeInsets.only(top: 5.0),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   border: Border(top: BorderSide(color: Colors.grey.shade300)),
                 ),
                 child: Flex(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   direction: Axis.horizontal,
                   children: [
                     Expanded(
@@ -273,10 +282,13 @@ class _ChatBoxState extends State<ChatBox> with WidgetsBindingObserver {
                             print(image);
                           }
                         },
-                        child: Icon(Icons.image),
+                        child: Icon(
+                          FontAwesomeIcons.fileImage,
+                          color: Colors.blue,
+                        ),
                         backgroundColor: Colors.transparent,
                         side: BorderSide(
-                          color: Colors.white,
+                          color: Colors.transparent,
                         ),
                       ),
                     ),
@@ -284,8 +296,10 @@ class _ChatBoxState extends State<ChatBox> with WidgetsBindingObserver {
                       flex: 4,
                       child: CustomWidget.textField(
                         controller: _chatMessageController,
-                        labelText: "Message",
-                        hintText: "",
+                        labelText: "Type a message",
+                        hintText: "Type a message",
+                        borderColor: Colors.transparent,
+                        fillColor: Colors.grey.shade300,
                       ),
                     ),
                     Expanded(
@@ -322,8 +336,8 @@ class _ChatBoxState extends State<ChatBox> with WidgetsBindingObserver {
                           }
                         },
                         child: Icon(Icons.send),
-                        backgroundColor: Colors.white,
-                        side: BorderSide(color: Colors.white),
+                        backgroundColor: Colors.transparent,
+                        side: BorderSide(color: Colors.transparent),
                       ),
                     ),
                   ],

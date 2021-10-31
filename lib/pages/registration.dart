@@ -166,47 +166,49 @@ class _RegistrationState extends State<Registration> {
                               _phoneNumberErr = "Invalid phone number format.";
                             });
                           }
-                        }
+                        } else {
+                          if (_phonenumberController.text != "" &&
+                              _nickNameController.text != "") {
+                            Map<String, String> newUserInfo = {
+                              'nickname': _nickNameController.text,
+                              'phoneNumber': _phonenumberController.text,
+                            };
 
-                        if (_phonenumberController.text != "") {
-                          Map<String, String> newUserInfo = {
-                            'nickname': _nickNameController.text,
-                            'phoneNumber': _phonenumberController.text,
-                          };
-
-                          Map<String, dynamic> response =
-                              await RequestPatient().addNewUser(
-                            data: newUserInfo,
-                          );
-
-                          print(response);
-                          // check if phonenumber already exist
-                          if (response['statusCode'] == "400") {
-                            setState(() {
-                              _phoneNumberErr = response['reasonPhrase'];
-                              _phonenumberController.clear();
-                            });
-                          } else {
-                            // store the data
-
-                            storage.write(
-                              key: "user_nickname",
-                              value: _nickNameController.text,
-                            );
-                            storage.write(
-                              key: "user_phoneNumber",
-                              value: _phonenumberController.text,
+                            Map<String, dynamic> response =
+                                await RequestPatient().addNewUser(
+                              data: newUserInfo,
                             );
 
-                            // wait for the modal to close
-                            await Utility().showModal(
-                              context: context,
-                              title: "Message",
-                              content: "Successfully registered.",
-                            );
+                            print(response);
+                            // check if phonenumber already exist
+                            if (response['statusCode'] == "400" &&
+                                _phonenumberController.text != "") {
+                              setState(() {
+                                _phoneNumberErr = response['reasonPhrase'];
+                                _phonenumberController.clear();
+                              });
+                            } else if (_phoneNumberErr == null) {
+                              // store the data
 
-                            // back to login
-                            Navigator.pop(context);
+                              storage.write(
+                                key: "user_nickname",
+                                value: _nickNameController.text,
+                              );
+                              storage.write(
+                                key: "user_phoneNumber",
+                                value: _phonenumberController.text,
+                              );
+
+                              // wait for the modal to close
+                              await Utility().showModal(
+                                context: context,
+                                title: "Message",
+                                content: "Successfully registered.",
+                              );
+
+                              // back to login
+                              Navigator.pop(context);
+                            }
                           }
                         }
                       },

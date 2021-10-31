@@ -238,6 +238,16 @@ class _GetDirectionState extends State<GetDirection> {
   }
 
   void updateDrawing({required String encodedPolyline}) {
+    // animate map camera based on currentPath bound
+    mapController.animateCamera(
+      CameraUpdate.newLatLngBounds(
+        LatLngBounds(
+          northeast: currentPath!.northeast,
+          southwest: currentPath!.southwest,
+        ),
+        100.0,
+      ),
+    );
     // List of coordinates to join
     List<LatLng> polylineCoordinates = [];
     // decode encodedPolyline
@@ -269,7 +279,7 @@ class _GetDirectionState extends State<GetDirection> {
   }
 
   Future startTimer() async {
-    int delaySeconds = 10;
+    int delaySeconds = 5;
 
     // Cancelling previous timer, if there was one, and creating a new one
     timer?.cancel();
@@ -289,7 +299,23 @@ class _GetDirectionState extends State<GetDirection> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          color: Colors.black,
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        backgroundColor: HexColor("#A6DCEF"),
+        title: Text(
+          "Route",
+          style: TextStyle(
+            color: Colors.black,
+          ),
+        ),
+        centerTitle: true,
+      ),
       body: Column(
         children: [
           Expanded(

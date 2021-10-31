@@ -13,6 +13,7 @@ class CustomWidget {
     double padding = 20.0,
     bool isPassword = false,
     Color borderColor = Colors.blueAccent,
+    Color fillColor = Colors.white,
     TextStyle? textStyle,
     TextStyle? errorTextStyle,
     Widget? prefixIcon,
@@ -34,6 +35,8 @@ class CustomWidget {
           labelText: labelText,
           hintText: hintText,
           errorText: errorText,
+          filled: true,
+          fillColor: fillColor,
           errorStyle: (errorTextStyle != null)
               ? errorTextStyle
               : TextStyle(
@@ -41,7 +44,7 @@ class CustomWidget {
                 ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(radius)),
-            borderSide: BorderSide(color: Colors.blue, width: 2.0),
+            borderSide: BorderSide(color: borderColor, width: 2.0),
           ),
           border: new OutlineInputBorder(
             borderSide: BorderSide(color: borderColor),
