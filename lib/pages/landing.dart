@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:location/location.dart';
@@ -7,6 +8,7 @@ import 'package:research_mobile_app/exportRequest.dart';
 import 'package:research_mobile_app/helper/newLoading.dart';
 import 'package:research_mobile_app/helper/showExitPopup.dart';
 import 'package:research_mobile_app/pages/searchWidget.dart';
+import 'package:research_mobile_app/request/requestNotif.dart';
 import 'package:search_choices/search_choices.dart';
 
 import '../exportHelper.dart';
@@ -22,13 +24,16 @@ class _LandingPageState extends State<LandingPage> {
   TextEditingController searchMedicineController = TextEditingController();
 
   late bool _serviceEnabled;
-
+  late FlutterSecureStorage storage;
   late PermissionStatus _permissionGranted;
   Location _userLocationTracker = new Location();
+  bool _newNotification = false;
 
   @override
   void initState() {
+    storage = FlutterSecureStorage();
     _permissionLocation();
+
     super.initState();
   }
 
@@ -63,6 +68,36 @@ class _LandingPageState extends State<LandingPage> {
     return true;
   }
 
+  Future<void> _checkNotification() async {
+    var notif = await RequestNotification().getNotifications();
+    int _ttlNotfication = 0;
+
+    if (notif is List) {
+      _ttlNotfication = notif.length;
+    }
+
+    bool isExist = await storage.containsKey(key: "notif_counter");
+
+    if (isExist) {
+      String? _storedValue = await storage.read(key: "notif_counter");
+      int _lastCount = int.parse(_storedValue!);
+      // check if total notif is match to the last count
+      if (_ttlNotfication > _lastCount) {
+        // get the number of new notification
+
+        setState(() {
+          _newNotification = true;
+        });
+      }
+    } else {
+      setState(() {
+        _newNotification = true;
+      });
+
+      await storage.write(key: "notif_counter", value: "0");
+    }
+  }
+
   @override
   void dispose() {
     super.dispose();
@@ -72,7 +107,7 @@ class _LandingPageState extends State<LandingPage> {
   /// a get request
   Future get_all_medicine() async {
     var data = await RequestMedicine().QueryAll();
-
+    await _checkNotification();
     return data;
   }
 
@@ -101,8 +136,24 @@ class _LandingPageState extends State<LandingPage> {
             IconButton(
               onPressed: () {
                 // TODO: notification
+                Navigator.pushNamed(context, notifPage);
               },
-              icon: Icon(Icons.notifications_outlined),
+              icon: Stack(children: [
+                Icon(Icons.notifications_outlined),
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: Visibility(
+                    visible: _newNotification,
+                    child: Container(
+                      width: 10,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.redAccent,
+                      ),
+                    ),
+                  ),
+                )
+              ]),
               color: Colors.blueAccent,
             )
           ],

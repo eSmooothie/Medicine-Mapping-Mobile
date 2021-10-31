@@ -143,9 +143,6 @@ class _RegistrationState extends State<Registration> {
                     flex: 2,
                     child: OutlinedButton(
                       onPressed: () async {
-                        print("Nickname: ${_nickNameController.text}");
-                        print("Phone: ${_phonenumberController.text}");
-
                         // TODO: validate
 
                         // display error message when textfield is empty
@@ -166,49 +163,48 @@ class _RegistrationState extends State<Registration> {
                               _phoneNumberErr = "Invalid phone number format.";
                             });
                           }
-                        } else {
-                          if (_phonenumberController.text != "" &&
-                              _nickNameController.text != "") {
-                            Map<String, String> newUserInfo = {
-                              'nickname': _nickNameController.text,
-                              'phoneNumber': _phonenumberController.text,
-                            };
+                        }
 
-                            Map<String, dynamic> response =
-                                await RequestPatient().addNewUser(
-                              data: newUserInfo,
+                        if (_phonenumberController.text != "" &&
+                            _nickNameController.text != "") {
+                          Map<String, String> newUserInfo = {
+                            'nickname': _nickNameController.text,
+                            'phoneNumber': _phonenumberController.text,
+                          };
+
+                          Map<String, dynamic> response =
+                              await RequestPatient().addNewUser(
+                            data: newUserInfo,
+                          );
+
+                          print(response);
+                          // check if phonenumber already exist
+                          if (response['statusCode'] == "400") {
+                            setState(() {
+                              _phoneNumberErr = response['reasonPhrase'];
+                              _phonenumberController.clear();
+                            });
+                          } else {
+                            // store the data
+
+                            storage.write(
+                              key: "user_nickname",
+                              value: _nickNameController.text,
+                            );
+                            storage.write(
+                              key: "user_phoneNumber",
+                              value: _phonenumberController.text,
                             );
 
-                            print(response);
-                            // check if phonenumber already exist
-                            if (response['statusCode'] == "400" &&
-                                _phonenumberController.text != "") {
-                              setState(() {
-                                _phoneNumberErr = response['reasonPhrase'];
-                                _phonenumberController.clear();
-                              });
-                            } else if (_phoneNumberErr == null) {
-                              // store the data
+                            // wait for the modal to close
+                            await Utility().showModal(
+                              context: context,
+                              title: "Message",
+                              content: "Successfully registered.",
+                            );
 
-                              storage.write(
-                                key: "user_nickname",
-                                value: _nickNameController.text,
-                              );
-                              storage.write(
-                                key: "user_phoneNumber",
-                                value: _phonenumberController.text,
-                              );
-
-                              // wait for the modal to close
-                              await Utility().showModal(
-                                context: context,
-                                title: "Message",
-                                content: "Successfully registered.",
-                              );
-
-                              // back to login
-                              Navigator.pop(context);
-                            }
+                            // back to login
+                            Navigator.pop(context);
                           }
                         }
                       },

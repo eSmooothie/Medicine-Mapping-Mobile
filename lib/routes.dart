@@ -49,6 +49,8 @@ Route<dynamic> appRoutes(RouteSettings route) {
       return Transition().page(
         ChatBox(pharmacy: route.arguments as Pharmacy),
       );
+    case notifPage:
+      return Transition().page(Notif());
     default:
       return Transition().page(
         LandingPage(),

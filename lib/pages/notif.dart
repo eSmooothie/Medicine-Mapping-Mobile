@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:hexcolor/hexcolor.dart';
 import 'package:research_mobile_app/models/notificationModel.dart';
 import 'package:research_mobile_app/request/httpRequest.dart';
 import 'package:research_mobile_app/request/requestNotif.dart';
@@ -16,9 +18,10 @@ class Notif extends StatefulWidget {
 
 class _NotifState extends State<Notif> {
   String announcementPath = MyHttpRequest().serverUrl + "announcement/";
-
+  late FlutterSecureStorage storage;
   @override
   void initState() {
+    storage = new FlutterSecureStorage();
     super.initState();
   }
 
@@ -31,23 +34,23 @@ class _NotifState extends State<Notif> {
   @override
   void dispose() {
     print("Dispose notice page.");
+
     super.dispose();
   }
 
   Future _getNotif() async {
     final result = await RequestNotification().getNotifications();
 
-    final storage = new FlutterSecureStorage();
     final bool isExist;
     int _ttlNotif = 0;
     if (result is List) {
       _ttlNotif = result.length;
     }
-    isExist = await storage.containsKey(key: "notifCounter");
+    isExist = await storage.containsKey(key: "notif_counter");
     if (isExist) {
-      await storage.write(key: "notifCounter", value: _ttlNotif.toString());
+      await storage.write(key: "notif_counter", value: _ttlNotif.toString());
     } else {
-      await storage.write(key: "notifCounter", value: _ttlNotif.toString());
+      await storage.write(key: "notif_counter", value: _ttlNotif.toString());
     }
 
     return result;
@@ -57,16 +60,19 @@ class _NotifState extends State<Notif> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: Ink(
-          child: InkWell(
-            onTap: () {
-              Navigator.popAndPushNamed(context, landingPage);
-            },
-            child: Icon(Icons.arrow_back),
-          ),
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          color: Colors.black,
+          icon: Icon(Icons.arrow_back),
         ),
+        backgroundColor: HexColor("#A6DCEF"),
         title: Text(
           "Notification",
+          style: TextStyle(
+            color: Colors.black,
+          ),
         ),
       ),
       body: FutureBuilder(
@@ -74,47 +80,29 @@ class _NotifState extends State<Notif> {
           builder: (BuildContext context, AsyncSnapshot snapshot) {
             if (snapshot.hasData) {
               List<NotificationModel> _notif = snapshot.data;
+              List<ListTile> _listTile = [];
 
-              return ListView.separated(
-                  itemBuilder: (BuildContext context, int index) {
-                    NotificationModel _notifData = _notif[index];
-                    return Ink(
-                      height: 50.0,
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Colors.black,
-                        ),
-                      ),
-                      child: InkWell(
-                        onTap: () async {
-                          String url = announcementPath + _notifData.ID;
+              _notif.forEach((NotificationModel notification) {
+                ListTile notificationTile = ListTile(
+                  leading: Icon(Icons.campaign),
+                  title: Text("${notification.TITLE}"),
+                  subtitle: Text("${notification.CREATED_AT}"),
+                  onTap: () async {
+                    String url = announcementPath + notification.ID;
 
-                          if (await canLaunch(url)) {
-                            await launch(url);
-                          }
-                        },
-                        child: Flex(
-                          direction: Axis.horizontal,
-                          children: [
-                            Flexible(
-                              child: Container(
-                                padding: EdgeInsets.all(10.0),
-                                child: Text(
-                                  "${_notifData.TITLE}",
-                                  style: TextStyle(
-                                    fontSize: 15.0,
-                                  ),
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                    );
+                    if (await canLaunch(url)) {
+                      await launch(url);
+                    }
                   },
-                  separatorBuilder: (BuildContext context, int index) =>
-                      const Divider(),
-                  itemCount: _notif.length);
+                );
+
+                _listTile.add(notificationTile);
+              });
+              return SingleChildScrollView(
+                child: Column(
+                  children: _listTile,
+                ),
+              );
             } else if (snapshot.hasError) {
               // error encountered.
               return Padding(
@@ -132,3 +120,9 @@ class _NotifState extends State<Notif> {
     );
   }
 }
+
+// String url = announcementPath + _notifData.ID;
+
+//                           if (await canLaunch(url)) {
+//                             await launch(url);
+//                           }
