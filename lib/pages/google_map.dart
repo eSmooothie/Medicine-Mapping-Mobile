@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -40,6 +38,8 @@ class _MyMapState extends State<MyMap> {
   bool isPharmacySelected = false;
   double pharmacyInfoBottomPosition = -400;
   double priceModalTopPosition = -100;
+  double popUpMessageModal = -100;
+  int numberOfPharmacyFound = 0;
   Pharmacy? selectedPharmacy;
   double? medicinePrice;
 
@@ -113,6 +113,8 @@ class _MyMapState extends State<MyMap> {
           prices[data.pharmacy.id] = data.price;
         }
       });
+
+      numberOfPharmacyFound = result.length;
     } else if (medicine == null) {
       result = await RequestPharmacy().QueryAll();
       result.forEach((Object data) {
@@ -167,6 +169,33 @@ class _MyMapState extends State<MyMap> {
     );
     // add the new marker in the list.
     markers[markerId] = newMarker;
+  }
+
+  Widget _popUpMessage() {
+    return AnimatedPositioned(
+      curve: Curves.easeInOut,
+      left: 1,
+      right: 1,
+      top: 40,
+      child: Align(
+        child: Container(
+          width: 300,
+          padding: EdgeInsets.all(18),
+          decoration: BoxDecoration(
+            color: Colors.blue,
+            borderRadius: BorderRadius.circular(25.0),
+          ),
+          child: Text(
+            "Message",
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 16.0,
+            ),
+          ),
+        ),
+      ),
+      duration: Duration(milliseconds: 500),
+    );
   }
 
   Widget _backgroundOverlay() {
@@ -406,6 +435,7 @@ class _MyMapState extends State<MyMap> {
             mapToolbarEnabled: false,
             markers: Set<Marker>.of(markers.values),
           ),
+          // _popUpMessage(),
           _backgroundOverlay(),
           _gestureListener(),
           _medicineModalPrice(),

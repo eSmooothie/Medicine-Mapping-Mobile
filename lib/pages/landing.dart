@@ -135,7 +135,6 @@ class _LandingPageState extends State<LandingPage> {
           actions: [
             IconButton(
               onPressed: () {
-                // TODO: notification
                 Navigator.pushNamed(context, notifPage);
               },
               icon: Stack(children: [
