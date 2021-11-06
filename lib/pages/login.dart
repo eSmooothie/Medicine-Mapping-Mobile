@@ -226,6 +226,7 @@ class _LoginState extends State<Login> {
                                     ),
                                   ),
                                   style: OutlinedButton.styleFrom(
+                                    backgroundColor: HexColor("#A6DCEF"),
                                     fixedSize: Size(
                                       MediaQuery.of(context).size.width - 100,
                                       50,
@@ -246,6 +247,7 @@ class _LoginState extends State<Login> {
                                     ),
                                   ),
                                   style: OutlinedButton.styleFrom(
+                                    backgroundColor: HexColor("#C9E4C5"),
                                     fixedSize: Size(
                                       MediaQuery.of(context).size.width - 100,
                                       50,

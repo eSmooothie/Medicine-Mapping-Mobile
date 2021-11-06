@@ -46,7 +46,7 @@ class _RegistrationState extends State<Registration> {
           color: Colors.black,
           icon: Icon(Icons.arrow_back),
         ),
-        backgroundColor: HexColor("#A6DCEF"),
+        backgroundColor: HexColor("#C9E4C5"),
         shadowColor: Colors.transparent,
       ),
       body: SafeArea(
@@ -57,7 +57,7 @@ class _RegistrationState extends State<Registration> {
                 alignment: Alignment.bottomLeft,
                 height: 200,
                 decoration: BoxDecoration(
-                  color: HexColor("#A6DCEF"),
+                  color: HexColor("#C9E4C5"),
                   borderRadius: BorderRadius.vertical(
                     bottom: Radius.circular(10),
                   ),
@@ -97,7 +97,7 @@ class _RegistrationState extends State<Registration> {
                           prefixIcon: Icon(Icons.person),
                           controller: _nickNameController,
                           width: MediaQuery.of(context).size.width - 90,
-                          borderColor: HexColor("#A6DCEF"),
+                          borderColor: HexColor("#C9E4C5"),
                           hintText: "Nickname",
                           labelText: "Nickname",
                           errorText: _nicknameErr,
@@ -128,7 +128,7 @@ class _RegistrationState extends State<Registration> {
                           controller: _phonenumberController,
                           keyboardType: TextInputType.number,
                           width: MediaQuery.of(context).size.width - 90,
-                          borderColor: HexColor("#A6DCEF"),
+                          borderColor: HexColor("#C9E4C5"),
                           hintText: "Phone number",
                           labelText: "Phone number",
                           errorText: _phoneNumberErr,
@@ -216,7 +216,7 @@ class _RegistrationState extends State<Registration> {
                         ),
                       ),
                       style: OutlinedButton.styleFrom(
-                        backgroundColor: HexColor("#A6DCEF"),
+                        backgroundColor: HexColor("#C9E4C5"),
                         fixedSize: Size(200, 50),
                       ),
                     ),
