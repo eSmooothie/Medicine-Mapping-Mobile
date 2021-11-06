@@ -50,7 +50,7 @@ class _MyMapState extends State<MyMap> {
     rootBundle.loadString('assets/default_mapStyle.txt').then((string) {
       mapStyle = string;
     });
-    getPharmacies();
+
     super.initState();
   }
 
@@ -409,7 +409,7 @@ class _MyMapState extends State<MyMap> {
             onMapCreated: (GoogleMapController controller) async {
               mapController = controller;
               mapController.setMapStyle(mapStyle);
-
+              await getPharmacies();
               await _permissionLocation();
               if (medicine != null) {
                 defaultZoom = 13.7;
