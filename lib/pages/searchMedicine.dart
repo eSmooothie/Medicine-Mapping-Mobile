@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:hexcolor/hexcolor.dart';
 import 'package:research_mobile_app/helper/utilities.dart';
 import 'package:research_mobile_app/models/medicine.dart';
 import 'package:research_mobile_app/request/requestMedicine.dart';
@@ -32,8 +33,22 @@ class _SearchMedicineState extends State<SearchMedicine> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Match Medicine"),
-        centerTitle: true,
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back,
+            color: Colors.black,
+          ),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        title: Text(
+          "$keyword",
+          style: TextStyle(color: Colors.black),
+        ),
+        centerTitle: false,
+        backgroundColor: HexColor("#A6DCEF"),
+        shadowColor: Colors.transparent,
       ),
       body: FutureBuilder(
         future: get_all_medicine(),
@@ -60,6 +75,10 @@ class _SearchMedicineState extends State<SearchMedicine> {
                   subtitle: Text(
                     '${genericNames.join(',').toLowerCase()}',
                   ),
+                  shape: Border(
+                      bottom: BorderSide(
+                    color: Colors.grey,
+                  )),
                   onTap: () {
                     Navigator.popAndPushNamed(
                       context,
