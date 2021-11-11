@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hexcolor/hexcolor.dart';
@@ -19,7 +21,6 @@ class _SearchMedicineState extends State<SearchMedicine> {
   List<ListTile> matchFound = [];
   @override
   void initState() {
-    // TODO: implement initState
     keyword = widget.med;
     super.initState();
   }

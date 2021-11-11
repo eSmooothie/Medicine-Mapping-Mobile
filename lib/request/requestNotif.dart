@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:http/http.dart';
 import 'package:research_mobile_app/models/notificationModel.dart';
 
 import 'httpRequest.dart';

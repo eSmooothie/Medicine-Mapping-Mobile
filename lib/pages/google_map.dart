@@ -91,7 +91,6 @@ class _MyMapState extends State<MyMap> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
   }
 
@@ -169,33 +168,6 @@ class _MyMapState extends State<MyMap> {
     );
     // add the new marker in the list.
     markers[markerId] = newMarker;
-  }
-
-  Widget _popUpMessage() {
-    return AnimatedPositioned(
-      curve: Curves.easeInOut,
-      left: 1,
-      right: 1,
-      top: 40,
-      child: Align(
-        child: Container(
-          width: 300,
-          padding: EdgeInsets.all(18),
-          decoration: BoxDecoration(
-            color: Colors.blue,
-            borderRadius: BorderRadius.circular(25.0),
-          ),
-          child: Text(
-            "Message",
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 16.0,
-            ),
-          ),
-        ),
-      ),
-      duration: Duration(milliseconds: 500),
-    );
   }
 
   Widget _backgroundOverlay() {

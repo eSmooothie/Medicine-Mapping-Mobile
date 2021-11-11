@@ -91,7 +91,6 @@ class _ChatBoxState extends State<ChatBox> with WidgetsBindingObserver {
     // scroll to the latest message
     SchedulerBinding.instance!.addPostFrameCallback((timeStamp) {
       if (_scrollController.hasClients) {
-        double max = _scrollController.position.maxScrollExtent;
         _scrollController.jumpTo(0.0);
       }
     });

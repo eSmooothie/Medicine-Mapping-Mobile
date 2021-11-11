@@ -19,7 +19,6 @@ class _RegistrationState extends State<Registration> {
   String? _nicknameErr;
   @override
   void initState() {
-    // TODO: implement initState
     _nickNameController = TextEditingController();
     _phonenumberController = TextEditingController();
     storage = FlutterSecureStorage();
@@ -28,7 +27,6 @@ class _RegistrationState extends State<Registration> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     _nickNameController.dispose();
     _phonenumberController.dispose();
     super.dispose();
@@ -143,8 +141,6 @@ class _RegistrationState extends State<Registration> {
                     flex: 2,
                     child: OutlinedButton(
                       onPressed: () async {
-                        // TODO: validate
-
                         // display error message when textfield is empty
                         setState(() {
                           _phoneNumberErr = (_phonenumberController.text == "")

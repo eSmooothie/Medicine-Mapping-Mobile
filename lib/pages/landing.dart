@@ -1,15 +1,14 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:hexcolor/hexcolor.dart';
 import 'package:location/location.dart';
 import 'package:research_mobile_app/exportModel.dart';
 import 'package:research_mobile_app/exportRequest.dart';
-import 'package:research_mobile_app/helper/newLoading.dart';
 import 'package:research_mobile_app/helper/showExitPopup.dart';
 import 'package:research_mobile_app/pages/searchWidget.dart';
 import 'package:research_mobile_app/request/requestNotif.dart';
-import 'package:search_choices/search_choices.dart';
 
 import '../exportHelper.dart';
 

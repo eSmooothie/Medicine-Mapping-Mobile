@@ -6,7 +6,6 @@ import 'package:research_mobile_app/helper/page_transition.dart';
 import 'package:research_mobile_app/pages/chat.dart';
 import 'package:research_mobile_app/pages/get_direction.dart';
 import 'package:research_mobile_app/pages/google_map.dart';
-import 'package:research_mobile_app/pages/inbox.dart';
 import 'package:research_mobile_app/pages/landing.dart';
 import 'package:research_mobile_app/pages/login.dart';
 import 'package:research_mobile_app/pages/notif.dart';

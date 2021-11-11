@@ -21,7 +21,6 @@ class _LoginState extends State<Login> {
   String? _phoneNumberErr;
   @override
   void initState() {
-    // TODO: implement initState
     _phoneNumberController = TextEditingController();
     storage = FlutterSecureStorage();
     pharmacy = widget.pharmacy;
@@ -30,7 +29,6 @@ class _LoginState extends State<Login> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
   }
 
@@ -161,8 +159,6 @@ class _LoginState extends State<Login> {
                               Flexible(
                                 child: OutlinedButton(
                                   onPressed: () async {
-                                    // TODO: Validate
-
                                     // validate
                                     setState(() {
                                       _phoneNumberErr =
