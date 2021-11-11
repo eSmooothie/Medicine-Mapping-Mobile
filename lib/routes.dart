@@ -12,6 +12,7 @@ import 'package:research_mobile_app/pages/login.dart';
 import 'package:research_mobile_app/pages/notif.dart';
 
 import 'package:research_mobile_app/pages/registration.dart';
+import 'package:research_mobile_app/pages/searchMedicine.dart';
 
 // Routes of the app
 const String landingPage = "/";
@@ -19,6 +20,7 @@ const String mapPage = "/map";
 const String directionPage = "/direction";
 const String registerPage = "/register";
 const String loginPage = "/login";
+const String searchMedicinePage = "/search";
 
 const String chatBoxPage = "/chatBox";
 
@@ -51,6 +53,10 @@ Route<dynamic> appRoutes(RouteSettings route) {
       );
     case notifPage:
       return Transition().page(Notif());
+    case searchMedicinePage:
+      return Transition().page(SearchMedicine(
+        med: route.arguments as String,
+      ));
     default:
       return Transition().page(
         LandingPage(),

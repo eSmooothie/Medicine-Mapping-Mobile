@@ -171,6 +171,11 @@ class _SearchWidgetState extends State<SearchWidget>
                           color: Colors.black.withOpacity(0.4),
                         ),
                       ),
+                      onSubmitted: (value) {
+                        // print(value);
+                        Navigator.pushNamed(context, searchMedicinePage,
+                            arguments: value);
+                      },
                       onChanged: (value) {
                         if (value.isNotEmpty) {
                           setState(() {
