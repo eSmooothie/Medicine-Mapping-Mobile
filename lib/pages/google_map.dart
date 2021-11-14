@@ -229,6 +229,17 @@ class _MyMapState extends State<MyMap> {
       visible: isPharmacySelected,
       child: GestureDetector(
         onTap: () {
+          double lat = double.parse(selectedPharmacy!.lat);
+          double lng = double.parse(selectedPharmacy!.lng);
+          LatLng pos = LatLng(lat, lng);
+          //selectedPharmacy
+          mapController
+              .animateCamera((CameraUpdate.newCameraPosition(new CameraPosition(
+            bearing: 0,
+            target: pos,
+            tilt: 0,
+            zoom: defaultZoom,
+          ))));
           setState(() {
             viewPrice = false;
             isPharmacySelected = false;
