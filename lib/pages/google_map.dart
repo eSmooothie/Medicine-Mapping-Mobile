@@ -244,7 +244,7 @@ class _MyMapState extends State<MyMap> {
                 height: 3,
               ),
               Text(
-                "(Click the marker to interact)",
+                "(Tap the marker to interact)",
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 14,
@@ -380,6 +380,7 @@ class _MyMapState extends State<MyMap> {
                       ),
                     ),
                     Container(
+                      padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
                       child: Text(
                         (selectedPharmacy != null)
                             ? "${selectedPharmacy!.address}"
