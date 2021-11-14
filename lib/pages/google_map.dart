@@ -230,6 +230,7 @@ class _MyMapState extends State<MyMap> {
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(25.0),
+            border: Border.all(color: Colors.black),
           ),
           child: Column(
             children: [
