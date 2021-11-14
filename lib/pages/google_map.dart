@@ -243,6 +243,13 @@ class _MyMapState extends State<MyMap> {
               SizedBox(
                 height: 3,
               ),
+              Text(
+                "(Click the marker to interact)",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 14,
+                ),
+              ),
             ],
           ),
         ),
