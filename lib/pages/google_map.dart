@@ -228,7 +228,7 @@ class _MyMapState extends State<MyMap> {
           width: 300,
           padding: EdgeInsets.all(18),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: HexColor("#A6DCEF"),
             borderRadius: BorderRadius.circular(25.0),
           ),
           child: Column(
@@ -238,6 +238,7 @@ class _MyMapState extends State<MyMap> {
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 14,
+                  color: Colors.black,
                 ),
               ),
               SizedBox(
@@ -248,6 +249,7 @@ class _MyMapState extends State<MyMap> {
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 14,
+                  color: Colors.black,
                 ),
               ),
             ],
