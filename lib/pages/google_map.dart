@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -44,14 +46,46 @@ class _MyMapState extends State<MyMap> {
   double? medicinePrice;
 
   double defaultZoom = 15;
+
+  int pharmacyCounter = 0;
+
+  Timer? timer;
+
+  bool waitingForResponse = false;
+  int timerCounter = 0;
   @override
   void initState() {
     medicine = widget.medicine;
     rootBundle.loadString('assets/default_mapStyle.txt').then((string) {
       mapStyle = string;
     });
-
+    if (medicine != null) {
+      setTimer();
+    }
     super.initState();
+  }
+
+  void setTimer() async {
+    // Cancelling previous timer, if there was one, and creating a new one
+    timer?.cancel();
+
+    timer = Timer.periodic(Duration(seconds: 3), (t) async {
+      if (!waitingForResponse && timerCounter < 4) {
+        waitingForResponse = true;
+        print("timer: $timerCounter");
+        setState(() {
+          popUpMessageModal = 55;
+          timerCounter += 1;
+        });
+        waitingForResponse = false;
+      }
+      if (timerCounter == 4) {
+        setState(() {
+          popUpMessageModal = -100;
+          // timerCounter += 1;
+        });
+      }
+    });
   }
 
   // ask permission to access the location of the user
@@ -136,6 +170,8 @@ class _MyMapState extends State<MyMap> {
         position: pos,
       );
     });
+
+    pharmacyCounter = pharmacies.length;
   }
 
   void _addMarker({
@@ -168,6 +204,50 @@ class _MyMapState extends State<MyMap> {
     );
     // add the new marker in the list.
     markers[markerId] = newMarker;
+  }
+
+  Widget _popUpMessage() {
+    if (medicine == null) {
+      return AnimatedPositioned(
+        duration: Duration(milliseconds: 500),
+        curve: Curves.easeInOut,
+        top: -1000,
+        left: 1,
+        right: 1,
+        child: Container(),
+      );
+    }
+    return AnimatedPositioned(
+      duration: Duration(milliseconds: 500),
+      curve: Curves.easeInOut,
+      top: popUpMessageModal,
+      left: 1,
+      right: 1,
+      child: Align(
+        child: Container(
+          width: 300,
+          padding: EdgeInsets.all(18),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(25.0),
+          ),
+          child: Column(
+            children: [
+              Text(
+                "There are $pharmacyCounter pharmacy that sell ${medicine!.brandName}.",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 14,
+                ),
+              ),
+              SizedBox(
+                height: 3,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   Widget _backgroundOverlay() {
@@ -418,7 +498,7 @@ class _MyMapState extends State<MyMap> {
             mapToolbarEnabled: false,
             markers: Set<Marker>.of(markers.values),
           ),
-          // _popUpMessage(),
+          _popUpMessage(),
           _backgroundOverlay(),
           _gestureListener(),
           _medicineModalPrice(),
