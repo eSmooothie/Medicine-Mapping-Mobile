@@ -70,7 +70,7 @@ class _MyMapState extends State<MyMap> {
     timer?.cancel();
 
     timer = Timer.periodic(Duration(seconds: 1), (t) async {
-      if (!waitingForResponse && timerCounter < 6) {
+      if (!waitingForResponse && timerCounter < 8) {
         waitingForResponse = true;
         print("timer: $timerCounter");
         setState(() {
@@ -79,10 +79,10 @@ class _MyMapState extends State<MyMap> {
         });
         waitingForResponse = false;
       }
-      if (timerCounter == 4) {
+      if (timerCounter == 8) {
         setState(() {
           popUpMessageModal = -100;
-          // timerCounter += 1;
+          timerCounter += 1;
         });
       }
     });
