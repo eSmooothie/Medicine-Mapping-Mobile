@@ -69,8 +69,8 @@ class _MyMapState extends State<MyMap> {
     // Cancelling previous timer, if there was one, and creating a new one
     timer?.cancel();
 
-    timer = Timer.periodic(Duration(seconds: 3), (t) async {
-      if (!waitingForResponse && timerCounter < 4) {
+    timer = Timer.periodic(Duration(seconds: 1), (t) async {
+      if (!waitingForResponse && timerCounter < 6) {
         waitingForResponse = true;
         print("timer: $timerCounter");
         setState(() {
@@ -228,7 +228,7 @@ class _MyMapState extends State<MyMap> {
           width: 300,
           padding: EdgeInsets.all(18),
           decoration: BoxDecoration(
-            color: HexColor("#A6DCEF"),
+            color: Colors.white,
             borderRadius: BorderRadius.circular(25.0),
           ),
           child: Column(
