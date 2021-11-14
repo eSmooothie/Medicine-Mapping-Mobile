@@ -234,7 +234,7 @@ class _MyMapState extends State<MyMap> {
           child: Column(
             children: [
               Text(
-                "There are $pharmacyCounter pharmacy that sell ${medicine!.brandName}.",
+                "There are $pharmacyCounter pharmacies that sell ${medicine!.brandName}.",
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 14,
