@@ -75,7 +75,7 @@ class _SearchWidgetState extends State<SearchWidget>
 
     _medicines.forEach((Medicine med) {
       List<String> genericNames = [];
-      matchCounter += 1;
+
       med.genericNames.forEach((element) {
         genericNames.add(element.name);
       });
@@ -83,6 +83,7 @@ class _SearchWidgetState extends State<SearchWidget>
       String medicineGenericName = genericNames.join(',').toLowerCase();
       if (med.brandName.toLowerCase().contains(keyword.toLowerCase()) ||
           medicineGenericName.contains(keyword.toLowerCase())) {
+        matchCounter += 1;
         ListTile listTile = ListTile(
           leading: Padding(
             padding: const EdgeInsets.all(8.0),
