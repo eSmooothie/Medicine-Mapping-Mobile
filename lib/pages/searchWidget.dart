@@ -74,12 +74,15 @@ class _SearchWidgetState extends State<SearchWidget>
     _itemList.add(divider);
 
     _medicines.forEach((Medicine med) {
-      if (med.brandName.toLowerCase().contains(keyword.toLowerCase())) {
-        List<String> genericNames = [];
-        matchCounter += 1;
-        med.genericNames.forEach((element) {
-          genericNames.add(element.name);
-        });
+      List<String> genericNames = [];
+      matchCounter += 1;
+      med.genericNames.forEach((element) {
+        genericNames.add(element.name);
+      });
+
+      String medicineGenericName = genericNames.join(',').toLowerCase();
+      if (med.brandName.toLowerCase().contains(keyword.toLowerCase()) ||
+          medicineGenericName.contains(keyword.toLowerCase())) {
         ListTile listTile = ListTile(
           leading: Padding(
             padding: const EdgeInsets.all(8.0),
@@ -87,7 +90,7 @@ class _SearchWidgetState extends State<SearchWidget>
           ),
           title: Text('${med.brandName}'),
           subtitle: Text(
-            '${genericNames.join(',').toLowerCase()}',
+            '$medicineGenericName',
           ),
           onTap: () {
             // pass the medicine object
