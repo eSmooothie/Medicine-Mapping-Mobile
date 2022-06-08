@@ -1,16 +1,9 @@
-# research_mobile_app
+# Medicine Mapping (Mobile)
 
-A new Flutter project.
+## PROJETC SUMMARY
+The researchers of the study are trying to provide a solution to the problem of “pharmacy tourism” - where a patient is forced to move from a pharmacy to another in search of particular medicine. Proponents proposed a medicine mapping system that incorporates a Geographical Information System (GIS) to demonstrate the geographical route of the nearest pharmacy having to search for a particular medicine.
 
-## Getting Started
+## APP
+Google Store link: [Play store](https://play.google.com/store/apps/details?id=com.ejotrio.research_mobile_app)
 
-This project is a starting point for a Flutter application.
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
